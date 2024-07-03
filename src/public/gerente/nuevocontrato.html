@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soluciones Metálicas</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <h1>Nuevo Contrato</h1>
+    <form id="nuevoContratoForm">
+      <div>
+        <label for="id_contrato">ID Contrato:</label>
+        <input type="text" id="id_contrato" name="id_contrato" required>
+      </div>
+      <div>
+        <label for="id_producto">ID Producto:</label>
+        <input type="text" id="id_producto" name="id_producto" required>
+      </div>
+      <div>
+        <label for="cantidad_producto">Cantidad de Producto:</label>
+        <input type="number" id="cantidad_producto" name="cantidad_producto" required>
+      </div>
+      <div>
+        <label for="fecha_inicio">Fecha de Inicio:</label>
+        <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+      </div>
+      <div>
+        <label for="fecha_fin">Fecha de Fin:</label>
+        <input type="date" id="fecha_fin" name="fecha_fin" required>
+      </div>
+      <button type="submit">Iniciar Proyecto</button>
+    </form>
+  
+    <script>
+      document.getElementById('nuevoContratoForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+  
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+  
+        try {
+          const response = await fetch('/path/to/your/api/initProyecto', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+  
+          if (response.ok) {
+            const result = await response.json();
+            alert(`Proyecto iniciado con éxito: ${result.message}`);
+            // Redirigir a otra página o actualizar la interfaz según sea necesario
+          } else {
+            const errorResult = await response.json();
+            alert(`Error: ${errorResult.error}`);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error en el servidor. Intente nuevamente más tarde.');
+        }
+      });
+    </script>
+  </body>
+  </html>

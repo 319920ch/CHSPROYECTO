@@ -218,7 +218,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-sm); /* Reemplazar con el color real */
     outline: none; /* Equivalente a focus-visible:outline-none en Tailwind */
     box-shadow: var(--ring-offset-background) 0 0 0 2px var(--ring); /* Revisar la definición de ring-ring en Tailwind */
-    cursor: not-allowed; /* Equivalente a disabled:cursor-not-allowed en Tailwind */
+    cursor: allowed; /* Equivalente a disabled:cursor-not-allowed en Tailwind */
     opacity: 0.5; /* Equivalente a disabled:opacity-50 en Tailwind */
     border-color: #2D2D2D; /* Equivalente a border-[#2D2D2D] en Tailwind */
     .input::placeholder {
