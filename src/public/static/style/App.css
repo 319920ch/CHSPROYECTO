@@ -322,3 +322,103 @@ h1, h2, h3, h4, h5, h6 {
 
 
 
+.headerprincipal {
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  width: 100%; /* Ancho completo del contenedor */
+  padding: 1.5rem; /* Padding de 1 rem alrededor */
+  background-color: #FFFFFF; /* Color de fondo */
+  color: #1e3a8a; /* Color de texto */
+}
+.encabezado {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh; /* Altura mínima de la pantalla */
+  background-color: #f5f5f5; /* Color de fondo */
+  color: #333333; /* Color de texto */
+}
+
+.imglogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem; /* Ancho fijo según tus necesidades */
+  height:4rem; /* Altura fija según tus necesidades */
+  background-color: #4b5563; /* Color de fondo */
+  border-radius: 50%; /* Para crear un círculo con border-radius */
+  overflow: hidden; /* Para ocultar partes de la imagen fuera del círculo */
+}
+
+.logo-img {
+  width: 100%; /* Ancho completo de la imagen dentro del contenedor */
+  height: auto; /* Altura ajustada automáticamente */
+  object-fit: cover; /* Para cubrir el contenido de la imagen */
+}
+
+
+.bienvenida {
+  font-size: 1.5rem; /* Tamaño de fuente equivalente a text-2xl */
+  font-weight: bold; /* Fuente en negrita */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.areaprincipal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1; /* Ocupa todo el espacio disponible */
+  gap: 2rem; /* Espacio entre elementos hijos */
+  width: 100%; /* Ancho completo del contenedor */
+  padding: 1rem; /* Padding general */
+  background-color: #1E3A8A;
+}
+
+/* Media queries para ajustes responsivos */
+@media (min-width: 768px) {
+  .areaprincipal {
+    padding: 0 2rem; /* Padding en dispositivos medianos */
+  }
+}
+
+@media (min-width: 1024px) {
+  .areaprincipal {
+    padding: 0 3rem; /* Padding en dispositivos grandes */
+  }
+}
+
+.area {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr)); /* Una columna en dispositivos pequeños */
+  gap: 2rem; /* Espacio entre las celdas */
+  width: 100%; /* Ancho completo del contenedor */
+}
+
+@media (min-width: 768px) {
+  .area {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* Dos columnas en dispositivos medianos */
+  }
+}
+
+@media (min-width: 1024px) {
+  .area {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* Tres columnas en dispositivos grandes */
+  }
+}
+
+.opciones {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Ancho completo del contenedor */
+  height: 8rem; /* Altura fija de 8rem (equivalente a h-32) */
+  background-color: #ffffff; /* Color de fondo blanco */
+  border: 2px solid #4b5563; /* Borde de 2px sólido color #4b5563 */
+  border-radius: 0.5rem; /* Bordes redondeados de 0.5rem */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+}
