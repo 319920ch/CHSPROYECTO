@@ -327,9 +327,10 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content:center;
   width: 100%; /* Ancho completo del contenedor */
-  padding: 1.5rem; /* Padding de 1 rem alrededor */
+  padding: 0.5rem; /* Padding de 1 rem alrededor */
   background-color: #FFFFFF; /* Color de fondo */
   color: #1e3a8a; /* Color de texto */
+  height: 5rem;
 }
 .encabezado {
   display:flex;
@@ -369,13 +370,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .areaprincipal {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 1; /* Ocupa todo el espacio disponible */
-  gap: 2rem; /* Espacio entre elementos hijos */
-  width: 100%; /* Ancho completo del contenedor */
-  padding: 1rem; /* Padding general */
+  flex:auto; /* Ocupa todo el espacio disponible */
+  gap: 0.5rem; /* Espacio entre elementos hijos */
+  width: 94%; /* Ancho completo del contenedor */
+  padding: 1.5rem; /* Padding general */
   background-color: #1E3A8A;
 }
 
@@ -395,8 +395,8 @@ h1, h2, h3, h4, h5, h6 {
 .area {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr)); /* Una columna en dispositivos pequeños */
-  gap: 2rem; /* Espacio entre las celdas */
-  width: 100%; /* Ancho completo del contenedor */
+  gap: 1.5rem; /* Espacio entre las celdas */
+  width:100%; /* Ancho completo del contenedor */
 }
 
 @media (min-width: 768px) {
@@ -416,7 +416,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   width: 100%; /* Ancho completo del contenedor */
-  height: 8rem; /* Altura fija de 8rem (equivalente a h-32) */
+  height: 6rem; /* Altura fija de 8rem (equivalente a h-32) */
   background-color: #ffffff; /* Color de fondo blanco */
   border: 2px solid #4b5563; /* Borde de 2px sólido color #4b5563 */
   border-radius: 0.5rem; /* Bordes redondeados de 0.5rem */
