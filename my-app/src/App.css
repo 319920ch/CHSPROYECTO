@@ -1,0 +1,324 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(240, 10%, 3.9%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(240, 10%, 3.9%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(240, 10%, 3.9%);
+  --primary: hsl(240, 5.9%, 10%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(240, 4.8%, 95.9%);
+  --secondary-foreground: hsl(240, 5.9%, 10%);
+  --muted: hsl(240, 4.8%, 95.9%);
+  --muted-foreground: hsl(240, 3.8%, 45%);
+  --accent: hsl(240, 4.8%, 95.9%);
+  --accent-foreground: hsl(240, 5.9%, 10%);
+  --destructive: hsl(0, 72%, 51%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 5.9%, 90%);
+  --input: hsl(240, 5.9%, 90%);
+  --ring: hsl(240, 5.9%, 10%);
+  --radius: 0.5rem;
+}
+
+/* Definición de variables para radios de borde */
+* {
+  --radius: 10px; /* Valor de radio de borde base, ajusta según sea necesario */
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+/* Keyframes para animaciones */
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+/* Aplicación de radios de borde mediante clases */
+.border-xl {
+  border-radius: var(--radius-xl);
+}
+
+.border-lg {
+  border-radius: var(--radius-lg);
+}
+
+.border-md {
+  border-radius: var(--radius-md);
+}
+
+.border-sm {
+  border-radius: var(--radius-sm);
+}
+
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+  font: 1.5rem;
+}
+
+.contenedor1 {
+  display: grid;
+  width: 100%;
+  min-height: 100vh;
+  grid-template-columns: 2fr 1fr; /* Columna izquierda 2 veces más ancha que la derecha */
+  gap: 2rem; /* Espacio entre las columnas */
+}
+
+@media (max-width: 1023px) {
+  .contenedor1 {
+    grid-template-columns: 1fr; /* Una sola columna en pantallas más pequeñas */
+  }
+}
+
+
+.contenedor2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.5rem; /* Equivalente a gap-6 en Tailwind */
+  background-color: #1E3A8A;
+  text-align: center; /* Centra el texto horizontalmente */
+  padding: 1.5rem;
+  max-width: 65rem; /* Equivalente a max-w-md en Tailwind para limitar el ancho máximo */
+  color: var(--primary-foreground); /* Reemplaza var(--primary-foreground-color) con el color real */
+}
+
+.contenedor3 img {
+  max-width: 50%; /* La imagen ocupa como máximo el ancho del contenedor */
+  height: auto; /* La altura se ajusta automáticamente para mantener la proporción */
+  align-items:center;
+}
+
+
+@media (min-width: 1024px) {
+  .contenedor2 {
+    padding: 1.6rem; /* Equivalente a lg:p-12 en Tailwind */
+  }
+}
+
+.espacioy2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.titulo1 {
+  font-size: 1.875rem; /* Equivalente a text-3xl en Tailwind */
+  font-weight: 700; /* Equivalente a font-bold en Tailwind */
+  letter-spacing: -0.05em; /* Equivalente a tracking-tighter en Tailwind */
+  justify-content: center;
+}
+
+@media (min-width: 640px) {
+  .titulo1 {
+    font-size: 2.25rem; /* Equivalente a sm:text-4xl en Tailwind */
+  }
+}
+
+@media (min-width: 768px) {
+  .titulo1 {
+    font-size: 3rem; /* Equivalente a md:text-5xl en Tailwind */
+  }
+}
+
+
+.pprincipal {
+  max-width: 1200px; /* Equivalente a max-w-[600px] en Tailwind */
+  font-size: 1.25rem; /* Equivalente a text-lg en Tailwind */
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .pprincipal {
+    font-size: 1.25rem; /* Equivalente a md:text-xl en Tailwind */
+  }
+}
+
+.contenedor3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary-background); /* Reemplazar con el color real */
+  padding: 2.5rem; /* Equivalente a p-6 en Tailwind */
+}
+
+@media (min-width: 1024px) {
+  .contenedor3 {
+    padding: 3rem; /* Equivalente a lg:p-12 en Tailwind */
+    margin-right: 4rem;
+    align-items: center;
+  }
+}
+
+.label {
+  font-size: 0.875rem; /* Equivalente a text-sm en Tailwind */
+  font-weight: 500; /* Equivalente a font-medium en Tailwind */
+  line-height: 1; /* Equivalente a leading-none en Tailwind */
+}
+
+
+  .input {
+    display: flex;
+    height: 2.5rem; /* Equivalente a h-10 en Tailwind */
+    width: 100%; /* Equivalente a w-full en Tailwind */
+    border-radius: 0.375rem; /* Equivalente a rounded-md en Tailwind */
+    border-width: 1px; /* Equivalente a border en Tailwind */
+    background-color: var(--background); /* Reemplazar con el color real */
+    padding-left: 0.75rem; /* Equivalente a px-3 en Tailwind */
+    padding-right: 0.75rem; /* Equivalente a px-3 en Tailwind */
+    padding-top: 0.5rem; /* Equivalente a py-2 en Tailwind */
+    padding-bottom: 0.5rem; /* Equivalente a py-2 en Tailwind */
+    font-size: 0.875rem; /* Equivalente a text-sm en Tailwind */
+    font-weight: 500; /* Equivalente a font-medium en Tailwind */
+    color: var(--text-sm); /* Reemplazar con el color real */
+    outline: none; /* Equivalente a focus-visible:outline-none en Tailwind */
+    box-shadow: var(--ring-offset-background) 0 0 0 2px var(--ring); /* Revisar la definición de ring-ring en Tailwind */
+    cursor: not-allowed; /* Equivalente a disabled:cursor-not-allowed en Tailwind */
+    opacity: 0.5; /* Equivalente a disabled:opacity-50 en Tailwind */
+    border-color: #2D2D2D; /* Equivalente a border-[#2D2D2D] en Tailwind */
+    .input::placeholder {
+      color: var(--muted-foreground); /* Reemplazar con el color real */
+    }
+  }
+
+
+
+.contenedor4 {
+  display: grid;
+  gap: 1rem; /* Equivalente a gap-4 en Tailwind */
+}
+
+.contenedor5 {
+  display: grid;
+  gap: 0.5rem; /* Equivalente a gap-2 en Tailwind */
+}
+
+
+
+.card {
+  width: 100%; /* Equivalente a w-full en Tailwind */
+  max-width: 32rem; /* Equivalente a max-w-md en Tailwind */
+}
+
+
+.card .header {
+    margin-top: 0.25rem; /* Equivalente a space-y-1 en Tailwind */
+    margin-bottom: 0.25rem; /* Equivalente a space-y-1 en Tailwind */
+    font-size: 1.5rem; /* Equivalente a text-2xl en Tailwind CSS */
+    font-weight: 400;
+    line-height: 2rem; /* Ajusta según el line-height deseado */
+    align-items:center;
+  }
+  
+
+.card .content {
+  display: grid;
+  gap: 1rem; 
+  font-size: 0.9rem;
+  
+}
+
+.button1 {
+  display: block; /* Cambiado a block para centrar horizontalmente */
+  width: fit-content; /* Ajusta el ancho al contenido */
+  height: fit-content;
+  margin: 0 auto; /* Centra horizontalmente */
+  height: 1.5rem; /* Equivalente a h-10 en Tailwind CSS */
+  align-items: center; /* Equivalente a items-center en Tailwind CSS */
+  justify-content: center; /* Equivalente a justify-center en Tailwind CSS */
+  border-radius: 0.375rem; /* Equivalente a rounded-md en Tailwind CSS */
+  background-color: #FFFFFF;
+  padding: 0.75rem 1rem; /* Equivalente a px-6 en Tailwind CSS */
+  font-size: 0.875rem; /* Equivalente a text-sm en Tailwind CSS */
+  font-weight: 500; /* Equivalente a font-medium en Tailwind CSS */
+  color: #1E3A8A;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Equivalente a shadow-sm en Tailwind CSS */
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  outline: none; /* Equivalente a focus:outline-none en Tailwind CSS */
+}
+
+.button1:hover {
+  background-color: rgba(30, 58, 138, 0.9); /* 90% de opacidad de #1E3A8A */
+}
+
+.button1:focus {
+  outline: none; /* Equivalente a focus:outline-none en Tailwind CSS */
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.9); /* Efecto de enfoque */
+}
+
+
+
+.button2 {
+  display: block; /* Cambiado a block para centrar horizontalmente */
+  width: 100%fit-content; /* Ajusta el ancho al contenido */
+  height: fit-content;
+  margin: 0 auto; /* Centra horizontalmente */
+  padding: 0.75rem 1.5rem; /* Equivalente a px-6 en Tailwind CSS */
+  font-size: 0.875rem; /* Equivalente a text-sm en Tailwind CSS */
+  font-weight: 500; /* Equivalente a font-medium en Tailwind CSS */
+  color: #FFFFFF;
+  background-color: #FF6B35;
+  border-radius: 0.375rem; /* Equivalente a rounded-md en Tailwind CSS */
+  transition: background-color 0.2s ease-in-out;
+  text-align: center; /* Centra el texto horizontalmente */
+  text-decoration: none; /* Elimina la decoración de enlace */
+  line-height: 1.25; /* Ajusta el espacio entre líneas */
+  cursor: pointer; /* Cambia el cursor a pointer al pasar por encima */
+}
+
+.button2:hover {
+  background-color: rgba(255, 107, 53, 0.9); /* 90% de opacidad de #FF6B35 */
+}
+
+.button2:focus {
+  outline: none; /* Elimina el contorno de enfoque predeterminado */
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.9); /* Efecto de enfoque */
+}
+
+
+
