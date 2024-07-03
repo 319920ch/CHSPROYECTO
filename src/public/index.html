@@ -54,9 +54,12 @@
 
         if (response.ok) {
           const data = await response.json();
+          // Guardar el nombre de usuario en LocalStorage
+          localStorage.setItem('nombreUsuario', nombre);
+
           // Redirigir según la respuesta del servidor (ejemplo: id_rol)
           if (data.id_rol === 2) {
-            window.location.href = './interfaz1.html'; // Redirige a la interfaz deseada
+            window.location.href = './gerente/inicio.html'; // Redirige a la interfaz deseada
           } else {
             // Redirigir a otra interfaz según sea necesario
             alert(`Bienvenido a Soluciones Metálicas. Tu id_rol es ${data.id_rol}`);

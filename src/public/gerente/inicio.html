@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soluciones Metálicas</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div class="encabezado">
+    <header class="headerprincipal">
+      <div class="imglogo">
+        <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+      </div>
+      <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span></center> !</h1>
+    </header>
+    <main class="areaprincipal">
+      <div class="area">
+        <div class="opciones">
+          <a href="./nuevo-contrato.html">NUEVO CONTRATO</a>
+        </div>
+        <div class="opciones">
+          <a href="./revisar-estado-contrato.html">REVISAR ESTADO DE CONTRATO VIGENTE</a>
+        </div>
+        <div class="opciones">
+          <a href="./informes-contratos.html">INFORMES DE CONTRATOS</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Recuperar el nombre de usuario de LocalStorage
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const nombreUsuario = localStorage.getItem('nombreUsuario');
+      if (nombreUsuario) {
+        document.getElementById('nombreUsuario').innerText = nombreUsuario;
+      }
+    });
+  </script>
+</body>
+</html>
