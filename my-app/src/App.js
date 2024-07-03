@@ -21,23 +21,23 @@ function App() {
             <div className="contenedor4">
               <div className="contenedor5">
                 <label className="label" htmlFor="email">
-                  Correo electrónico
+                  Nombre de Usuario
                 </label>
                 <input
                   className="input"
-                  id="email"
-                  placeholder="alguien@example.com"
-                  type="email"
+                  id="nombre"
+                  placeholder="Juan Perez"
+                  type="nombre"
                 />
               </div>
               <div className="contenedor5">
-                <label className="label" htmlFor="password">
+                <label className="label" htmlFor="contrasena">
                   Contraseña
                 </label>
                 <input
                   className="input"
-                  id="password"
-                  type="password"
+                  id="contrasena"
+                  type="contrasena"
                 />
               </div>
             </div>
