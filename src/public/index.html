@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenido a Soluciones Metálicas</title>
+  <link rel="stylesheet" href="./static/style/App.css">
+</head>
+<body>
+  <div class="contenedor1">
+    <div class="contenedor2">
+      <div class="espacioy2">
+        <h1 class="titulo1">Bienvenido a Soluciones Metálicas</h1>
+        <p class="pprincipal">
+          Somos una empresa metalúrgica líder en la industria, con más de 50 años de experiencia en la fabricación de productos de alta calidad. Nuestro compromiso con la excelencia y la innovación nos ha convertido en un socio confiable para nuestros clientes.
+        </p>
+      </div>
+    </div>
+    <div class="contenedor3">
+      <div class="card">
+        <div class="header"><center><strong>Iniciar sesión</strong></center></div>
+        <center><img src="./static/image/LOGO.jpeg" alt="Logo de aplicación"></center>
+        <div class="content">
+          <p><center>Ingresa tus credenciales para acceder a tu cuenta</center></p>
+          <div class="contenedor4">
+            <div class="contenedor5">
+              <label class="label" for="nombre">Nombre de Usuario</label>
+              <input class="input" id="nombre" placeholder="Juan Perez" type="text">
+            </div>
+            <div class="contenedor5">
+              <label class="label" for="contrasena">Contraseña</label>
+              <input class="input" id="contrasena" type="password">
+            </div>
+          </div>
+          <button class="button2" onclick="handleLogin()">Iniciar sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function handleLogin() {
+      var nombre = document.getElementById('nombre').value;
+      var contrasena = document.getElementById('contrasena').value;
+
+      try {
+        const response = await fetch("/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ nombre, contrasena }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Redirigir según la respuesta del servidor (ejemplo: id_rol)
+          if (data.id_rol === 2) {
+            window.location.href = './interfaz1.html'; // Redirige a la interfaz deseada
+          } else {
+            // Redirigir a otra interfaz según sea necesario
+            alert(`Bienvenido a Soluciones Metálicas. Tu id_rol es ${data.id_rol}`);
+          }
+        } else {
+          // Manejo de errores si la solicitud falla
+          alert('Inicio de sesión fallido. Verifica tus credenciales.');
+        }
+      } catch (error) {
+        console.error('Error en inicio de sesión:', error);
+      }
+    }
+  </script>
+</body>
+</html>

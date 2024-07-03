@@ -71,7 +71,11 @@ exports.login = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: 'Credenciales Inválidas' });
     }
-    res.status(200).json({ message: 'Ingreso exitoso', user });
+
+    // Aquí obtienes el id_rol del usuario encontrado
+    const { id_rol } = user;
+
+    res.status(200).json({ message: 'Ingreso exitoso', user, id_rol }); // Devuelve id_rol junto con el usuario
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
