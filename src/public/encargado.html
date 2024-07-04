@@ -18,15 +18,16 @@
     </header>
     <main class="areaprincipal">
       <div class="opciones">
-        <button class="botonpagina">NUEVO </button>
+        <button class="botonpagina" onclick="window.location.href = './';">Asignación de Personal </button>
       </div>
-        <div class="opciones">
-          <a href="./revisar-estado-contrato.html">REVISARE</a>
-        </div>
-        <div class="opciones">
-          <a href="./informes-contratos.html">INFORMES</a>
-        </div>
+      <div class="opciones">
+        <button class="botonpagina" onclick="window.location.href = './';">Estado de Trabajo en Área </button>
       </div>
+<!-- Agregamos un elemento para mostrar la notificación -->
+  <div class="notificacion">
+    <p>Hola</p>
+    <p id="estado-areas"></p>
+  </div>
     </main>
   </div>
 
@@ -38,14 +39,26 @@
         document.getElementById('nombreUsuario').innerText = nombreUsuario;
       }
     });
+// Creamos una función para obtener el estado de áreas
+async function getAreasInfo() {
+  try {
+    const response = await fetch('/api/buscarinfo/a');
+    const areasInfo = await response.json();
+    const estadoAreasElement = document.getElementById('estado-areas');
+    let estadoAreasText = '';
+
+    areasInfo.forEach((area) => {
+      estadoAreasText += `Área ${area.nombre_area}: ${area.estado}\n`;
+    });
+
+    estadoAreasElement.innerText = estadoAreasText;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Llamamos a la función cuando se carga la página
+document.addEventListener('DOMContentLoaded', getAreasInfo);
   </script>
 </body>
 </html>
-<script>
-  document.addEventListener('DOMContentLoaded', (event) => {
-    const btnNuevoContrato = document.querySelector('.botonpagina');
-    btnNuevoContrato.addEventListener('click', (event) => {
-      window.location.href = './nuevocontrato.html';
-    });
-  });
-</script>

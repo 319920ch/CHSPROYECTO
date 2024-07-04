@@ -15,7 +15,7 @@
 
 /* Estilos para el encabezado de la tabla */
 .thead {
-    background-color: #1E3A8A; /* Fondo azul oscuro */
+    background-color: #5B5F80; /* Fondo azul oscuro */
     color: #fff; /* Texto blanco */
     padding: 0.75rem; /* Relleno de 0.75 rem */
     justify-content: center;
@@ -46,6 +46,6 @@
     justify-content: center;
     align-items: center;
     height: calc(100vh - 72px); /* Adjust height based on header height */
-    background-color: #1E3A8A;
+    background-color: #5B5F80;
     width: 100%;
   }

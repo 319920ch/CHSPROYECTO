@@ -122,7 +122,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: flex-start;
   justify-content: center;
   gap: 1.5rem; /* Equivalente a gap-6 en Tailwind */
-  background-color: #1E3A8A;
+  background-color: #5B5F80;
   text-align: center; /* Centra el texto horizontalmente */
   padding: 1.5rem;
   max-width: 65rem; /* Equivalente a max-w-md en Tailwind para limitar el ancho máximo */
@@ -276,7 +276,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0.75rem 1rem; /* Equivalente a px-6 en Tailwind CSS */
   font-size: 0.875rem; /* Equivalente a text-sm en Tailwind CSS */
   font-weight: 500; /* Equivalente a font-medium en Tailwind CSS */
-  color: #1E3A8A;
+  color: #000080;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Equivalente a shadow-sm en Tailwind CSS */
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
   outline: none; /* Equivalente a focus:outline-none en Tailwind CSS */
@@ -329,7 +329,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%; /* Ancho completo del contenedor */
   padding: 0.5rem; /* Padding de 1 rem alrededor */
   background-color: #FFFFFF; /* Color de fondo */
-  color: #1e3a8a; /* Color de texto */
+  color: #5B5F80; /* Color de texto */
   height: 5rem;
 }
 .encabezado {
@@ -376,7 +376,7 @@ h1, h2, h3, h4, h5, h6 {
   gap: 0.5rem; /* Espacio entre elementos hijos */
   width: 94%; /* Ancho completo del contenedor */
   padding: 1.5rem; /* Padding general */
-  background-color: #1E3A8A;
+  background-color: #5B5F80;
 }
 
 /* Media queries para ajustes responsivos */

@@ -67,11 +67,11 @@
   }
 
   .botonenvio:hover {
-    background-color: #1E3A8A; /* Color de fondo al pasar el ratón por encima */
+    background-color: #5B5F80; /* Color de fondo al pasar el ratón por encima */
   }
 
   .botonenvio:focus {
     outline: none; /* Eliminar el contorno por defecto */
     box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
-    border-color: #1E3A8A; /* Color del borde en foco */
+    border-color: #5B5F80; /* Color del borde en foco */
   }
