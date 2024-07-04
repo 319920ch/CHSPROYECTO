@@ -22,8 +22,11 @@
       <main class="main-content">
         <div class="card">
           <div class="header">
-              <button class="botonpagina" onclick="abrirModalCrearProducto()">Crear Nuevo Producto</button>
+              <input class="buscador" type="text" id="buscarProducto" placeholder="Buscar producto por nombre" onkeyup="buscarProducto()">
           </div>
+          <div class="header">
+            <button class="botonpagina" onclick="abrirModalCrearProducto()">Crear Nuevo Producto</button>
+        </div>
           <div>
               <table class="table1">
                   <thead class="thead">
@@ -88,6 +91,8 @@
     </div>
   
     <script>
+      let productos = []; // Almacenará los productos cargados
+
       // Recuperar el nombre de usuario de LocalStorage y cargar productos
       document.addEventListener('DOMContentLoaded', async () => {
         const nombreUsuario = localStorage.getItem('nombreUsuario');
@@ -106,25 +111,38 @@
             throw new Error('Network response was not ok');
           }
           const data = await response.json();
-          const productosList = document.getElementById('productosList');
-          productosList.innerHTML = '';
-          data.forEach(producto => {
-            const row = document.createElement('tr');
-            row.id = `producto-${producto.id_producto}`; // ID único para cada fila
-            row.innerHTML = `
-              <td class="trol">${producto.id_producto}</td>
-              <td class="trol">${producto.nombre_producto}</td>
-              <td class="trol">${producto.descripcion_producto}</td>
-              <td class="trol">
-                <button class="botonpagina" onclick="abrirModalActualizar(${producto.id_producto},'${producto.nombre_producto}', '${producto.descripcion}')">Actualizar</button>
-                <button class="botonpagina" onclick="abrirModalEliminar(${producto.id_producto})">Eliminar</button>
-              </td>
-            `;
-            productosList.appendChild(row);
-          });
+          productos = data; // Guardar los productos en la variable global
+          mostrarProductos(data);
         } catch (error) {
           console.error('Error:', error);
         }
+      }
+  
+      function mostrarProductos(productos) {
+        const productosList = document.getElementById('productosList');
+        productosList.innerHTML = '';
+        productos.forEach(producto => {
+          const row = document.createElement('tr');
+          row.id = `producto-${producto.id_producto}`; // ID único para cada fila
+          row.innerHTML = `
+            <td class="trol">${producto.id_producto}</td>
+            <td class="trol">${producto.nombre_producto}</td>
+            <td class="trol">${producto.descripcion_producto || 'Sin descripción'}</td>
+            <td class="trol">
+              <button class="botonpagina" onclick="abrirModalActualizar(${producto.id_producto},'${producto.nombre_producto}', '${producto.descripcion_producto}')">Actualizar</button>
+              <button class="botonpagina" onclick="abrirModalEliminar(${producto.id_producto})">Eliminar</button>
+            </td>
+          `;
+          productosList.appendChild(row);
+        });
+      }
+
+      function buscarProducto() {
+        const terminoBusqueda = document.getElementById('buscarProducto').value.toLowerCase();
+        const productosFiltrados = productos.filter(producto => 
+          producto.nombre_producto.toLowerCase().includes(terminoBusqueda)
+        );
+        mostrarProductos(productosFiltrados);
       }
   
       function abrirModalCrearProducto() {

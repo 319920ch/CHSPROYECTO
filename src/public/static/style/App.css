@@ -423,6 +423,18 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
 }
 
+.buscador {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 99%; /* Ancho completo del contenedor */
+  height: 2rem; /* Altura fija de 8rem (equivalente a h-32) */
+  background-color: #ffffff; /* Color de fondo blanco */
+  border: 2px solid #4b5563; /* Borde de 2px sólido color #4b5563 */
+  border-radius: 0.5rem; /* Bordes redondeados de 0.5rem */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
 .opciones a {
   display: inline-block;
   padding: 10px 20px;
