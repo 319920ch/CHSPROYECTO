@@ -21,10 +21,13 @@
         <button class="botonpagina">NUEVO CONTRATO</button>
       </div>
         <div class="opciones">
-          <a href="./revisar-estado-contrato.html">REVISAR ESTADO DE CONTRATO VIGENTE</a>
+          <button class="botonpagina2">NUEVO PROYECTO</button>
         </div>
         <div class="opciones">
-          <a href="./informes-contratos.html">INFORMES DE CONTRATOS</a>
+          <button class="botonpagina3">ESTADO DE CONTRATOS</button>
+        </div>
+        <div class="opciones">
+          <button class="botonpagina4">INFORMES</button>
         </div>
       </div>
     </main>
@@ -46,6 +49,24 @@
     const btnNuevoContrato = document.querySelector('.botonpagina');
     btnNuevoContrato.addEventListener('click', (event) => {
       window.location.href = './nuevocontrato.html';
+    });
+  });
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const btnNuevoContrato = document.querySelector('.botonpagina2');
+    btnNuevoContrato.addEventListener('click', (event) => {
+      window.location.href = './listadocontrato.html';
+    });
+  });
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const btnNuevoContrato = document.querySelector('.botonpagina3');
+    btnNuevoContrato.addEventListener('click', (event) => {
+      window.location.href = './estadocontratos.html';
+    });
+  });
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const btnNuevoContrato = document.querySelector('.botonpagina4');
+    btnNuevoContrato.addEventListener('click', (event) => {
+      window.location.href = './infocontrato.html';
     });
   });
 </script>

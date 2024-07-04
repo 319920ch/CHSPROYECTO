@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nuevo Contrato</title>
-  <link rel="stylesheet" href="../static/style/forms.css">
-  <link rel="stylesheet" href="../static/style/App.css">
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soluciones Metálicas - Nuevo Contrato</title>
+    <link rel="stylesheet" href="../static/style/App.css">
+    <link rel="stylesheet" href="../static/style/modal.css">
+    <link rel="stylesheet" href="../static/style/tablas.css">
+    <link rel="stylesheet" href="../static/style/forms.css">
+    <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+  </head>
   <body>
         <header class="header">
           <a href="./gerente.html">
@@ -83,9 +86,10 @@
           
                   if (response.ok) {
                     const data = await response.json();
+                    const id_contrato = data.id_contrato; // Usar el nombre del campo correcto
                     alert('Contrato creado con éxito');
-                    window.location.href = './nuevoproyecto.html';
-                  } else {
+                    window.location.href = `./nuevoproyecto.html?contratoId=${id_contrato}`;
+                  }  else {
                     const errorMessage = await response.text();
                     alert(`Error al crear contrato: ${errorMessage}`);
                   }

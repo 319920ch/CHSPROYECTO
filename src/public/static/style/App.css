@@ -518,3 +518,104 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
   border-color: #1E3A8A; /* Color del borde en foco */
 }
+
+
+.botonpagina {
+  color: #FF6B35; /* Color del texto */
+  border: none; /* Sin borde inicial */
+  background-color: #ffffff;
+  padding: 0.5rem 1rem; /* Relleno (padding) para el botón */
+  border-radius: 0.25rem; /* Bordes redondeados */
+  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Transición suave para hover y focus */
+  font-size: 1rem;
+  width: 100%;
+  height: 100%;
+}
+
+.botonpagina:hover {
+  background-color:  #FF6B35; /* Color de fondo al pasar el ratón por encima */
+  color: #f5f5f5;
+  transition: background-color 0.3s;
+}
+
+.botonpagina:focus {
+  outline: none; /* Eliminar el contorno por defecto */
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
+  border-color: #1E3A8A; /* Color del borde en foco */
+}
+
+.botonpagina2 {
+  color: #FF6B35; /* Color del texto */
+  border: none; /* Sin borde inicial */
+  background-color: #ffffff;
+  padding: 0.5rem 1rem; /* Relleno (padding) para el botón */
+  border-radius: 0.25rem; /* Bordes redondeados */
+  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Transición suave para hover y focus */
+  font-size: 1rem;
+  width: 100%;
+  height: 100%;
+}
+
+.botonpagina2:hover {
+  background-color:  #FF6B35; /* Color de fondo al pasar el ratón por encima */
+  color: #f5f5f5;
+  transition: background-color 0.3s;
+}
+
+.botonpagina2:focus {
+  outline: none; /* Eliminar el contorno por defecto */
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
+  border-color: #1E3A8A; /* Color del borde en foco */
+}
+
+.botonpagina3 {
+  color: #FF6B35; /* Color del texto */
+  border: none; /* Sin borde inicial */
+  background-color: #ffffff;
+  padding: 0.5rem 1rem; /* Relleno (padding) para el botón */
+  border-radius: 0.25rem; /* Bordes redondeados */
+  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Transición suave para hover y focus */
+  font-size: 1rem;
+  width: 100%;
+  height: 100%;
+}
+
+.botonpagina3:hover {
+  background-color:  #FF6B35; /* Color de fondo al pasar el ratón por encima */
+  color: #f5f5f5;
+  transition: background-color 0.3s;
+}
+
+.botonpagina3:focus {
+  outline: none; /* Eliminar el contorno por defecto */
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
+  border-color: #1E3A8A; /* Color del borde en foco */
+}
+
+.botonpagina4 {
+  color: #FF6B35; /* Color del texto */
+  border: none; /* Sin borde inicial */
+  background-color: #ffffff;
+  padding: 0.5rem 1rem; /* Relleno (padding) para el botón */
+  border-radius: 0.25rem; /* Bordes redondeados */
+  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Transición suave para hover y focus */
+  font-size: 1rem;
+  width: 100%;
+  height: 100%;
+}
+
+.botonpagina4:hover {
+  background-color:  #FF6B35; /* Color de fondo al pasar el ratón por encima */
+  color: #f5f5f5;
+  transition: background-color 0.3s;
+}
+
+.botonpagina4:focus {
+  outline: none; /* Eliminar el contorno por defecto */
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
+  border-color: #1E3A8A; /* Color del borde en foco */
+}
