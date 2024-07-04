@@ -49,3 +49,17 @@ exports.eliminarProducto = async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   };
+
+  exports.buscarProductoPorNombre = async (req, res) => {
+    try {
+      // Obtener la lista completa de productos
+      const productos = await Producto.findAll({
+        attributes: ['id_producto', 'nombre_producto', 'descripcion_producto']
+      });
+  
+      // Return the list of products
+      res.status(200).json(productos);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };

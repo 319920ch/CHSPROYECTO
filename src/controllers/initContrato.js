@@ -1,6 +1,5 @@
 const Contrato = require('../models/contratom');
 
-
 exports.initContrato = async (req, res) => {
   try {
     const { cliente, presupuesto, fecha_inicio, fecha_fin } = req.body;

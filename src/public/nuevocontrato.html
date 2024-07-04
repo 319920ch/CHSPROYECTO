@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuevo Contrato</title>
+  <link rel="stylesheet" href="../static/style/forms.css">
+  <link rel="stylesheet" href="../static/style/App.css">
+</head>
+  <body>
+        <header class="header">
+          <a href="./gerente.html">
+            <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo">
+        </a>
+          <h1 class="title">SOLUCIONES METÁLICAS</h1>
+        </header>
+      
+        <main class="main-content">
+          <form id="nuevoContratoForm" class="form-container">
+            <h2 class="form-title">Nuevo contrato</h2>
+            <div class="form-group">
+              <label for="cliente" class="form-label">Cliente:</label>
+              <input id="cliente" type="text" class="form-input" placeholder="Ingrese nombre del cliente">
+            </div>
+            <div class="form-group">
+              <label for="presupuesto" class="form-label">Presupuesto:</label>
+              <input id="presupuesto" type="text" class="form-input" placeholder="Ingrese presupuesto">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fecha de Inicio:</label>
+              <div class="date-inputs">
+                <input type="text" class="form-input date-input" placeholder="Día" id="diai">
+                <input type="text" class="form-input date-input" placeholder="Mes" id="mesi">
+                <input type="text" class="form-input date-input" placeholder="Año" id="añoi">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fecha de Fin:</label>
+              <div class="date-inputs">
+                <input type="text" class="form-input date-input" placeholder="Día" id="diaf">
+                <input type="text" class="form-input date-input" placeholder="Mes" id="mesf">
+                <input type="text" class="form-input date-input" placeholder="Año" id="añof">
+              </div>
+            </div>
+            <button type="submit" class="submit-button" onclick="handleNuevoContrato()">Registrar Contrato</button>
+          </form>
+          
+  <script>
+  async  function handleNuevoContrato() {
+  const cliente = document.getElementById('cliente').value;
+  const presupuesto = document.getElementById('presupuesto').value;
+
+  const fechaInicioDay = document.getElementById('diai').value;
+  const fechaInicioMonth = document.getElementById('mesi').value;
+  const fechaInicioYear = document.getElementById('añoi').value;
+  const fechaInicio = `${fechaInicioYear}-${fechaInicioMonth.padStart(2, '0')}-${fechaInicioDay.padStart(2, '0')}`;
+
+  const fechaFinDay = document.getElementById('diaf').value;
+  const fechaFinMonth = document.getElementById('mesf').value;
+  const fechaFinYear = document.getElementById('añof').value;
+  const fechaFin = `${fechaFinYear}-${fechaFinMonth.padStart(2, '0')}-${fechaFinDay.padStart(2, '0')}`;
+
+  const datos = {
+    cliente,
+    presupuesto,
+    fecha_inicio: fechaInicio,
+    fecha_fin: fechaFin
+  };
+
+  if (!cliente || !presupuesto ||!fechaInicioDay || !fechaInicioMonth || !fechaFinYear || !fechaFinMonth) {
+    alert('Por favor, complete todos los campos requeridos');
+    return;
+  }else{
+    alert(`Datos a enviar:\n${JSON.stringify(datos, null, 2)}`);
+    try {
+      const response = await fetch('/api/initC/iniciar', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(datos)});
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('ok');
+        alert('Contrato creado con éxito');
+        window.location.href = './nuevoproyecto.html';
+      } else {
+        const errorMessage = await response.text();
+        console.log('no');
+        alert(`Error al crear contrato: ${errorMessage}`);
+      }
+  } catch (error) {
+    console.error('Error al crear contrato:', error);
+    alert('Error al crear contrato. Verifica los datos ingresados.',fecha_inicio);
+  }
+  }
+}
+  </script>
+</body>
+</html>

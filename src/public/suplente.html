@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soluciones Metálicas</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="stylesheet" href="../static/style/tablas.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div class="encabezado">
+    <header class="headerprincipal">
+      <div class="imglogo">
+        <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+      </div>
+      <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span></center> !</h1>
+    </header>
+    <main class="main-content">
+        <table class="table">
+            <thead class="thead">
+              <tr>
+                <th>Id rol</th>
+                <th>Nombre de rol</th>
+              </tr>
+            </thead>
+            <tbody id="rolesList" class="tbody">
+              <!-- Aquí se añadirán dinámicamente los roles -->
+            </tbody>
+          </table>
+    </main>
+  </div>
+
+  <script>
+    // Recuperar el nombre de usuario de LocalStorage y cargar roles
+    document.addEventListener('DOMContentLoaded', async () => {
+      const nombreUsuario = localStorage.getItem('nombreUsuario');
+      if (nombreUsuario) {
+        document.getElementById('nombreUsuario').innerText = nombreUsuario;
+      }
+
+      // Llamar a la función para cargar los roles
+      await cargarRoles();
+    });
+
+    async function cargarRoles() {
+      try {
+        const response = await fetch('/api/roles');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        const rolesList = document.getElementById('rolesList');
+        rolesList.innerHTML = '';
+        data.forEach(rol => {
+          // Filtrar roles con id 1 o 2
+          if (rol.id_rol !== 1 && rol.id_rol !== 2 && rol.id_rol !== 8) {
+            const row = document.createElement('tr');
+            row.id = `rol-${rol.id_rol}`;
+            row.innerHTML = `
+              <td class="trol">${rol.id_rol}</td>
+              <td class="tn"><button class="botonpagina" onclick="seleccionarRol(${rol.id_rol})">${rol.nombre_rol}</button></td>
+            `;
+            rolesList.appendChild(row);
+          }
+        });
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    function seleccionarRol(idRol) {
+      switch (parseInt(idRol)) {
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+          window.location.href = './encargado.html'; // Redirige a la interfaz de encargado
+          break;
+        default:
+          alert('Rol no reconocido');
+      }
+    }
+  </script>
+</body>
+</html>

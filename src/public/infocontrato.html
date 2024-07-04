@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Información de Contrato</title>
+    <link rel="stylesheet" href="../static/style/forms.css">
+    <link rel="stylesheet" href="../static/style/App.css">
+</head>
+<body>
+    <header class="header">
+        <a href="./inicio.html">
+          <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo">
+      </a>
+        <h1 class="title">SOLUCIONES METÁLICAS</h1>
+      </header>
+      
+    <h1 class="form-title">Información de Contrato</h1>
+    <form id="buscarContratoForm" class="form-container">
+        <div class="espacioy2">
+            <label for="idContrato" class="form-label">ID de Contrato:</label> 
+        </div>
+        <input type="text" class="form-input" id="idContrato" name="id_contrato">
+        <div class="espacioy2">
+        <button class="submit-button" type="submit">Buscar</button>
+    </div>
+    </form>
+
+    <div id="resultadoContrato">
+        <!-- Aquí se mostrará la información del contrato y proyectos -->
+    </div>
+
+    <script>
+        document.getElementById('buscarContratoForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(this);
+            const idContrato = formData.get('id_contrato');
+            
+            const response = await fetch('/buscainfo/c', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id_contrato: idContrato })
+            });
+
+            const data = await response.json();
+            mostrarResultado(data);
+        });
+
+        function mostrarResultado(data) {
+            const resultadoContrato = document.getElementById('resultadoContrato');
+            resultadoContrato.innerHTML = `
+                <p>ID Contrato: ${data.id_contrato}</p>
+                <p>Cliente: ${data.cliente}</p>
+                <p>Fecha Inicio: ${data.fecha_inicio}</p>
+                <p>Fecha Fin: ${data.fecha_fin}</p>
+                <p>Presupuesto: ${data.presupuesto}</p>
+                <h2>Proyectos:</h2>
+                <ul>
+                    ${data.proyectos.map(proyecto => `
+                        <li>
+                            <p>ID Proyecto: ${proyecto.id_proyecto}</p>
+                            <p>Nombre Proyecto: ${proyecto.nombre_proyecto}</p>
+                            <h3>Áreas:</h3>
+                            <ul>
+                                ${proyecto.areas.map(area => `
+                                    <li>
+                                        <p>ID Área: ${area.id_area}</p>
+                                        <p>Nombre Área: ${area.nombre_area}</p>
+                                        <p>Estado: ${area.estado}</p>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
+    </script>
+</body>
+</html>

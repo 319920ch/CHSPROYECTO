@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soluciones Metálicas - Productos</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="stylesheet" href="../static/style/tablas.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="encabezado">
+      <header class="headerprincipal">
+        <div class="imglogo">
+            <a href="./admin.html">
+                <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+            </a>
+        </div>
+        <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span>!</center></h1>
+      </header>
+      <main class="main-content">
+        <div class="card">
+          <div class="header">
+              <button class="botonpagina" onclick="abrirModalCrearProducto()">Crear Nuevo Producto</button>
+          </div>
+          <div>
+              <table class="table1">
+                  <thead class="thead">
+                    <tr>
+                      <th>ID Producto</th>
+                      <th>Nombre Producto</th>
+                      <th>Detalles</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="productosList" class="tbody">
+                    <!-- Aquí se añadirán dinámicamente los productos -->
+                  </tbody>
+                </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  
+    <!-- Ventana modal para Actualizar -->
+    <div id="modalActualizar" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Actualizar Producto</h2>
+        <form id="updateForm">
+          <label for="idProductoActualizar">ID Producto:</label>
+          <input type="text" id="idProductoActualizar" name="idProductoActualizar" readonly><br><br>
+          <label for="nombreActualizar">Nuevo Nombre:</label>
+          <input type="text" id="nombreActualizar" name="nombreActualizar"><br><br>
+          <label for="descripcionActualizar">Nueva Descripción:</label>
+          <textarea id="descripcionActualizar" name="descripcionActualizar" rows="4" cols="50"></textarea><br><br>
+          <button type="submit">Guardar cambios</button>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Ventana modal para Eliminar -->
+    <div id="modalEliminar" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Eliminar Producto</h2>
+        <label for="idEliminar">ID Producto:</label>
+        <input type="text" id="idEliminar" name="idEliminar"><br><br>
+        <p>¿Estás seguro de que deseas eliminar este producto?</p>
+        <button id="eliminarBtn" style="background-color:red;">Eliminar</button>
+      </div>
+    </div>
+    
+    <!-- Ventana modal para Crear Nuevo Producto -->
+    <div id="modalCrearProducto" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Crear Nuevo Producto</h2>
+        <form id="createForm">
+          <label for="nombreNuevo">Nombre del Producto:</label>
+          <input type="text" id="nombreNuevo" name="nombreNuevo"><br><br>
+          <label for="descripcionNueva">Descripción:</label>
+          <textarea id="descripcionNueva" name="descripcionNueva" rows="4" cols="50"></textarea><br><br>
+          <button type="submit">Crear Producto</button>
+        </form>
+      </div>
+    </div>
+  
+    <script>
+      // Recuperar el nombre de usuario de LocalStorage y cargar productos
+      document.addEventListener('DOMContentLoaded', async () => {
+        const nombreUsuario = localStorage.getItem('nombreUsuario');
+        if (nombreUsuario) {
+          document.getElementById('nombreUsuario').innerText = nombreUsuario;
+        }
+    
+        // Llamar a la función para cargar los productos
+        await cargarProductos();
+      });
+    
+      async function cargarProductos() {
+        try {
+          const response = await fetch('/api/productos'); // Ruta de la API para obtener productos
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          const productosList = document.getElementById('productosList');
+          productosList.innerHTML = '';
+          data.forEach(producto => {
+            const row = document.createElement('tr');
+            row.id = `producto-${producto.id_producto}`; // ID único para cada fila
+            row.innerHTML = `
+              <td class="trol">${producto.id_producto}</td>
+              <td class="trol">${producto.nombre_producto}</td>
+              <td class="trol">${producto.descripcion_producto}</td>
+              <td class="trol">
+                <button class="botonpagina" onclick="abrirModalActualizar(${producto.id_producto},'${producto.nombre_producto}', '${producto.descripcion}')">Actualizar</button>
+                <button class="botonpagina" onclick="abrirModalEliminar(${producto.id_producto})">Eliminar</button>
+              </td>
+            `;
+            productosList.appendChild(row);
+          });
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+  
+      function abrirModalCrearProducto() {
+          const modal = document.getElementById('modalCrearProducto');
+          const span = modal.querySelector('.close');
+    
+          // Mostrar el modal
+          modal.style.display = 'block';
+    
+          // Cuando el usuario hace clic en '×' (cerrar), cerrar el modal
+          span.onclick = function() {
+            modal.style.display = 'none';
+          };
+    
+          // Cuando el usuario hace clic fuera del modal, cerrar el modal
+          window.onclick = function(event) {
+            if (event.target === modal) {
+              modal.style.display = 'none';
+            }
+          };
+        }
+  
+      async function abrirModalActualizar(id, nombre, descripcionActual) {
+        const modal = document.getElementById('modalActualizar');
+        const span = modal.querySelector('.close');
+        const form = modal.querySelector('form');
+        const idProductoInput = form.querySelector('#idProductoActualizar');
+        const nombreInput = form.querySelector('#nombreActualizar');
+        const descripcionInput = form.querySelector('#descripcionActualizar');
+    
+        // Llenar los campos del formulario con los datos actuales
+        idProductoInput.value = id;
+        nombreInput.value = nombre;
+        descripcionInput.value = descripcionActual;
+    
+        // Mostrar el modal
+        modal.style.display = 'block';
+    
+        // Cuando el usuario hace clic en '×' (cerrar), cerrar el modal
+        span.onclick = function() {
+          modal.style.display = 'none';
+        };
+    
+        // Cuando el usuario hace clic fuera del modal, cerrar el modal
+        window.onclick = function(event) {
+          if (event.target === modal) {
+            modal.style.display = 'none';
+          }
+        };
+    
+        // Manejar el envío del formulario
+        form.onsubmit = async function(event) {
+          event.preventDefault();
+          await actualizarProducto(id, nombreInput.value, descripcionInput.value);
+          modal.style.display = 'none';
+        };
+      }
+    
+      async function abrirModalEliminar(id) {
+        const modal = document.getElementById('modalEliminar');
+        const span = modal.querySelector('.close');
+        const idEliminarInput = modal.querySelector('#idEliminar');
+        const eliminarBtn = modal.querySelector('#eliminarBtn');
+    
+        // Mostrar el modal
+        modal.style.display = 'block';
+    
+        // Llenar el campo de ID
+        idEliminarInput.value = id;
+    
+        // Cuando el usuario hace clic en '×' (cerrar), cerrar el modal
+        span.onclick = function() {
+          modal.style.display = 'none';
+        };
+    
+        // Cuando el usuario hace clic fuera del modal, cerrar el modal
+        window.onclick = function(event) {
+          if (event.target === modal) {
+            modal.style.display = 'none';
+          }
+        };
+    
+        // Manejar el clic en el botón de Eliminar
+        eliminarBtn.onclick = async function() {
+          const id = idEliminarInput.value;
+          await eliminarProducto(id);
+          modal.style.display = 'none';
+        };
+      }
+    
+      async function eliminarProducto(id) {
+        try {
+          const response = await fetch(`/api/productos/${id}`, {
+            method: 'DELETE'
+          });
+    
+          if (!response.ok) {
+            throw new Error('Error al eliminar el producto');
+          }
+          alert('Producto eliminado correctamente');
+          await cargarProductos(); // Recargar la lista de productos
+        } catch (error) {
+          alert('Error al eliminar el producto: pertenece a un proyecto');
+        }
+      }
+    
+      async function actualizarProducto(id, nuevoNombre, nuevaDescripcion) {
+        try {
+          const response = await fetch(`/api/productos/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              nombre_producto: nuevoNombre,
+              descripcion_producto: nuevaDescripcion
+            })
+          });
+    
+          if (!response.ok) {
+            throw new Error('Error al actualizar el producto');
+          }
+    
+          console.log('Producto actualizado correctamente');
+          await cargarProductos();
+        } catch (error) {
+          console.error('Error al actualizar el producto:', error);
+        }
+      }
+  
+      // Manejar el envío del formulario de creación de producto
+      const createForm = document.getElementById('createForm');
+      createForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const nombreNuevo = document.getElementById('nombreNuevo').value;
+        const descripcionNueva = document.getElementById('descripcionNueva').value;
+        await crearProducto(nombreNuevo, descripcionNueva);
+        document.getElementById('modalCrearProducto').style.display = 'none';
+      });
+  
+      async function crearProducto(nombre, descripcion) {
+        try {
+          const response = await fetch('/api/productos', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              nombre_producto: nombre,
+              descripcion_producto: descripcion
+            })
+          });
+  
+          if (!response.ok) {
+            throw new Error('Error al crear el producto');
+          }
+  
+          alert('Producto creado correctamente');
+          await cargarProductos(); // Recargar la lista de productos
+        } catch (error) {
+          console.error('Error al crear el producto:', error);
+        }
+      }
+    </script>
+  </body>
+</html>

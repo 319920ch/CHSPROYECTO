@@ -1,11 +1,13 @@
-
-
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const sequelize = require('./database/conexiones'); // Asegúrate de tener la ruta correcta
 const authRoutes = require('./routes/authRoutes'); // Importa el archivo de rutas de autenticación
 const path = require('path');
+const rolesRoutes = require('./routes/rolRoutes'); // Ajusta el nombre del archivo según corresponda
+const initCI = require('./routes/initContrato/iniciar'); // Ajusta el nombre del archivo según corresponda
+const productos = require('./routes/productoRoutes'); // Ajusta el nombre del archivo según corresponda
+
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -22,8 +24,11 @@ app.set('views', path.join(__dirname, 'views'));
 // Servir archivos estáticos desde la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Rutas de autenticación
+// Rutas 
 app.use('/auth', authRoutes); // Usa '/auth' como prefijo para las rutas de autenticación
+app.use('/api/roles', rolesRoutes); // Asegúrate de que la ruta base es /api/roles
+app.use('/api/productos', productos); // Asegúrate de que la ruta base es /api/roles
+app.use('/api/initC/iniciar', initCI); // Asegúrate de que la ruta base es /api/roles
 
 // Ruta para renderizar la página de inicio
 app.get('/', (req, res) => {

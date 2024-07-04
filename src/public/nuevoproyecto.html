@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuevo Proyecto</title>
+  <link rel="stylesheet" href="../static/style/forms.css">
+  <link rel="stylesheet" href="../static/style/App.css">
+</head>
+  <body>
+        <header class="header">
+            <a href="./inicio.html">
+                <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo">
+            </a>
+          <h1 class="title">SOLUCIONES METÁLICAS</h1>
+        </header>
+      
+        <main class="main-content">
+          <form id="nuevoContratoForm" class="form-container">
+            <h2 class="form-title">Nuevo proyecto</h2>
+            <div class="form-group">
+              <label for="contrato" class="form-label">Contrato número:</label>
+              <input id="contrato" type="text" class="form-input" >
+            </div>
+            <div class="form-group">
+              <label for="producto" class="form-label">Producto:</label>
+              <input id="producto" type="text" class="form-input" >
+            </div>
+            <div class="form-group">
+                <label for="cantidad" class="form-label">Cantidad:</label>
+                <input id="cantidad" type="text" class="form-input" placeholder="Ingrese cantidad">
+              </div>
+            <div class="form-group">
+              <label class="form-label">Fecha de Inicio:</label>
+              <div class="date-inputs">
+                <input type="text" class="form-input date-input" placeholder="Día" id="diai">
+                <input type="text" class="form-input date-input" placeholder="Mes" id="mesi">
+                <input type="text" class="form-input date-input" placeholder="Año" id="añoi">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fecha de Fin:</label>
+              <div class="date-inputs">
+                <input type="text" class="form-input date-input" placeholder="Día" id="diaf">
+                <input type="text" class="form-input date-input" placeholder="Mes" id="mesf">
+                <input type="text" class="form-input date-input" placeholder="Año" id="añof">
+              </div>
+            </div>
+            <button type="submit" class="submit-button" onclick="handleNuevoProyecto()">Registrar Proyecto</button>
+          </form>
+</body>
+</html>

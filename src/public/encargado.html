@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Soluciones Metálicas</title>
   <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="stylesheet" href="../static/style/modal.css">
   <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -16,15 +17,14 @@
       <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span></center> !</h1>
     </header>
     <main class="areaprincipal">
-      <div class="area">
+      <div class="opciones">
+        <button class="botonpagina">NUEVO </button>
+      </div>
         <div class="opciones">
-          <a href="./nuevocontrato.html">NUEVO CONTRATO</a>
+          <a href="./revisar-estado-contrato.html">REVISARE</a>
         </div>
         <div class="opciones">
-          <a href="./revisar-estado-contrato.html">REVISAR ESTADO DE CONTRATO VIGENTE</a>
-        </div>
-        <div class="opciones">
-          <a href="./informes-contratos.html">INFORMES DE CONTRATOS</a>
+          <a href="./informes-contratos.html">INFORMES</a>
         </div>
       </div>
     </main>
@@ -41,3 +41,11 @@
   </script>
 </body>
 </html>
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const btnNuevoContrato = document.querySelector('.botonpagina');
+    btnNuevoContrato.addEventListener('click', (event) => {
+      window.location.href = './nuevocontrato.html';
+    });
+  });
+</script>

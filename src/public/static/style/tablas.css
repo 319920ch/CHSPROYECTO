@@ -1,0 +1,51 @@
+/* Estilos para la tabla */
+.table {
+    border: 1px solid #2D2D2D; /* Borde de 1 píxel sólido con color #2D2D2D */
+    border-radius: 8px; /* Bordes redondeados */
+    margin-top: 1rem; /* Margen superior de 1 rem */
+    width: 50%;
+}
+
+.table1 {
+    border: 1px solid #2D2D2D; /* Borde de 1 píxel sólido con color #2D2D2D */
+    border-radius: 8px; /* Bordes redondeados */
+    margin-top: 1rem; /* Margen superior de 1 rem */
+    width: 100%;
+}
+
+/* Estilos para el encabezado de la tabla */
+.thead {
+    background-color: #1E3A8A; /* Fondo azul oscuro */
+    color: #fff; /* Texto blanco */
+    padding: 0.75rem; /* Relleno de 0.75 rem */
+    justify-content: center;
+}
+
+/* Estilos para las filas de la tabla */
+.trol {
+    background-color: #fff;
+    color: #2D2D2D;
+    text-align: center; /* Centra el texto horizontalmente */
+    vertical-align: middle; /* Centra verticalmente si el contenido tiene más de una línea */
+    border-bottom: 1px solid #2D2D2D; /* Borde inferior de 1 píxel sólido con color #2D2D2D */
+}
+
+.tn {
+    background-color: #fff;
+    border-bottom: 1px solid #2D2D2D; /* Borde inferior de 1 píxel sólido con color #2D2D2D */
+}
+
+/* Estilos para las celdas de la tabla */
+.tbody {
+    background-color: #F0F0F0; /* Fondo gris claro */
+    padding: 1.5rem; /* Relleno de 0.75 rem */
+    width: 35rem;
+}
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 72px); /* Adjust height based on header height */
+    background-color: #1E3A8A;
+    width: 100%;
+  }

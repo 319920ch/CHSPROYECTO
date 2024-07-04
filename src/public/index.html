@@ -58,12 +58,35 @@
           localStorage.setItem('nombreUsuario', nombre);
 
           // Redirigir según la respuesta del servidor (ejemplo: id_rol)
-          if (data.id_rol === 2) {
-            window.location.href = './gerente/inicio.html'; // Redirige a la interfaz deseada
-          } else {
-            // Redirigir a otra interfaz según sea necesario
-            alert(`Bienvenido a Soluciones Metálicas. Tu id_rol es ${data.id_rol}`);
-          }
+          switch (data.id_rol) {
+            case 1:
+                window.location.href = './admin.html'; // Redirige a la interfaz de administrador
+                break;
+            case 2:
+                window.location.href = './gerente.html'; // Redirige a la interfaz general
+                break;
+            case 3:
+                window.location.href = './encargado.html'; // Redirige a la interfaz de usuario
+                break;
+            case 4:
+                window.location.href = './encargado.html'; // Redirige a la interfaz de usuario
+                break;
+            case 5:
+                window.location.href = './encargado.html'; // Redirige a la interfaz de usuario
+                break;
+            case 6:
+                window.location.href = './encargado.html'; // Redirige a la interfaz de usuario
+                break;
+            case 7:
+                window.location.href = './encargado.html'; // Redirige a la interfaz de usuario
+                break;
+            case 8:
+                window.location.href = './suplente.html'; // Redirige a la interfaz de invitado
+                break;
+            default:
+                // Redirigir a otra interfaz según sea necesario
+                alert(`Bienvenido a Soluciones Metálicas. Tu id_rol es ${data.id_rol}`);
+        }        
         } else {
           // Manejo de errores si la solicitud falla
           alert('Inicio de sesión fallido. Verifica tus credenciales.');
