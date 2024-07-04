@@ -23,11 +23,13 @@
             <h2 class="form-title">Nuevo proyecto</h2>
             <div class="form-group">
               <label for="contrato" class="form-label">Contrato número:</label>
-              <input id="contrato" type="text" class="form-input" readonly>
+              <input id="contrato" type="text" class="form-input" >
             </div>
             <div class="form-group">
               <label for="producto" class="form-label">Producto:</label>
-              <input id="producto" type="text" class="form-input" >
+              <select id="producto" class="form-input">
+                <option value="">Seleccione un producto</option>
+              </select>
             </div>
             <div class="form-group">
                 <label for="cantidad" class="form-label">Cantidad:</label>
@@ -35,21 +37,13 @@
               </div>
             <div class="form-group">
               <label class="form-label">Fecha de Inicio:</label>
-              <div class="date-inputs">
-                <input type="text" class="form-input date-input" placeholder="Día" id="diai">
-                <input type="text" class="form-input date-input" placeholder="Mes" id="mesi">
-                <input type="text" class="form-input date-input" placeholder="Año" id="añoi">
-              </div>
+              <input type="date" id="fecha_inicio" class="form-input">
             </div>
             <div class="form-group">
               <label class="form-label">Fecha de Fin:</label>
-              <div class="date-inputs">
-                <input type="text" class="form-input date-input" placeholder="Día" id="diaf">
-                <input type="text" class="form-input date-input" placeholder="Mes" id="mesf">
-                <input type="text" class="form-input date-input" placeholder="Año" id="añof">
-              </div>
+              <input type="date" id="fecha_fin" class="form-input">
             </div>
-            <button type="submit" class="submit-button" onclick="handleNuevoProyecto()">Registrar Proyecto</button>
+            <button type="submit" class="submit-button" onclick="handleNuevoProyecto(event)">Registrar Proyecto</button>
           </form>
 
     <script>
@@ -58,6 +52,75 @@
 
       // Ahora puedes utilizar el contratoId para llenar el campo de contrato número
       document.getElementById('contrato').value = contratoId;
-    </script>
+      
+      async function loadProductos() {
+        try {
+          const response = await fetch('/api/productos');
+          const productos = await response.json();
+          const select = document.getElementById('producto');
+          productos.forEach(producto => {
+            const option = document.createElement('option');
+            option.value = producto.id_producto;
+            option.text = producto.nombre_producto;
+            select.appendChild(option);
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      loadProductos();
+
+        async function handleNuevoProyecto() {
+          event.preventDefault(); 
+
+          const contratoId = document.getElementById('contrato').value;
+          const producto = document.getElementById('producto').value;
+          const cantidad = document.getElementById('cantidad').value;
+          const fechaInicio = document.getElementById('fecha_inicio').value;
+          const fechaFin = document.getElementById('fecha_fin').value;
+      
+          const [añoi, mesi, diai] = fechaInicio.split('-');
+          const [añof, mesf, diaf] = fechaFin.split('-');
+        
+          const data = {
+            id_contrato: contratoId,
+            id_producto: producto,
+            cantidad_producto: cantidad,
+            fecha_inicio: fechaInicio,
+            fecha_fin: fechaFin,
+          };
+      
+          alert(JSON.stringify(data));
+      
+          if (!contratoId || !producto || !cantidad || !diai || !mesi || !añoi || !diaf || !mesf || !añof) {
+            alert('Por favor, complete todos los campos requeridos');
+            return;
+          } else {
+            try {
+              const response = await fetch('/api/initP/iniciar', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              });
+      
+              const resultado = await response.json();
+      
+              if (response.ok) {
+                alert(`Proyecto creado con éxito. ID del proyecto: ${resultado.id_proyecto}`);
+                console.log("Éxito");
+              } else {
+                alert(`Error al crear: ${resultado.error}`);
+                console.error("error1");
+              }
+            } catch (error) {
+              alert(`Error al crear el proyecto: ${error.message}`);
+              console.error("error2");
+            }
+          }
+        }
+      </script>
 </body>
 </html>

@@ -31,39 +31,26 @@
             </div>
             <div class="form-group">
               <label class="form-label">Fecha de Inicio:</label>
-              <div class="date-inputs">
-                <input type="text" class="form-input date-input" placeholder="Día" id="diai">
-                <input type="text" class="form-input date-input" placeholder="Mes" id="mesi">
-                <input type="text" class="form-input date-input" placeholder="Año" id="añoi">
-              </div>
+              <input type="date" id="fecha_inicio" class="form-input" min="<?php echo date('Y-m-d'); ?>">
             </div>
             <div class="form-group">
               <label class="form-label">Fecha de Fin:</label>
-              <div class="date-inputs">
-                <input type="text" class="form-input date-input" placeholder="Día" id="diaf">
-                <input type="text" class="form-input date-input" placeholder="Mes" id="mesf">
-                <input type="text" class="form-input date-input" placeholder="Año" id="añof">
-              </div>
+              <input type="date" id="fecha_fin" class="form-input" max="<?php echo date('Y-m-d', strtotime('+1 year')); ?>">
             </div>
             <button type="submit" class="submit-button" onclick="handleNuevoContrato(event)">Registrar Contrato</button>
           </form>      
           <script>
             async function handleNuevoContrato(event) {
-              event.preventDefault(); // Agregamos esta línea para prevenir que el formulario se envíe
+              event.preventDefault(); 
           
               const cliente = document.getElementById('cliente').value;
               const presupuesto = document.getElementById('presupuesto').value;
-          
-              const fechaInicioDay = document.getElementById('diai').value;
-              const fechaInicioMonth = document.getElementById('mesi').value;
-              const fechaInicioYear = document.getElementById('añoi').value;
-              const fechaInicio = `${fechaInicioYear}-${fechaInicioMonth.padStart(2, '0')}-${fechaInicioDay.padStart(2, '0')}`;
-          
-              const fechaFinDay = document.getElementById('diaf').value;
-              const fechaFinMonth = document.getElementById('mesf').value;
-              const fechaFinYear = document.getElementById('añof').value;
-              const fechaFin = `${fechaFinYear}-${fechaFinMonth.padStart(2, '0')}-${fechaFinDay.padStart(2, '0')}`;
-          
+              const fechaInicio = document.getElementById('fecha_inicio').value;
+              const fechaFin = document.getElementById('fecha_fin').value;
+              
+              const [añoi, mesi, diai] = fechaInicio.split('-');
+              const [añof, mesf, diaf] = fechaFin.split('-');
+
               const datos = {
                 cliente,
                 presupuesto,
@@ -71,7 +58,7 @@
                 fecha_fin: fechaFin
               };
           
-              if (!cliente || !presupuesto || !fechaInicioDay || !fechaInicioMonth || !fechaFinYear || !fechaFinMonth) {
+              if (!cliente || !presupuesto || !fechaInicio || !fechaFin) {
                 alert('Por favor, complete todos los campos requeridos');
                 return;
               } else {
@@ -86,7 +73,7 @@
           
                   if (response.ok) {
                     const data = await response.json();
-                    const id_contrato = data.id_contrato; // Usar el nombre del campo correcto
+                    const id_contrato = data.id_contrato; 
                     alert('Contrato creado con éxito');
                     window.location.href = `./nuevoproyecto.html?contratoId=${id_contrato}`;
                   }  else {

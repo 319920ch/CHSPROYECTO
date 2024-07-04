@@ -7,7 +7,7 @@ const path = require('path');
 const rolesRoutes = require('./routes/rolRoutes'); // Ajusta el nombre del archivo según corresponda
 const initC = require('./routes/initContrato'); // Ajusta el nombre del archivo según corresponda
 const productos = require('./routes/productoRoutes'); // Ajusta el nombre del archivo según corresponda
-
+const initP = require('./routes/initProyectoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -29,6 +29,7 @@ app.use('/auth', authRoutes); // Usa '/auth' como prefijo para las rutas de aute
 app.use('/api/roles', rolesRoutes); // Asegúrate de que la ruta base es /api/roles
 app.use('/api/productos', productos); // Asegúrate de que la ruta base es /api/roles
 app.use('/api/initC', initC); // Asegúrate de que la ruta base es /api/roles
+app.use('/api/initP', initP);
 
 // Ruta para renderizar la página de inicio
 app.get('/', (req, res) => {
