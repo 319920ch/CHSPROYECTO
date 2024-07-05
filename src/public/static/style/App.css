@@ -37,19 +37,13 @@
   --muted: hsl(240, 4.8%, 95.9%);
   --muted-foreground: hsl(240, 3.8%, 45%);
   --accent: hsl(240, 4.8%, 95.9%);
+  --accent-foreground: hsl(240, 5.9%, 10%);
   --destructive: hsl(0, 72%, 51%);
   --destructive-foreground: hsl(0, 0%, 98%);
   --border: hsl(240, 5.9%, 90%);
   --input: hsl(240, 5.9%, 90%);
   --ring: hsl(240, 5.9%, 10%);
   --radius: 0.5rem;
-}
-
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: #5B5F80; /* Fondo para toda la página */
 }
 
 /* Definición de variables para radios de borde */
@@ -100,7 +94,6 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: 'Inter', sans-serif;
-  overflow: auto; /* Permite el desplazamiento si el contenido excede la altura del contenedor */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -246,12 +239,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
+
 .card {
   width: 100%; /* Equivalente a w-full en Tailwind */
   max-width: 32rem; /* Equivalente a max-w-md en Tailwind */
-  height: max-content;
-  overflow: auto;
-  max-height: fit-content;
 }
 
 
@@ -269,8 +260,7 @@ h1, h2, h3, h4, h5, h6 {
   display: grid;
   gap: 1rem; 
   font-size: 0.9rem;
-  height: max-content;
-  max-height: fit-content;
+  
 }
 
 .button1 {
@@ -345,7 +335,6 @@ h1, h2, h3, h4, h5, h6 {
 .encabezado {
   display:flex;
   flex-direction: column;
-  overflow: auto;
   align-items: center;
   min-height: 100vh; /* Altura mínima de la pantalla */
   background-color: #f5f5f5; /* Color de fondo */
@@ -434,18 +423,6 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
 }
 
-.buscador {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 99%; /* Ancho completo del contenedor */
-  height: 2rem; /* Altura fija de 8rem (equivalente a h-32) */
-  background-color: #ffffff; /* Color de fondo blanco */
-  border: 2px solid #4b5563; /* Borde de 2px sólido color #4b5563 */
-  border-radius: 0.5rem; /* Bordes redondeados de 0.5rem */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
-}
-
 .opciones a {
   display: inline-block;
   padding: 10px 20px;
@@ -528,113 +505,4 @@ h1, h2, h3, h4, h5, h6 {
   outline: none; /* Eliminar el contorno por defecto */
   box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
   border-color: #1E3A8A; /* Color del borde en foco */
-}
-
-
-.botonpagina {
-  color: #FF6B35; /* Color del texto */
-  border: none; /* Sin borde inicial */
-  background-color: #ffffff;
-  padding: 0.5rem 1rem; /* Relleno (padding) para el botón */
-  border-radius: 0.25rem; /* Bordes redondeados */
-  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
-  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Transición suave para hover y focus */
-  font-size: 1rem;
-  width: 100%;
-  height: 100%;
-}
-
-.botonpagina:hover {
-  background-color:  #FF6B35; /* Color de fondo al pasar el ratón por encima */
-  color: #f5f5f5;
-  transition: background-color 0.3s;
-}
-
-.botonpagina:focus {
-  outline: none; /* Eliminar el contorno por defecto */
-  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
-  border-color: #1E3A8A; /* Color del borde en foco */
-}
-
-.botonpagina2 {
-  color: #FF6B35; /* Color del texto */
-  border: none; /* Sin borde inicial */
-  background-color: #ffffff;
-  padding: 0.5rem 1rem; /* Relleno (padding) para el botón */
-  border-radius: 0.25rem; /* Bordes redondeados */
-  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
-  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Transición suave para hover y focus */
-  font-size: 1rem;
-  width: 100%;
-  height: 100%;
-}
-
-.botonpagina2:hover {
-  background-color:  #FF6B35; /* Color de fondo al pasar el ratón por encima */
-  color: #f5f5f5;
-  transition: background-color 0.3s;
-}
-
-.botonpagina2:focus {
-  outline: none; /* Eliminar el contorno por defecto */
-  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
-  border-color: #1E3A8A; /* Color del borde en foco */
-}
-
-.botonpagina3 {
-  color: #FF6B35; /* Color del texto */
-  border: none; /* Sin borde inicial */
-  background-color: #ffffff;
-  padding: 0.5rem 1rem; /* Relleno (padding) para el botón */
-  border-radius: 0.25rem; /* Bordes redondeados */
-  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
-  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Transición suave para hover y focus */
-  font-size: 1rem;
-  width: 100%;
-  height: 100%;
-}
-
-.botonpagina3:hover {
-  background-color:  #FF6B35; /* Color de fondo al pasar el ratón por encima */
-  color: #f5f5f5;
-  transition: background-color 0.3s;
-}
-
-.botonpagina3:focus {
-  outline: none; /* Eliminar el contorno por defecto */
-  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
-  border-color: #1E3A8A; /* Color del borde en foco */
-}
-
-.botonpagina4 {
-  color: #FF6B35; /* Color del texto */
-  border: none; /* Sin borde inicial */
-  background-color: #ffffff;
-  padding: 0.5rem 1rem; /* Relleno (padding) para el botón */
-  border-radius: 0.25rem; /* Bordes redondeados */
-  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
-  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Transición suave para hover y focus */
-  font-size: 1rem;
-  width: 100%;
-  height: 100%;
-}
-
-.botonpagina4:hover {
-  background-color:  #FF6B35; /* Color de fondo al pasar el ratón por encima */
-  color: #f5f5f5;
-  transition: background-color 0.3s;
-}
-
-.botonpagina4:focus {
-  outline: none; /* Eliminar el contorno por defecto */
-  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
-  border-color: #1E3A8A; /* Color del borde en foco */
-}
-
-.botonpagina[disabled] {
-  background-color: #ccc; /* color de fondo gris claro */
-  color: #666; /* color de texto gris oscuro */
-  cursor: not-allowed; /* cursor de prohibido */
-  opacity: 0.5; /* opacidad del 50% */
-  pointer-events: none; /* deshabilita los eventos de puntero */
 }

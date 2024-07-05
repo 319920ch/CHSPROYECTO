@@ -75,7 +75,7 @@ exports.updateEstadoContrato = async (req, res) => {
     const { id_contrato, id_estado } = req.body;
     const contrato = await Contrato.findByPk(id_contrato);
     if (!contrato) {
-      return res.status(404).json({ error: 'Proyecto no encontrado' });
+      return res.status(404).json({ error: 'Contrato no encontrado' });
     }
 
     await contrato.update({ id_estado });

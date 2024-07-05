@@ -10,6 +10,7 @@ const productos = require('./routes/productoRoutes'); // Ajusta el nombre del ar
 const initP = require('./routes/initProyectoRoutes');
 const contratos = require('./routes/contratoRoutes');
 const estados = require('./routes/estadoRoutes');
+const buscainfo = require('./routes/buscainfoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -34,6 +35,7 @@ app.use('/api/initC', initC); // Asegúrate de que la ruta base es /api/roles
 app.use('/api/initP', initP);
 app.use('/api/contratos', contratos);
 app.use('/api/estados', estados);
+app.use('/api/buscainfo', buscainfo);
 
 // Ruta para renderizar la página de inicio
 app.get('/', (req, res) => {

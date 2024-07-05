@@ -34,7 +34,7 @@
                 <th>Estado</th>
                 <th>Fecha de Inicio</th>
                 <th>Fecha de Fin</th>
-                <th>Acciones</th>
+                <!-- <th>Acciones</th> -->
               </tr>
             </thead>
             <tbody id="contratosList" class="tbody">
@@ -92,9 +92,9 @@
             <td class="trol">${contrato.id_estado} - ${estados[contrato.id_estado]}</td> <!-- mostrar id_estado y nombre de estado -->
             <td class="trol">${contrato.fecha_inicio}</td>
             <td class="trol">${contrato.fecha_fin}</td>
-            <td class="trol">
+<!--             <td class="trol">
               <button class="botonpagina" onclick="actualizarEstado(${contrato.id_contrato})" ${contrato.id_estado === 4? 'disabled' : ''}>Actualizar Estado</button>
-            </td>
+            </td> -->
           `;
           contratosList.appendChild(row);
         });

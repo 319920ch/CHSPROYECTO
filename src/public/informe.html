@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de Contrato</title>
+    <link rel="stylesheet" href="../static/style/App.css">
+    <link rel="stylesheet" href="../static/style/modal.css">
+    <link rel="stylesheet" href="../static/style/tablas.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="../static/js/generarPdf.js" defer></script>
+</head>
+<body>
+  <div class="encabezado">
+    <header class="headerprincipal">
+      <div class="imglogo">
+        <a href="./gerente.html">
+          <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+        </a>
+      </div>
+      <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span>!</center></h1>
+    </header>
+    <main class="main-content">
+      <div class="card">
+        <h2>Información de Contrato</h2>
+        <div id="contrato-info"></div>
+        <button id="generar-pdf">Generar PDF</button>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

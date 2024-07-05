@@ -92,7 +92,7 @@
             <td class="trol">${contrato.fecha_inicio}</td>
             <td class="trol">${contrato.fecha_fin}</td>
             <td class="trol">
-              <button class="botonpagina" onclick="informe">Generar Informe</button>
+                <button class="botonpagina" onclick="informe(${contrato.id_contrato})">Generar Informe</button>
             </td>
           `;
           contratosList.appendChild(row);
@@ -116,9 +116,10 @@ function buscarCliente() {
     mostrarContratos(contratosFiltrados);
   }
 
-    function informe(id_contrato) {
-      window.location.href = `actualizarEC.html?contratoId=${id_contrato}`;
-    }
+  function informe(id_contrato) {
+    window.location.href = `informe.html?contratoId=${id_contrato}`;
+  }
+  
   </script>
 </body>
 </html>
