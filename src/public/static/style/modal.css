@@ -1,77 +1,77 @@
 .modal {
-    display: none; /* Ocultar la modal por defecto */
-    position: fixed; /* Fijar la posición */
-    z-index: 1; /* Colocarla encima */
-    left: 0;
-    top: 0;
-    width: 100%; /* Ancho completo */
-    height: 100%; /* Altura completa */
-    overflow: auto; /* Habilitar el scroll si es necesario */
-    background-color: rgb(0, 0, 0); /* Color de fondo negro */
-    background-color: rgba(0, 0, 0, 0.4); /* Fondo con opacidad */
-  }
+  display: none; /* Ocultar la modal por defecto */
+  position: fixed; /* Fijar la posición */
+  z-index: 1; /* Colocarla encima */
+  left: 0;
+  top: 0;
+  width: 100%; /* Ancho completo */
+  height: 100%; /* Altura completa */
+  overflow: auto; /* Habilitar el scroll si es necesario */
+  background-color: rgb(0, 0, 0); /* Color de fondo negro */
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo con opacidad */
+}
 
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% desde arriba y centrado */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Ancho del modal */
-    max-width: 600px; /* Máximo ancho del modal */
-  }
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% desde arriba y centrado */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Ancho del modal */
+  max-width: 600px; /* Máximo ancho del modal */
+}
 
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
 
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 
-  .card {
-    width: 100%; /* Ancho completo */
-    max-width: 600px; /* Máximo ancho del card */
-    margin: auto; /* Centrar el card */
-  }
+.card {
+  width: 100%; /* Ancho completo */
+  max-width: 600px; /* Máximo ancho del card */
+  margin: auto; /* Centrar el card */
+}
 
+.gridform {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* Crear dos columnas de igual ancho */
+  gap: 1rem; /* Espacio entre las celdas */
+}
+
+@media (max-width: 768px) {
   .gridform {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr)); /* Crear dos columnas de igual ancho */
-    gap: 1rem; /* Espacio entre las celdas */
+    grid-template-columns: repeat(1, minmax(0, 1fr)); /* Una columna en dispositivos pequeños */
   }
+}
 
-  @media (max-width: 768px) {
-    .gridform {
-      grid-template-columns: repeat(1, minmax(0, 1fr)); /* Una columna en dispositivos pequeños */
-    }
-  }
+.texto {
+  color: #2D2D2D; /* Color de texto */
+}
 
-  .texto {
-    color: #2D2D2D; /* Color de texto */
-  }
+.botonenvio {
+  background-color: #32CD32; /* Color de fondo */
+  color: #FFFFFF; /* Color del texto */
+  border: none; /* Sin borde inicial */
+  padding: 0.5rem 1rem; /* Relleno (padding) para el botón */
+  border-radius: 0.25rem; /* Bordes redondeados */
+  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Transición suave para hover y focus */
+}
 
-  .botonenvio {
-    background-color: #32CD32; /* Color de fondo */
-    color: #FFFFFF; /* Color del texto */
-    border: none; /* Sin borde inicial */
-    padding: 0.5rem 1rem; /* Relleno (padding) para el botón */
-    border-radius: 0.25rem; /* Bordes redondeados */
-    cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
-    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Transición suave para hover y focus */
-  }
+.botonenvio:hover {
+  background-color: #5B5F80; /* Color de fondo al pasar el ratón por encima */
+}
 
-  .botonenvio:hover {
-    background-color: #5B5F80; /* Color de fondo al pasar el ratón por encima */
-  }
-
-  .botonenvio:focus {
-    outline: none; /* Eliminar el contorno por defecto */
-    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
-    border-color: #5B5F80; /* Color del borde en foco */
-  }
+.botonenvio:focus {
+  outline: none; /* Eliminar el contorno por defecto */
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
+  border-color: #5B5F80; /* Color del borde en foco */
+}
