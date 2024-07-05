@@ -90,9 +90,7 @@
             fecha_inicio: fechaInicio,
             fecha_fin: fechaFin,
           };
-      
-          alert(JSON.stringify(data));
-      
+            
           if (!contratoId || !producto || !cantidad || !diai || !mesi || !añoi || !diaf || !mesf || !añof) {
             alert('Por favor, complete todos los campos requeridos');
             return;
@@ -110,6 +108,7 @@
       
               if (response.ok) {
                 alert(`Proyecto creado con éxito. ID del proyecto: ${resultado.id_proyecto}`);
+                window.location.href = `./gerente.html`;
                 console.log("Éxito");
               } else {
                 alert(`Error al crear: ${resultado.error}`);
