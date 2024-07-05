@@ -8,6 +8,8 @@ const rolesRoutes = require('./routes/rolRoutes'); // Ajusta el nombre del archi
 const initC = require('./routes/initContrato'); // Ajusta el nombre del archivo según corresponda
 const productos = require('./routes/productoRoutes'); // Ajusta el nombre del archivo según corresponda
 const initP = require('./routes/initProyectoRoutes');
+const contratos = require('./routes/contratoRoutes');
+const estados = require('./routes/estadoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -30,6 +32,8 @@ app.use('/api/roles', rolesRoutes); // Asegúrate de que la ruta base es /api/ro
 app.use('/api/productos', productos); // Asegúrate de que la ruta base es /api/roles
 app.use('/api/initC', initC); // Asegúrate de que la ruta base es /api/roles
 app.use('/api/initP', initP);
+app.use('/api/contratos', contratos);
+app.use('/api/estados', estados);
 
 // Ruta para renderizar la página de inicio
 app.get('/', (req, res) => {

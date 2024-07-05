@@ -25,15 +25,14 @@ exports.getEstadoById = async (req, res) => {
   try {
     const estado = await Estado.findByPk(req.params.id);
     if (estado) {
-      res.status(200).json(estado);
+      res.status(200).json({ nombre_estado: estado.nombre_estado });
     } else {
-      res.status(404).json({ message: 'Estado no encontrado' });
+      res.status(200).json({ nombre_estado: 'Estado no encontrado' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-
 // Actualizar un estado por ID
 exports.updateEstado = async (req, res) => {
   try {

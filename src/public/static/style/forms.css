@@ -1,13 +1,15 @@
-
  * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f5f5f5;
+  overflow: auto; /* Permite el desplazamiento si el contenido excede la altura del contenedor */
+  max-height: fit-content;
 }
 
 .header {
@@ -34,10 +36,14 @@ body {
 .main-content {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: calc(100vh - 72px); /* Adjust height based on header height */
+  align-items: flex-start; /* Alinea el contenido al inicio verticalmente */
+  min-height: calc(100vh - 72px); /* Ajusta la altura basada en la altura del encabezado */
   background-color: #5B5F80;
+  overflow: auto; /* Permite el desplazamiento si el contenido excede la altura del contenedor */
+  width: 100%;
+  max-height: fit-content;
 }
+
 
 .form-container {
   background-color: #ffffff;
