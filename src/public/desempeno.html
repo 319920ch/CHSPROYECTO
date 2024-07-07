@@ -3,17 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soluciones Metálicas</title>
+  <title>Soluciones Metálicas - Desempeño de empleado</title>
   <link rel="stylesheet" href="../static/style/App.css">
   <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="stylesheet" href="../static/style/tablas.css">
   <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
 </head>
-<body>
+<body style="background-color: #5B5F80;">
+  <div class="encabezado">
     <header class="headerprincipal">
       <div class="imglogo">
-        <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+        <a href="./admin.html">
+          <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+        </a>
       </div>
-      <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span></center> !</h1>
+      <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span>!</center></h1>
     </header>
-    <p>desempeno</p>
+<body>
+    <h1>Desempeño del Empleado <span id="nombres-empleado"></span> <span id="apellidos-empleado"></span> con ID <span id="id-empleado"></span> </h1>
+
+    <p>Id del Empleado: </p>
+
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const idEmpleado = urlParams.get('id_empleado');
+    const nombresEmpleado = urlParams.get('nombres');
+    const apellidosEmpleado = urlParams.get('apellidos');
+
+    document.getElementById('id-empleado').textContent = idEmpleado;
+    document.getElementById('nombres-empleado').textContent = nombresEmpleado;
+    document.getElementById('apellidos-empleado').textContent = apellidosEmpleado;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const nombreUsuario = localStorage.getItem('nombreUsuario');
+        if (nombreUsuario) {
+          document.getElementById('nombreUsuario').innerText = nombreUsuario;
+        }
+        await cargarEmpleados();
+      });
+  </script>
 </body>
+</html>

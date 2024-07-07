@@ -4,6 +4,6 @@ const Rempleado = require('../controllers/registroempleados');
 
 // Rutas para las evaluaciones
 
-router.post('/iniciar', Rempleado.registerEmpleado);
+router.post('/', Rempleado.registerEmpleado);
 
 module.exports = router;

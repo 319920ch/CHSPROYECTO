@@ -13,6 +13,8 @@ const estados = require('./routes/estadoRoutes');
 const buscainfo = require('./routes/buscainfoRoutes');
 const usuarios = require('./routes/usuarioRoutes');
 const roles = require('./routes/rolRoutes');
+const empleados = require('./routes/empleadoRoutes');
+const empleadosr = require('./routes/registroempleados');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -40,6 +42,8 @@ app.use('/api/estados', estados);
 app.use('/api/buscainfo', buscainfo);
 app.use('/api/usuarios', usuarios)
 app.use('/api/roles', roles)
+app.use('/api/empleados', empleados);
+app.use('/api/empleadosr', empleadosr);
 
 // Ruta para renderizar la página de inicio
 app.get('/', (req, res) => {

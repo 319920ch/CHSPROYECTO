@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soluciones Metálicas - Gestión de empleados</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="stylesheet" href="../static/style/tablas.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body style="background-color: #5B5F80;">
+  <div class="encabezado">
+    <header class="headerprincipal">
+      <div class="imglogo">
+        <a href="./admin.html">
+          <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+        </a>
+      </div>
+      <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span>!</center></h1>
+    </header>
+    <main class="main-content">
+      <div class="card">
+        <div class="header">
+          <input class="buscador" type="text" id="buscarN" placeholder="Buscar empleado por nombre" onkeyup="buscarN()">
+        </div>
+        <div class="header">
+          <button class="botonpagina" onclick="abrirModalCrearEmpleado()">Crear Nuevo Empleado</button>
+        </div>
+        <div>
+          <table class="table1">
+            <thead class="thead">
+              <tr>
+                <th>ID</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Cédula</th>
+                <th>Tiempo de Experiencia (años)</th>
+                <th>Número de contacto</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="empleadosList" class="tbody">
+              <!-- Aquí se añadirán dinámicamente los usuarios -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Ventana modal para Crear Nuevo Usuario -->
+  <div id="modalCrearEmpleado" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="cerrarModal('modalCrearEmpleado')">&times;</span>
+      <h2>Registrar Nuevo Empleado</h2>
+      <form id="createForm" onsubmit="handleNuevoEmpleado(event)">
+        <label for="nombres">Nombres:</label>
+        <input type="text" id="nombres" name="nombres"><br><br>
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidos" name="apellidos"><br><br>
+        <label for="cedula">Cédula:</label>
+        <input type="text" id="cedula" name="cedula"><br><br>
+        <label for="tiempoexp">Tiempo de experiencia general en años:</label>
+        <input type="text" id="tiempoexp" name="tiempoexp"><br><br>
+        <label for="contacto">Número de contacto:</label>
+        <input type="text" id="contacto" name="contacto"><br><br>
+        <button type="submit" class="submit-button">Registrar Empleado</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Ventana modal para Eliminar Usuario -->
+  <div id="modalEliminarEmpleado" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="cerrarModal('modalEliminarEmpleado')">&times;</span>
+      <h2>Eliminar Empleado</h2>
+      <p>¿Está seguro de eliminar al empleado <span id="idEmpleadoEliminar"></span>?</p>
+      <button id="eliminarBtn" style="background-color:red;" onclick="handleEliminarEmpleado()">Eliminar</button>
+      <button type="button" class="submit-button" onclick="cerrarModal('modalEliminarEmpleado')">Cancelar</button>
+    </div>
+  </div>
+
+<!-- Ventana modal para Editar Usuario -->
+<div id="modalEditarEmpleado" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="cerrarModal('modalEditarEmpleado')">&times;</span>
+    <h2>Editar Empleado</h2>
+    <form id="editForm" onsubmit="handleEditarUsuario(event)">
+      <label for="editid">ID del Empleado:</label>
+      <input type="text" id="editid" name="editid" readonly><br><br>
+      <label for="editNombres">Nombre del Empleado:</label>
+      <input type="text" id="editNombres" name="editNombres" readonly><br><br>
+      <label for="editApellidos">Apellidos:</label>
+      <input type="text" id="editApellidos" name="editApellidos" readonly><br><br>
+      <label for="editTiempoexp">Tiempo de experiencia general en años:</label>
+      <input type="number" id="editTiempoexp" name="editTiempoexp" min="0" max="30"><br><br>
+      <label for="editContacto">Número de contacto:</label>
+      <input type="number" id="editContacto" name="editContacto" pattern="[0-9]" maxlength="10"><br><br>
+      <button type="submit" class="submit-button">Guardar Cambios</button>
+      <p id="editErrorMessage" style="color:red;"></p>
+    </form>
+  </div>
+</div>
+
+  <script>
+    let empleados = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const nombreUsuario = localStorage.getItem('nombreUsuario');
+      if (nombreUsuario) {
+        document.getElementById('nombreUsuario').innerText = nombreUsuario;
+      }
+      await cargarEmpleados();
+    });
+
+    async function cargarEmpleados() {
+      try {
+        const response = await fetch('/api/empleados');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        empleados = data;
+        mostrarEmpleados(data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    function mostrarEmpleados(empleado) {
+      const empleadosList = document.getElementById('empleadosList');
+      empleadosList.innerHTML = '';
+      empleado.forEach((empleado, index) => {
+        const row = document.createElement('tr');
+        row.id = `empleado-${empleado.id_empleado}`;
+        row.innerHTML = `
+          <td>${empleado.id_empleado}</td>
+          <td>${empleado.nombres}</td>
+          <td>${empleado.apellidos}</td>
+          <td>${empleado.cedula}</td>
+          <td><center>${empleado.tiempo_exp_general}</center> </td>
+          <td>${empleado.numero_contacto}</td>
+          <td>
+            <button class="botonpagina" onclick="abrirModalEliminar('${empleado.id_empleado}', '${empleado.nombres} ${empleado.apellidos}')">Eliminar</button>
+            <button class="botonpagina" onclick="abrirModalEditar('${empleado.id_empleado}', '${empleado.nombres}', '${empleado.apellidos}', '${empleado.tiempo_exp_general}', '${empleado.numero_contacto}')">Editar</button>
+            <button class="botonpagina" onclick="location.href='desempeno.html?id_empleado=${empleado.id_empleado}&nombres=${empleado.nombres}&apellidos=${empleado.apellidos}'">Desempeño</button>
+          </td>
+        `;
+        empleadosList.appendChild(row);
+      });
+    }
+
+    function abrirModalCrearEmpleado() {
+      const modal = document.getElementById('modalCrearEmpleado');
+      const span = modal.querySelector('.close');
+
+      modal.style.display = 'block';
+
+      span.onclick = function() {
+        modal.style.display = 'none';
+      };
+
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      };
+    }
+
+    function abrirModalEliminar(id_empleado, nombre) {
+      document.getElementById('idEmpleadoEliminar').textContent = nombre;
+      const modal = document.getElementById('modalEliminarEmpleado');
+      modal.style.display = 'block';
+      document.getElementById('eliminarBtn').onclick = () => handleEliminarEmpleado(id_empleado);
+    }
+
+    function abrirModalEditar(id_empleado, nombres, apellidos, tiempoexp, contacto) {
+      document.getElementById('editid').value = id_empleado;
+      document.getElementById('editNombres').value = nombres;
+      document.getElementById('editApellidos').value = apellidos;
+      document.getElementById('editTiempoexp').value = tiempoexp;
+      document.getElementById('editContacto').value = contacto;
+      document.getElementById('modalEditarEmpleado').style.display = 'block';
+      document.getElementById('editErrorMessage').textContent = ''; // Limpiar mensaje de error si lo hubiera
+    }
+
+    function cerrarModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    function buscarN() {
+      const input = document.getElementById('buscarN');
+      const filter = input.value.toUpperCase();
+      const table = document.querySelector('.table1');
+      const tr = table.getElementsByTagName('tr');
+
+      for (let i = 1; i < tr.length; i++) {
+        const td = tr[i].getElementsByTagName('td')[1]; // Cambiado a índice 1 para nombres
+        if (td) {
+          const txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = '';
+          } else {
+            tr[i].style.display = 'none';
+          }
+        }
+      }
+    }
+
+    async function handleNuevoEmpleado(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch('/api/empleadosr', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const nuevoEmpleado = await response.json();
+        empleados.push(nuevoEmpleado);
+        mostrarEmpleados(empleados);
+        cerrarModal('modalCrearEmpleado');
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    async function handleEliminarEmpleado(id) {
+      try {
+        const response = await fetch(`/api/empleados/${id}`, {
+          method: 'DELETE'
+        });
+        if (!response.ok) {
+          alert('No se puede eliminar empleado porque consta en un registro de asignación');
+          throw new Error('Network response was not ok');
+        }
+        alert('Eliminación exitosa');
+
+        await cargarEmpleados();
+        cerrarModal('modalEliminarEmpleado');
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    async function handleEditarUsuario(event) {
+      event.preventDefault();
+      const editid= document.getElementById('editid').value;
+      const editNombres = document.getElementById('editNombres').value;
+      const editApellidos = document.getElementById('editApellidos').value;
+      const editTiempoexp = document.getElementById('editTiempoexp').value;
+      const editContacto = document.getElementById('editContacto').value;
+    
+      const updatedEmpleado = {
+        nombres: editNombres,
+        apellidos: editApellidos,
+        tiempo_exp_general: editTiempoexp,
+        numero_contacto: editContacto
+      };
+
+      try {
+        const response = await fetch(`/api/empleados/${editid}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updatedEmpleado)
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        alert('Información editada exitosamente');
+        await cargarEmpleados();
+        cerrarModal('modalEditarEmpleado'); // Cerrar la ventana modal de edición
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+  </script>
+</body>
+</html>
