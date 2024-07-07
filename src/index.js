@@ -4,8 +4,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const routes = require('./routes/index');
 const rolesRoutes = require('./routes/rolRoutes'); // Ajusta el nombre del archivo según corresponda
-//const initCI = require('./routes/initContrato/iniciar'); // Ajusta el nombre del archivo según corresponda
-//const initCI = require('./routes/initContrato/iniciar'); // Ajusta el nombre del archivo según corresponda
 
 // Configuración de la aplicación
 app.use(cors());

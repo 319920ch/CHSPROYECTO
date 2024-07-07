@@ -11,6 +11,8 @@ const initP = require('./routes/initProyectoRoutes');
 const contratos = require('./routes/contratoRoutes');
 const estados = require('./routes/estadoRoutes');
 const buscainfo = require('./routes/buscainfoRoutes');
+const usuarios = require('./routes/usuarioRoutes');
+const roles = require('./routes/rolRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -36,6 +38,8 @@ app.use('/api/initP', initP);
 app.use('/api/contratos', contratos);
 app.use('/api/estados', estados);
 app.use('/api/buscainfo', buscainfo);
+app.use('/api/usuarios', usuarios)
+app.use('/api/roles', roles)
 
 // Ruta para renderizar la página de inicio
 app.get('/', (req, res) => {

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soluciones Metálicas - Gestión de usuarios</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="stylesheet" href="../static/style/tablas.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body style="background-color: #5B5F80;">
+  <div class="encabezado">
+    <header class="headerprincipal">
+      <div class="imglogo">
+        <a href="./admin.html">
+          <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+        </a>
+      </div>
+      <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span>!</center></h1>
+    </header>
+    <main class="main-content">
+      <div class="card">
+        <div class="header">
+          <input class="buscador" type="text" id="buscarRol" placeholder="Buscar usuario por rol" onkeyup="buscarRol()">
+        </div>
+        <div class="header">
+          <input class="buscador" type="text" id="buscarN" placeholder="Buscar usuario por nombre" onkeyup="buscarN()">
+        </div>
+        <div class="header">
+          <button class="botonpagina" onclick="abrirModalcrearUsuario()">Crear Nuevo Usuario</button>
+        </div>
+        <div>
+          <table class="table1">
+            <thead class="thead">
+              <tr>
+                <th>Nombre Usuario</th>
+                <th>Correo Electrónico</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="usuariosList" class="tbody">
+              <!-- Aquí se añadirán dinámicamente los usuarios -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Ventana modal para Crear Nuevo Usuario -->
+  <div id="modalCrearUsuario" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Crear Nuevo Usuario</h2>
+      <form id="createForm" onsubmit="handleNuevoUsuario(event)">
+        <label for="nombreU">Nombre del Usuario:</label>
+        <input type="text" id="nombreU" name="nombreU"><br><br>
+        <label for="correo">Correo:</label>
+        <input type="email" id="correo" name="correo"><br><br>
+        <label for="contrasena">Contraseña:</label>
+        <input type="text" id="contrasena" name="contrasena"><br><br>
+        <div class="form-group">
+          <label for="rol" class="form-label">Rol:</label>
+          <select id="rol" name="rol" class="form-input">
+            <option value="">Seleccione un rol</option>
+          </select>
+        </div>
+        <button type="submit" class="submit-button">Crear Usuario</button>
+      </form>
+      
+    </div>
+  </div>
+
+  <!-- Ventana modal para Eliminar Usuario -->
+  <div id="modalEliminarUsuario" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="cerrarModal('modalEliminarUsuario')">&times;</span>
+      <h2>Eliminar Usuario</h2>
+      <p>¿Está seguro de eliminar al usuario <span id="nombreUsuarioEliminar"></span>?</p>
+      <button id="eliminarBtn" style="background-color:red;" onclick="handleEliminarUsuario()">Eliminar</button>
+      <button type="button" class="submit-button" onclick="cerrarModal('modalEliminarUsuario')">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Ventana modal para Editar Usuario -->
+  <div id="modalEditarUsuario" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="cerrarModal('modalEditarUsuario')">&times;</span>
+      <h2>Editar Usuario</h2>
+      <form id="editForm" onsubmit="handleEditarUsuario(event)">
+        <label for="nombreUModal">Nombre del Usuario:</label>
+        <input type="text" id="nombreUModal" name="nombreUModal" readonly><br><br>
+        <label for="correoActualizar">Correo:</label>
+        <input type="email" id="correoActualizar" name="correoActualizar"><br><br>
+        <div class="form-group">
+          <label for="rolModal" class="form-label">Rol:</label>
+          <select id="rolModal" name="rolModal" class="form-input">
+            <option value="">Seleccione un rol</option>
+            <!-- Opciones de roles -->
+          </select>
+        </div>
+        <button type="submit" class="submit-button">Guardar Cambios</button>
+        <p id="errorMessage" style="color:red;"></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+      let usuarios = []; // Almacenará los usuarios cargados
+  
+      document.addEventListener('DOMContentLoaded', async () => {
+        const nombreUsuario = localStorage.getItem('nombreUsuario');
+        if (nombreUsuario) {
+          document.getElementById('nombreUsuario').innerText = nombreUsuario;
+        }
+        // Llamar a la función para cargar usuarios
+        await cargarUsuarios();
+        await loadRol();
+        await loadRolModal();
+      });
+  
+      async function cargarUsuarios() {
+        try {
+          const response = await fetch('/api/usuarios'); // Ruta de la API para obtener usuarios
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          usuarios = data; // Guardar los usuarios en la variable global
+          mostrarUsuarios(data);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+  
+      const roles = [
+        { id_rol: 1, nombre_rol: "administrador" },
+        { id_rol: 2, nombre_rol: "gerente" },
+        { id_rol: 3, nombre_rol: "Encargado de corte" },
+        { id_rol: 4, nombre_rol: "Encargado de soldadura" },
+        { id_rol: 5, nombre_rol: "Encargado de pintura" },
+        { id_rol: 6, nombre_rol: "Encargado de ensamblaje" },
+        { id_rol: 7, nombre_rol: "Encargado de verificación de calidad" },
+        { id_rol: 8, nombre_rol: "Suplente encargado" }
+      ];
+  
+      function getNombreRol(id_rol) {
+        const rol = roles.find(rol => rol.id_rol === id_rol);
+        return rol ? rol.nombre_rol : 'Desconocido';
+      }
+  
+
+      function mostrarUsuarios(usuarios) {
+        const usuariosList = document.getElementById('usuariosList');
+        usuariosList.innerHTML = '';
+        usuarios.forEach(usuario => {
+          const row = document.createElement('tr');
+          row.id = `usuario-${usuario.nombre}`; // ID único para cada fila
+          row.innerHTML = `
+            <td class="trol">${usuario.nombre}</td>
+            <td class="trol">${usuario.correo_electronico}</td>
+            <td class="trol">${getNombreRol(usuario.id_rol)}</td>
+            <td class="trol">
+              <button class="botonpagina" onclick="abrirModalEliminar('${usuario.nombre}')">Eliminar</button>
+              <button class="botonpagina" onclick="abrirModalEditar('${usuario.nombre}', '${usuario.correo_electronico}', ${usuario.id_rol})">Editar</button>
+            </td>
+          `;
+          usuariosList.appendChild(row);
+        });
+      }
+  
+      async function loadRol() {
+        try {
+          const select = document.getElementById('rol');
+          roles.forEach(role => {
+            const option = document.createElement('option');
+            option.value = role.id_rol;
+            option.text = role.nombre_rol;
+            select.appendChild(option);
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+  
+      async function loadRolModal() {
+        try {
+          const select = document.getElementById('rolModal');
+          roles.forEach(role => {
+            const option = document.createElement('option');
+            option.value = role.id_rol;
+            option.text = role.nombre_rol;
+            select.appendChild(option);
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+  
+      function abrirModalcrearUsuario() {
+        document.getElementById('modalCrearUsuario').style.display = 'block';
+      }
+
+      function abrirModalEliminar(nombre) {
+        document.getElementById('nombreUsuarioEliminar').textContent = nombre;
+        document.getElementById('modalEliminarUsuario').style.display = 'block';
+        document.getElementById('eliminarBtn').onclick = () => handleEliminarUsuario(nombre);
+      }
+  
+      function abrirModalEditar(nombre, correo, id_rol) {
+        document.getElementById('nombreUModal').value = nombre;
+        document.getElementById('correoActualizar').value = correo;
+        document.getElementById('rolModal').value = id_rol;
+        document.getElementById('modalEditarUsuario').style.display = 'block';
+        document.getElementById('errorMessage').textContent = ''; // Limpiar mensaje de error
+      }
+  
+      function cerrarModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+      }
+
+
+    function abrirModalcrearUsuario() {
+      const modal = document.getElementById('modalCrearUsuario');
+      const span = modal.querySelector('.close');
+
+      // Mostrar el modal
+      modal.style.display = 'block';
+
+      // Cuando el usuario hace clic en '×' (cerrar), cerrar el modal
+      span.onclick = function() {
+        modal.style.display = 'none';
+      };
+
+      // Cuando el usuario hace clic fuera del modal, cerrar el modal
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      };
+    }
+
+    function buscarRol() {
+      const input = document.getElementById('buscarRol');
+      const filter = input.value.toUpperCase();
+      const table = document.querySelector('.table1');
+      const tr = table.getElementsByTagName('tr');
+
+      for (let i = 1; i < tr.length; i++) {
+        const td = tr[i].getElementsByTagName('td')[2];
+        if (td) {
+          const txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = '';
+          } else {
+            tr[i].style.display = 'none';
+          }
+        }
+      }
+    }
+
+    function buscarN() {
+      const input = document.getElementById('buscarN');
+      const filter = input.value.toUpperCase();
+      const table = document.querySelector('.table1');
+      const tr = table.getElementsByTagName('tr');
+
+      for (let i = 1; i < tr.length; i++) {
+        const td = tr[i].getElementsByTagName('td')[0];
+        if (td) {
+          const txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = '';
+          } else {
+            tr[i].style.display = 'none';
+          }
+        }
+      }
+    }
+
+    async function handleNuevoUsuario(event) {
+      event.preventDefault(); 
+      
+      const nombre = document.getElementById('nombreU').value;
+      const correo = document.getElementById('correo').value;
+      const contrasena = document.getElementById('contrasena').value;
+      const rol = document.getElementById('rol').value;
+      
+      const data = {
+        nombre: nombre,
+        correo_electronico: correo,
+        contrasena: contrasena,
+        id_rol: rol,
+      };
+      
+      console.log(data); // Verificar que los datos se están capturando correctamente
+      
+      if (!nombre || !correo || !contrasena || !rol) {
+        alert('Por favor, complete todos los campos requeridos');
+        return;
+      }
+      
+      // Verificar si ya existe un usuario con el mismo rol id
+      if (rol >= 1 && rol <= 7) {
+        try {
+          const response = await fetch(`/api/usuarios?rol=${rol}`);
+          const usuariosConMismoRol = await response.json();
+          if (usuariosConMismoRol.length > 0) {
+            alert(`Ya existe un usuario con el rol elegido`);
+            return;
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      
+      try {
+        const response = await fetch('/api/usuarios', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+        
+        const resultado = await response.json();
+        
+        if (response.ok) {
+          alert(`Usuario creado con éxito.`);
+          window.location.href = `./gestionusuario.html`;
+        } else {
+          alert(`Error al crear: ${resultado.error}`);
+          console.error("Error:", resultado);
+        }
+      } catch (error) {
+        alert(`Error al crear el usuario: ${error.message}`);
+        console.error(error.message);
+      }
+    }
+    
+    async function handleEliminarUsuario(nombre) {
+      try {
+        const response = await fetch(`/api/usuarios/${nombre}`, {
+          method: 'DELETE'
+        });
+        if (!response.ok) {
+          throw new Error('Error al eliminar usuario');
+        }
+        // Recargar la lista de usuarios
+        await cargarUsuarios();
+        cerrarModal('modalEliminarUsuario');
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    async function handleEditarUsuario(event) {
+      event.preventDefault();
+      const nombre = document.getElementById('nombreUModal').value;
+      const correo = document.getElementById('correoActualizar').value;
+      const rol = document.getElementById('rolModal').value;
+
+      // Verificar si el rol es diferente de 8 y si ya existe un usuario con ese rol
+      if (rol != 8 && usuarios.some(usuario => usuario.id_rol == rol && usuario.nombre != nombre)) {
+        document.getElementById('errorMessage').textContent = 'Solo el rol de Suplente encargado puede tener más de un usuario.';
+        return;
+      }
+
+      const updatedUser = {
+        correo_electronico: correo,
+        id_rol: parseInt(rol)
+      };
+
+      try {
+        const response = await fetch(`/api/usuarios/${nombre}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updatedUser)
+        });
+        if (!response.ok) {
+          throw new Error('Error al actualizar usuario');
+        }
+        // Recargar la lista de usuarios
+        await cargarUsuarios();
+        cerrarModal('modalEditarUsuario');
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+    
+  </script>
+</body>
+</html>
