@@ -41,7 +41,7 @@ exports.getEvaluacionById = async (req, res) => {
 };
 
 // Actualizar una evaluación por ID de área, ID de empleado y ID de desempeño
-exports.updateEvaluacion = async (req, res) => {
+exports.actualizarEvaluacion = async (req, res) => {
   try {
     const [updated] = await Evaluacion.update(req.body, {
       where: {

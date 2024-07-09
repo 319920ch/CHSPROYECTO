@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soluciones Metálicas - Desempeño de empleado</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="stylesheet" href="../static/style/tablas.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body style="background-color: #5B5F80;">
+  
+  <div class="encabezado">
+    <header class="headerprincipal">
+      <div class="imglogo">
+        <a href="./admin.html">
+          <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+        </a>
+      </div>
+      <h1 class="bienvenida">
+        <center>¡Bienvenido <span id="nombreUsuario"></span>!</center>
+      </h1>
+    </header>
+    <main class="main-content">
+      <div class="card">
+        <h1 style="color: #ffffff;">
+          <center>Desempeño del empleado en <span id="nombreArea"></span></center>
+        </h1>
+        <form id="actualizarDesempenoForm">
+          <label for="idDesempeno">Nuevo Desempeño:</label>
+          <select id="idDesempeno" name="nueva_calificacion" required>
+            <!-- Options will be dynamically added -->
+          </select>
+          <button type="submit">Actualizar</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const idEmpleado = urlParams.get('id_empleado');
+      const idArea = urlParams.get('id_area');
+      const idDesempeno1 = urlParams.get('id_desempeno');
+      const nombreUsuario = localStorage.getItem('nombreUsuario');
+    
+      if (nombreUsuario) {
+        document.getElementById('nombreUsuario').innerText = nombreUsuario;
+      }
+  
+      fetch(`/api/areas/${idArea}`)
+        .then(response => response.json())
+        .then(area => {
+          document.getElementById('nombreArea').textContent = area.nombre_area;
+        })
+        .catch(error => console.error('Error al obtener el área:', error));
+    
+      fetch('/api/desempenos')
+        .then(response => response.json())
+        .then(desempenos => {
+          const idDesempenoSelect = document.getElementById('idDesempeno');
+          desempenos.forEach(desempeno => {
+            const option = document.createElement('option');
+            option.value = desempeno.id_desempeno;
+            option.textContent = desempeno.puntuacion_desempeño;
+            idDesempenoSelect.appendChild(option);
+          });
+        })
+        .catch(error => console.error('Error al obtener los desempeños:', error));
+    
+      document.getElementById('actualizarDesempenoForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+    
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+    
+        if (!idEmpleado || !idArea || !idDesempeno1) {
+          alert('Los parámetros id_empleado, id_area o id_desempeno son inválidos.');
+          return;
+        }
+    
+        try {
+          const response = await fetch(`/api/evaluaciones/${idArea}/${idEmpleado}/${idDesempeno1}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              id_empleado: idEmpleado,
+              id_area: idArea,
+              id_desempeno: data.nueva_calificacion
+            })
+          });
+    
+          if (response.ok) {
+            const result = await response.json();
+            alert(result.message);
+          } else {
+            const error = await response.json();
+            alert(error.error);
+          }
+        } catch (error) {
+          console.error('Error al actualizar el desempeño:', error);
+          alert('Error al actualizar el desempeño. Intente nuevamente.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

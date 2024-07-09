@@ -15,6 +15,10 @@ const usuarios = require('./routes/usuarioRoutes');
 const roles = require('./routes/rolRoutes');
 const empleados = require('./routes/empleadoRoutes');
 const empleadosr = require('./routes/registroempleados');
+const areas = require('./routes/areaRoutes');
+const evaluaciones = require('./routes/evaluacionRoutes');
+const desempenos = require('./routes/desempenoRoutes');
+const asignarD = require('./routes/asignarDesempenoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -41,9 +45,13 @@ app.use('/api/contratos', contratos);
 app.use('/api/estados', estados);
 app.use('/api/buscainfo', buscainfo);
 app.use('/api/usuarios', usuarios)
-app.use('/api/roles', roles)
+app.use('/api/roles', roles);
 app.use('/api/empleados', empleados);
 app.use('/api/empleadosr', empleadosr);
+app.use('/api/areas', areas);
+app.use('/api/evaluaciones', evaluaciones);
+app.use('/api/desempenos', desempenos);
+app.use('/api/asignarD', asignarD);
 
 // Ruta para renderizar la página de inicio
 app.get('/', (req, res) => {

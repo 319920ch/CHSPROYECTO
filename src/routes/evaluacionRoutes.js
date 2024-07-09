@@ -14,7 +14,7 @@ router.get('/', evaluacionController.getEvaluaciones);
 router.get('/:id_area/:id_empleado/:id_desempeno', evaluacionController.getEvaluacionById);
 
 // Actualizar una evaluación por ID de área, ID de empleado y ID de desempeño
-router.put('/:id_area/:id_empleado/:id_desempeno', evaluacionController.updateEvaluacion);
+router.put('/:id_area/:id_empleado/:id_desempeno', evaluacionController.actualizarEvaluacion);
 
 // Eliminar una evaluación por ID de área, ID de empleado y ID de desempeño
 router.delete('/:id_area/:id_empleado/:id_desempeno', evaluacionController.deleteEvaluacion);

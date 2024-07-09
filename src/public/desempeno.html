@@ -19,29 +19,239 @@
       </div>
       <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span>!</center></h1>
     </header>
-<body>
-    <h1>Desempeño del Empleado <span id="nombres-empleado"></span> <span id="apellidos-empleado"></span> con ID <span id="id-empleado"></span> </h1>
+    <main class="main-content">
+      <div class="card">
+        <h1 style="color: #ffffff;"><center>Desempeño del empleado <span id="nombres-empleado"></span> <span id="apellidos-empleado"></span> con ID <span id="id-empleado"></span></center></h1>
+        <button id="addEvaluationBtn" class="botonpagina">Agregar Evaluación de Desempeño</button>
+        <table class="table1">
+          <thead class="thead">
+            <tr>
+              <th>Área</th>
+              <th>Desempeño</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="evaluacionesList" class="tbody">
+            <!-- Aquí se añadirán dinámicamente los usuarios -->
+          </tbody>
+        </table>
+        <p style="color:#ffffff"> <center>Si desea cambiar la puntuacion de desempeño, primero elimine el área correspondiente y luego vuelva a crear </center> </p>
+        <p id="noDataMessage" style="display:none; text-align:center; color:#ffffff">Aún no se han ingresado datos de evaluación para este empleado.</p>
+      </div>
+    </main>
 
-    <p>Id del Empleado: </p>
+    <!-- Modal for adding evaluation -->
+    <div id="evaluationModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Agregar Evaluación de Desempeño</h2>
+        <form id="evaluationForm">
+          <label for="idArea">Área:</label>
+          <select id="idArea" name="id_area" required>
+            <!-- Options will be dynamically added -->
+          </select>
+          <label for="idDesempeno">Desempeño:</label>
+          <select id="idDesempeno" name="id_desempeno" required>
+            <!-- Options will be dynamically added -->
+          </select>
+          <input type="hidden" id="idEmpleado" name="id_empleado">
+          <button type="submit">Agregar</button>
+        </form>
+      </div>
+    </div>
 
 
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const idEmpleado = urlParams.get('id_empleado');
-    const nombresEmpleado = urlParams.get('nombres');
-    const apellidosEmpleado = urlParams.get('apellidos');
+    <script>
+      async function deleteEvaluation(id_area, id_empleado, id_desempeno) {
+        if (confirm("¿Estás seguro de que deseas eliminar esta evaluación?")) {
+          try {
+            const response = await fetch(`/api/evaluaciones/${id_area}/${id_empleado}/${id_desempeno}`, {
+              method: 'DELETE',
+            });
+      
+            if (response.ok) {
+              alert("Evaluación eliminada con éxito.");
+              location.reload();
+            } else {
+              const error = await response.json();
+              alert(error.message);
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      }
 
-    document.getElementById('id-empleado').textContent = idEmpleado;
-    document.getElementById('nombres-empleado').textContent = nombresEmpleado;
-    document.getElementById('apellidos-empleado').textContent = apellidosEmpleado;
+document.addEventListener('click', function(event) {
+  if (event.target && event.target.classList.contains('editBtn')) {
+    const id_evaluacion = event.target.getAttribute('data-id');
+    const id_empleado = event.target.getAttribute('data-id-empleado');
+    const id_area = event.target.getAttribute('data-id-area');
+    const desempeno = event.target.getAttribute('data-desempeno');
 
-    document.addEventListener('DOMContentLoaded', async () => {
+    document.getElementById('editIdEvaluacion').value = id_evaluacion;
+    document.getElementById('editIdDesempeno').value = desempeno;
+
+    // Fetch new desempeño data
+    fetch(`/api/desempenos`)
+      .then(response => response.json())
+      .then(desempenos => {
+        const editDesempenoSelect = document.getElementById('editIdDesempeno');
+        editDesempenoSelect.innerHTML = ''; // Clear previous options
+        desempenos.forEach(desempeno => {
+          const option = document.createElement('option');
+          option.value = desempeno.id_desempeno;
+          option.textContent = desempeno.puntuacion_desempeño;
+          editDesempenoSelect.appendChild(option);
+        });
+      });
+
+    editModal.style.display = 'block';
+  }
+});
+
+
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const idEmpleado = urlParams.get('id_empleado');
+        const nombresEmpleado = urlParams.get('nombres');
+        const apellidosEmpleado = urlParams.get('apellidos');
+
+        document.getElementById('id-empleado').textContent = idEmpleado;
+        document.getElementById('nombres-empleado').textContent = nombresEmpleado;
+        document.getElementById('apellidos-empleado').textContent = apellidosEmpleado;
+        document.getElementById('idEmpleado').value = idEmpleado;
+
         const nombreUsuario = localStorage.getItem('nombreUsuario');
         if (nombreUsuario) {
           document.getElementById('nombreUsuario').innerText = nombreUsuario;
         }
-        await cargarEmpleados();
+
+        try {
+          // Fetch evaluations, areas, and desempenos concurrently
+          const [evaluacionesResponse, areasResponse, desempenosResponse] = await Promise.all([
+            fetch(`/api/evaluaciones`),  // Ensure this route returns evaluations for the given employee
+            fetch('/api/areas'),
+            fetch('/api/desempenos')
+          ]);
+
+          const evaluaciones = await evaluacionesResponse.json();
+          const areas = await areasResponse.json();
+          const desempenos = await desempenosResponse.json();
+
+          const tbody = document.getElementById('evaluacionesList');
+          const noDataMessage = document.getElementById('noDataMessage');
+          const areaSelect = document.getElementById('idArea');
+          const desempenoSelect = document.getElementById('idDesempeno');
+          const editDesempenoSelect = document.getElementById('editIdDesempeno');
+
+          // Create a map for area IDs to area names
+          const areaMap = new Map();
+          areas.forEach(area => {
+            areaMap.set(area.id_area, area.nombre_area);
+            const option = document.createElement('option');
+            option.value = area.id_area;
+            option.textContent = area.nombre_area;
+            areaSelect.appendChild(option);
+          });
+
+          // Create a map for desempeño IDs to desempeño puntuations
+          const desempenoMap = new Map();
+          desempenos.forEach(desempeno => {
+            desempenoMap.set(desempeno.id_desempeno, desempeno.puntuacion_desempeño);
+            const option = document.createElement('option');
+            option.value = desempeno.id_desempeno;
+            option.textContent = desempeno.puntuacion_desempeño;
+            desempenoSelect.appendChild(option);
+          });
+
+          // Filter evaluations by id_empleado
+          const evaluacionesEmpleado = evaluaciones.filter(evaluacion => evaluacion.id_empleado == idEmpleado);
+
+          if (evaluacionesEmpleado.length === 0) {
+            noDataMessage.style.display = 'block';
+          } else {
+            evaluacionesEmpleado.forEach((evaluacion) => {
+              const areaNombre = areaMap.get(evaluacion.id_area) || 'Área desconocida';
+              const desempenoPuntuacion = desempenoMap.get(evaluacion.id_desempeno) || 'Desempeño desconocido';
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${areaNombre}</td>
+                <td>${desempenoPuntuacion}</td>
+                <td>
+<button class="editBtn" data-id-empleado="${evaluacion.id_empleado}" data-id-area="${evaluacion.id_area}" data-id-desempeno="${evaluacion.id_desempeno}">Editar</button>
+                  <button onclick="deleteEvaluation(${evaluacion.id_area}, ${evaluacion.id_empleado}, ${evaluacion.id_desempeno})">Eliminar</button>
+                </td>
+              `;
+              tbody.appendChild(row);
+            });
+          }
+        } catch (error) {
+          console.error(error);
+        }
+
+        // Modal logic
+        const modal = document.getElementById('evaluationModal');
+        const btn = document.getElementById('addEvaluationBtn');
+        const span = document.getElementsByClassName('close')[0];
+
+        btn.onclick = function() {
+          modal.style.display = 'block';
+        }
+
+        span.onclick = function() {
+          modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = 'none';
+          }
+        }
+
+
+
+        document.getElementById('evaluationForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const formData = new FormData(e.target);
+          const data = Object.fromEntries(formData.entries());
+
+          try {
+            const response = await fetch('/api/evaluaciones', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+              alert('Evaluación agregada con éxito.');
+              location.reload();
+            } else {
+              const error = await response.json();
+              alert(error.message);
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        });
+
+        document.addEventListener('click', function(event) {
+          if (event.target && event.target.classList.contains('editBtn')) {
+            const id_empleado = event.target.getAttribute('data-id-empleado');
+            const id_area = event.target.getAttribute('data-id-area');
+            const id_desempeno = event.target.getAttribute('data-id-desempeno'); // Obtener el id_desempeno
+        
+            // Redirigir a la página de edición con los parámetros necesarios
+            window.location.href = `editar_evaluacion.html?id_empleado=${id_empleado}&id_area=${id_area}&id_desempeno=${id_desempeno}`;
+          }
+        });
+        
       });
-  </script>
+    </script>
+  </div>
 </body>
 </html>
