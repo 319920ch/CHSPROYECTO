@@ -15,7 +15,7 @@
             <a href="./gerente.html">
                 <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo">
             </a>
-          <h1 class="title">SOLUCIONES METÁLICAS</h1>
+          <h1 class="title">SOLUCIONES METÁLICAS - NUEVO PROYECTO</h1>
         </header>
       
         <main class="main-content">
@@ -108,7 +108,7 @@
       
               if (response.ok) {
                 alert(`Proyecto creado con éxito. ID del proyecto: ${resultado.id_proyecto}`);
-                window.location.href = `./gerente.html`;
+                window.location.href = `./estadoa.html?id_contrato=${contratoId}&id_proyecto=${resultado.id_proyecto}`;
                 console.log("Éxito");
               } else {
                 alert(`Error al crear: ${resultado.error}`);

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soluciones Metálicas</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div class="encabezado">
+    <header class="headerprincipal">
+      <div class="imglogo">
+        <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+      </div>
+      <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span></center> !</h1>
+    </header>
+    <main class="areaprincipal">
+    </main>
+  </div>
+
+  <script>
+    // Recuperar el nombre de usuario e idRol de LocalStorage
+    document.addEventListener('DOMContentLoaded', async (event) => {
+      const nombreUsuario = localStorage.getItem('nombreUsuario');
+      if (nombreUsuario) {
+        document.getElementById('nombreUsuario').innerText = nombreUsuario;
+      }});
+  </script>
+</body>
+</html>

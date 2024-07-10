@@ -19,6 +19,7 @@ const areas = require('./routes/areaRoutes');
 const evaluaciones = require('./routes/evaluacionRoutes');
 const desempenos = require('./routes/desempenoRoutes');
 const asignarD = require('./routes/asignarDesempenoRoutes');
+const estadoa = require('./routes/estadoareaRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -52,6 +53,7 @@ app.use('/api/areas', areas);
 app.use('/api/evaluaciones', evaluaciones);
 app.use('/api/desempenos', desempenos);
 app.use('/api/asignarD', asignarD);
+app.use('/api/estadoa', estadoa);
 
 // Ruta para renderizar la página de inicio
 app.get('/', (req, res) => {
