@@ -15,50 +15,124 @@
         <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
       </div>
       <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span></center> !</h1>
+      <h2 class="rolUsuario" hidden><center>Tu rol de usuario es: <span id="rolUsuario"></span></center></h2>
     </header>
+    <div class="notificación" >
+      <h2><center>Estado de las áreas:</center></h2> 
+      <div id="estado-areas" class="estado-areas"></div>
+    </div>
     <main class="areaprincipal">
       <div class="opciones">
-        <button class="botonpagina" onclick="window.location.href = './';">Asignación de Personal </button>
+        <button class="botonpagina" onclick="window.location.href = './';">Asignar Empleados </button>
       </div>
       <div class="opciones">
-        <button class="botonpagina" onclick="window.location.href = './';">Estado de Trabajo en Área </button>
+        <button class="botonpagina" onclick="window.location.href = './';">Estado de Área </button>
       </div>
-<!-- Agregamos un elemento para mostrar la notificación -->
-  <div class="notificacion">
-    <p>Hola</p>
-    <p id="estado-areas"></p>
-  </div>
+      <!-- Agregamos un elemento para mostrar la notificación -->
     </main>
   </div>
 
   <script>
-    // Recuperar el nombre de usuario de LocalStorage
-    document.addEventListener('DOMContentLoaded', (event) => {
+    // Recuperar el nombre de usuario e idRol de LocalStorage
+    document.addEventListener('DOMContentLoaded', async (event) => {
       const nombreUsuario = localStorage.getItem('nombreUsuario');
       if (nombreUsuario) {
         document.getElementById('nombreUsuario').innerText = nombreUsuario;
       }
+
+      const rolUsuario = localStorage.getItem('idRol');
+      if (rolUsuario) {
+        document.getElementById('rolUsuario').innerText = rolUsuario;
+      }
+
+      // Obtener contratos vigentes y luego la información de las áreas
+      try {
+        const responseContratos = await fetch('/api/buscainfo/v');
+        const contratosVigentes = await responseContratos.json();
+      
+        console.log('contratosVigentes:', contratosVigentes);
+      
+        const areasPromises = contratosVigentes.filter((contrato) => {
+          console.log('contrato:', contrato);
+          return contrato && contrato.id_contrato;
+        }).map((contrato) => getAreasInfo(contrato.id_contrato));
+        const areasInfo = await Promise.all(areasPromises);
+          
+        const estadoAreasElement = document.getElementById('estado-areas');
+        estadoAreasElement.innerHTML = '';
+      
+        if (areasInfo.flat().length === 0) {
+          estadoAreasElement.innerText = 'No hay información de áreas para los contratos vigentes.';
+          return;
+        }
+      
+        const listaAreas = document.createElement('ul');
+      
+        const areaRolesMatrix = [
+          [1, 3], // corte - Encargado de corte
+          [2, 4], // soldadura - Encargado de soldadura
+          [3, 5], // pintura - Encargado de pintura
+          [4, 6], // ensamblaje - Encargado de ensamblaje
+          [5, 7]  // verificación de calidad - Encargado de verificación de calidad
+        ];
+
+        const roleId = parseInt(localStorage.getItem('idRol'));
+        const areaId = areaRolesMatrix.find(([areaId, roleIdMatch]) => roleIdMatch === roleId)[0];
+
+        areasInfo.flat().forEach((area) => {
+          if (area && area.id_area === areaId) {
+            console.log('area:', area);
+            const listItem = document.createElement('li');
+            listItem.textContent = `Contrato: ${area.id_contrato}, Cliente: ${area.cliente}, Fecha de inicio: ${area.fecha_inicio}, Fecha de fin: ${area.fecha_fin}, Proyecto: ${area.id_proyecto}, Área: ${area.nombre_area}, Estado: ${area.estado}`;
+            listaAreas.appendChild(listItem);
+
+            if (area.estado === 'atrasado') {
+              const notificacion = document.createElement('div');
+              notificacion.className = 'notificacion-precaucion';
+              notificacion.textContent = `¡Precaución! El área ${area.nombre_area} del contrato ${area.id_contrato} y el proyecto ${area.id_proyecto} está atrasada. Por favor, asigna más empleados`;
+              estadoAreasElement.appendChild(notificacion);
+
+              const botonAsignar = document.createElement('button');
+              botonAsignar.className = 'botonnotificacion';
+              botonAsignar.textContent = 'Asignar más empleados';
+              botonAsignar.onclick = () => {
+                window.location.href = './asignarE.html';
+              };
+              notificacion.appendChild(botonAsignar);
+            }
+          }
+        });
+
+      console.log('areasInfo:', areasInfo);
+      
+        estadoAreasElement.appendChild(listaAreas);
+      } catch (error) {
+        console.error('Error al obtener los contratos vigentes:', error);
+      }
     });
-// Creamos una función para obtener el estado de áreas
-async function getAreasInfo() {
-  try {
-    const response = await fetch('/api/buscarinfo/a');
-    const areasInfo = await response.json();
-    const estadoAreasElement = document.getElementById('estado-areas');
-    let estadoAreasText = '';
 
-    areasInfo.forEach((area) => {
-      estadoAreasText += `Área ${area.nombre_area}: ${area.estado}\n`;
-    });
-
-    estadoAreasElement.innerText = estadoAreasText;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Llamamos a la función cuando se carga la página
-document.addEventListener('DOMContentLoaded', getAreasInfo);
+    
+    // Función para obtener el estado de áreas
+    async function getAreasInfo(idContrato) {
+      try {
+        const response = await fetch('/api/buscainfo/a', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id_contrato: idContrato })
+        });
+    
+        const areasInfo = await response.json();
+    
+        console.log(areasInfo);  // This line is logging the response data
+    
+        return areasInfo; // Add this line to return the areasInfo data
+      } catch (error) {
+        console.error('Error al obtener la información de las áreas:', error);
+      }
+    
+    }
   </script>
 </body>
 </html>

@@ -16,11 +16,11 @@ exports.initProyecto = async (req, res) => {
     }
 
     // Validar las condiciones en un if compuesto
-    if (fechaInicio >= fechaActual && 
-        fechaFin >= fechaActual && 
-        fechaFin >= fechaInicio && 
-        fechaInicio.getDay() !== 0 && 
-        fechaFin.getDay() !== 0) {
+    if (fechaInicio >= new Date(fechaActual.getTime() - 86400000) && 
+    fechaFin >= new Date(fechaActual.getTime() - 86400000) && 
+    fechaFin >= fechaInicio && 
+    fechaInicio.getDay()!== 0 && 
+    fechaFin.getDay()!== 0) {
 
       // Crear el proyecto solo si todas las validaciones son exitosas
       const proyecto = await Proyecto.create({

@@ -19,11 +19,11 @@ exports.initContrato = async (req, res) => {
     }
 
     // Validar las condiciones en un if compuesto
-    if (fechaInicio >= fechaActual && 
-        fechaFin >= fechaActual && 
-        fechaFin >= fechaInicio && 
-        fechaInicio.getDay() !== 0 && 
-        fechaFin.getDay() !== 0) {
+    if (fechaInicio >= new Date(fechaActual.getTime() - 86400000) && 
+    fechaFin >= new Date(fechaActual.getTime() - 86400000) && 
+    fechaFin >= fechaInicio && 
+    fechaInicio.getDay()!== 0 && 
+    fechaFin.getDay()!== 0) {
 
       // Crear el contrato solo si la validación es exitosa
       const contrato = await Contrato.create({

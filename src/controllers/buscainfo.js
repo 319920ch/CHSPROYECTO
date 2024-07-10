@@ -102,9 +102,10 @@ exports.getContratoInfo = async (req, res) => {
   
           return {
             id_contrato: contrato.id_contrato,
+            fecha_inicio: contrato.fecha_inicio,
+            fecha_fin: contrato.fecha_fin,
             cliente: contrato.cliente,
             id_proyecto: proyecto.id_proyecto,
-            nombre_proyecto: proyecto.nombre_proyecto,
             id_area: area.id_area,
             nombre_area: area.nombre_area,
             estado: estado.estado,
@@ -145,3 +146,23 @@ exports.getContratoInfo = async (req, res) => {
     const horasRestantes = Math.round((fechaFinDate - fechaActual) / (1000 * 60 * 60));
     return horasRestantes;
   }
+
+  const { Op } = require('sequelize');
+
+exports.getContratosVigentes = async (req, res) => {
+  try {
+    const currentDate = new Date();
+
+    const contratos = await Contrato.findAll({
+      where: {
+        fecha_inicio: { [Op.lte]: currentDate },
+        fecha_fin: { [Op.gte]: currentDate }
+      },
+      attributes: ['id_contrato', 'cliente', 'fecha_inicio', 'fecha_fin']
+    });
+
+    res.status(200).json(contratos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
