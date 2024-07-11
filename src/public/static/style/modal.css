@@ -76,3 +76,36 @@
   border-color: #5B5F80; /* Color del borde en foco */
 }
 
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.modal-header, .modal-body, .modal-footer {
+  padding: 10px;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-footer {
+  text-align: center;
+}
+.info-section {
+  margin-bottom: 20px;
+}
+.info-section h2 {
+  margin-bottom: 10px;
+}
+.info-section p {
+  margin: 5px 0;
+}

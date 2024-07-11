@@ -165,3 +165,17 @@ exports.modificarPresupuestoArea = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.obtenerProyectosPorContrato = async (req, res) => {
+  try {
+    const { contratoId } = req.body;
+    const proyectos = await Proyecto.findAll({
+      where: { id_contrato: contratoId }
+    });
+
+    // Asegurarse de que se devuelve un arreglo
+    res.status(200).json(proyectos.length ? proyectos : []);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

@@ -88,3 +88,20 @@ exports.deletePresupuesto = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// ...
+// Obtener todos los proyectos con sus areas por ID de contrato
+exports.getProyectosByContrato = async (req, res) => {
+  try {
+    const proyectos = await Presupuesto.findAll({
+      where: {
+        id_contrato: req.params.id_contrato,
+      },
+      attributes: ['id_proyecto', 'id_area', 'monto' ],
+      group: ['id_proyecto', 'id_area', 'monto' ],
+    });
+    res.status(200).json(proyectos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

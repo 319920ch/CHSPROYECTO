@@ -34,7 +34,7 @@
                 <th>Estado</th>
                 <th>Fecha de Inicio</th>
                 <th>Fecha de Fin</th>
-                <th>Acciones</th>
+                <th>Modificar presupuestos de áreas</th>
               </tr>
             </thead>
             <tbody id="contratosList" class="tbody">
@@ -93,7 +93,7 @@
             <td class="trol">${contrato.fecha_inicio}</td>
             <td class="trol">${contrato.fecha_fin}</td>
             <td class="trol">
-              <button class="botonpagina" onclick="crearProyecto(${contrato.id_contrato})" ${contrato.id_estado === 4? 'disabled' : ''}>Nuevo Proyecto</button>
+              <button class="botonpagina" onclick="crearProyecto(${contrato.id_contrato})" ${contrato.id_estado === 4? 'disabled' : ''}>Modificar Presupuesto</button>
             </td>
           `;
           contratosList.appendChild(row);
@@ -118,7 +118,7 @@ function buscarCliente() {
   }
 
     function crearProyecto(id_contrato) {
-      window.location.href = `nuevoproyecto.html?contratoId=${id_contrato}`;
+      window.location.href = `modificarpresupuestos.html?contratoId=${id_contrato}`;
     }
   </script>
 </body>

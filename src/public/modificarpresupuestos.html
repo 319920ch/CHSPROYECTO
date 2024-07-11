@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modificar Presupuesto de Áreas</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="stylesheet" href="../static/style/tablas.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body style="background-color: #5B5F80;">
+  <div class="encabezado">
+    <header class="headerprincipal">
+        <div class="imglogo">
+          <a href="./gerente.html">
+            <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+          </a>
+        </div>
+        <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span>!</center></h1>
+      </header>
+    <main class="main-content">
+      <div class="card">
+        <div class="header">
+          <h2 style="color: #ffffff;"> <center>Contrato ID: <span id="contratoId"></span></center></h2>
+        </div>
+        <table id="proyectosTable" style="color: #ffffff;">
+          <thead>
+            <tr>
+              <th><h3>N° Proyecto</h3></th>
+              <th><h3 style="justify-items: left;">Área</h3></th>
+              <th><h3>Monto</h3></th>
+              <th><h3>Modificar Presupuesto</h3></th>
+            </tr>
+          </thead>
+          <tbody id="proyectosBody">
+            <!-- Aquí se insertarán los datos dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const nombreUsuario = localStorage.getItem('nombreUsuario');
+        if (nombreUsuario) {
+          document.getElementById('nombreUsuario').innerText = nombreUsuario;
+         
+    }});
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const contratoId = urlParams.get('contratoId');
+      document.getElementById('contratoId').innerText = contratoId;
+
+
+      try {
+        // Obtener datos de presupuestos y áreas
+        const responsePresupuestos = await fetch(`/api/presupuestos/${contratoId}`);
+        const responseAreas = await fetch('/api/areas');
+        const dataPresupuestos = await responsePresupuestos.json();
+        const dataAreas = await responseAreas.json();
+
+        // Mapear IDs de área a nombres de área
+        const areaNamesMap = {};
+        dataAreas.forEach(area => {
+          areaNamesMap[area.id_area] = area.nombre_area;
+        });
+
+        const proyectosBody = document.getElementById('proyectosBody');
+        dataPresupuestos.forEach((proyecto) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td><center>${proyecto.id_proyecto}</center></td>
+            <td>${areaNamesMap[proyecto.id_area]}</td>
+            <td>${proyecto.monto}</td>
+            <td>
+              <form class="modificar-form" data-id-proyecto="${proyecto.id_proyecto}" data-id-area="${proyecto.id_area}">
+                <input type="number" class="submitbi" step="0.01" name="nuevo_monto" placeholder="Nuevo monto" required>
+                <button type="submit" class="submitb">Modificar</button>
+              </form>
+            </td>
+          `;
+          proyectosBody.appendChild(row);
+        });
+
+// Agregar evento de envío de formulario para modificar presupuesto
+document.querySelectorAll('.modificar-form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const idProyecto = form.getAttribute('data-id-proyecto');
+      const idArea = form.getAttribute('data-id-area');
+      const nuevoMonto = form.nuevo_monto.value;
+  
+      try {
+        const response = await fetch('/api/asignarP/modificarP', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            id_contrato: contratoId,
+            id_proyecto: idProyecto,
+            id_area: idArea,
+            nuevo_monto: nuevoMonto
+          })
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data); // Manejar respuesta según necesidades
+  
+          // Actualizar el monto mostrado en la tabla
+          form.parentNode.previousElementSibling.innerText = nuevoMonto;
+        } else {
+          const errorResponse = await response.json();
+          alert(`Error: ${errorResponse.error}`);
+          e.preventDefault();
+          return false;
+        }
+  
+      } catch (error) {
+        console.error(error);
+        alert(`Error: ${error.message}`);
+        e.preventDefault();
+        return false;
+      }
+    });
+  });
+
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>

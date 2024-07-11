@@ -15,7 +15,7 @@
     <a href="./gerente.html">
         <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo">
     </a>
-    <h1 class="title">SOLUCIONES METÁLICAS - NUEVO PROYECTO</h1>
+    <h1 class="bienvenida" style="color: #5B5F80;"><center>¡Bienvenido <span id="nombreUsuario"></span>!</center></h1>
 </header>
 
 <main class="main-content">
@@ -60,6 +60,12 @@
 </main>
 
 <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const nombreUsuario = localStorage.getItem('nombreUsuario');
+        if (nombreUsuario) {
+          document.getElementById('nombreUsuario').innerText = nombreUsuario;
+         
+    }});
     async function loadProductos() {
         try {
             const response = await fetch('/api/productos');

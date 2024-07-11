@@ -23,6 +23,7 @@ const estadoa = require('./routes/estadoareaRoutes');
 const reglas = require('./routes/reglasRoutes');
 const asignarP = require('./routes/areasPresupuestoRoutes');
 const proyectos = require('./routes/proyectoRoutes');
+const presupuestos = require('./routes/presupuestoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -60,6 +61,7 @@ app.use('/api/estadoa', estadoa);
 app.use('/api/reglas', reglas);
 app.use('/api/asignarP', asignarP);
 app.use('/api/proyectos', proyectos);
+app.use('/api/presupuestos', presupuestos);
 
 // Ruta para renderizar la página de inicio
 app.get('/', (req, res) => {

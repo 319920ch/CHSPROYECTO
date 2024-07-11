@@ -8,5 +8,6 @@ router.get('/', presupuestoController.getPresupuestos);
 router.get('/:id_area/:id_proyecto/:id_contrato', presupuestoController.getPresupuestoById);
 router.put('/:id_area/:id_proyecto/:id_contrato', presupuestoController.updatePresupuesto);
 router.delete('/:id_area/:id_proyecto/:id_contrato', presupuestoController.deletePresupuesto);
+router.get('/:id_contrato', presupuestoController.getProyectosByContrato);
 
 module.exports = router;
