@@ -21,18 +21,23 @@ exports.getEstado = async (req, res) => {
 };
 
 // Obtener un estado por ID
+// Obtener un estado por ID
 exports.getEstadoById = async (req, res) => {
   try {
+    console.log('Fetching state with ID:', req.params.id); // Debug log
     const estado = await Estado.findByPk(req.params.id);
     if (estado) {
+      console.log('State found:', estado); // Debug log
       res.status(200).json({ nombre_estado: estado.nombre_estado });
     } else {
       res.status(200).json({ nombre_estado: 'Estado no encontrado' });
     }
   } catch (error) {
+    console.error('Error fetching state:', error); // Debug log
     res.status(500).json({ error: error.message });
   }
 };
+
 // Actualizar un estado por ID
 exports.updateEstado = async (req, res) => {
   try {

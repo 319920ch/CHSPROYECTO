@@ -22,19 +22,25 @@ exports.asignarAreasProyecto = async (req, res) => {
 
     const areasAsignadas = [];
     for (const area of areas) {
-        const areaExistente = await Area.findOne({
-            where: { nombre_area: area.nombre_area },
-            attributes: ['id_area', 'nombre_area'] // Include id_area attribute
-          });
+      const areaExistente = await Area.findOne({
+        where: { nombre_area: area.nombre_area },
+        attributes: ['id_area', 'nombre_area'] // Include id_area attribute
+      });
       if (!areaExistente) {
         return res.status(404).json({ error: `Área ${area.nombre_area} no encontrada` });
+      }
+
+      const { monto } = area; // Obtener el monto desde el objeto de área enviado en la solicitud
+
+      if (monto == null) {
+        return res.status(400).json({ error: `El monto no puede ser null para el área ${area.nombre_area}` });
       }
 
       const presupuesto = await Presupuesto.create({
         id_proyecto,
         id_contrato,
         id_area: areaExistente.id_area,
-        monto: 0 // Inicializar monto en 0, puede ser actualizado luego
+        monto: monto // Usar el monto proporcionado en la solicitud
       });
 
       areasAsignadas.push({

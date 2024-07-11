@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soluciones Metálicas - Nuevo Proyecto</title>
@@ -9,117 +9,138 @@
     <link rel="stylesheet" href="../static/style/tablas.css">
     <link rel="stylesheet" href="../static/style/forms.css">
     <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
-  </head>
-  <body>
-        <header class="header">
-            <a href="./gerente.html">
-                <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo">
-            </a>
-          <h1 class="title">SOLUCIONES METÁLICAS - NUEVO PROYECTO</h1>
-        </header>
-      
-        <main class="main-content">
-          <form id="nuevoProyectoForm" class="form-container">
-            <h2 class="form-title">Nuevo proyecto</h2>
-            <div class="form-group">
-              <label for="contrato" class="form-label">Contrato número:</label>
-              <input id="contrato" type="text" class="form-input" >
-            </div>
-            <div class="form-group">
-              <label for="producto" class="form-label">Producto:</label>
-              <select id="producto" class="form-input">
-                <option value="">Seleccione un producto</option>
-              </select>
-            </div>
-            <div class="form-group">
-                <label for="cantidad" class="form-label">Cantidad:</label>
-                <input id="cantidad" type="number" class="form-input" placeholder="Ingrese cantidad" min="1">
-              </div>
-            <div class="form-group">
-              <label class="form-label">Fecha de Inicio:</label>
-              <input type="date" id="fecha_inicio" class="form-input">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Fecha de Fin:</label>
-              <input type="date" id="fecha_fin" class="form-input">
-            </div>
-            <button type="submit" class="submit-button" onclick="handleNuevoProyecto(event)">Registrar Proyecto</button>
-          </form>
+</head>
+<body>
+<header class="header">
+    <a href="./gerente.html">
+        <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo">
+    </a>
+    <h1 class="title">SOLUCIONES METÁLICAS - NUEVO PROYECTO</h1>
+</header>
 
-    <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      const contratoId = urlParams.get('contratoId');
+<main class="main-content">
+<form id="nuevoProyectoForm" class="form-container">
+    <h2 class="form-title">Nuevo proyecto</h2>
+    <div class="form-group">
+        <label for="contrato" class="form-label">Contrato número:</label>
+        <input id="contrato" type="text" class="form-input" readonly>
+    </div>
+    <div class="form-group">
+        <label for="presupuesto" class="form-label">Presupuesto de Contrato:</label>
+        <input id="presupuesto" type="text" class="form-input" readonly>
+    </div>
+    <div class="form-group">
+        <label for="producto" class="form-label">Producto:</label>
+        <select id="producto" class="form-input">
+            <option value="">Seleccione un producto</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="cantidad" class="form-label">Cantidad:</label>
+        <input id="cantidad" type="number" class="form-input" placeholder="Ingrese cantidad" min="1">
+    </div>
+     <div class="form-group">
+        <!-- /<label class="form-label" hidden>Fecha de Inicio del Contrato:</label> -->
+        <input type="date" id="fecha_inicio_contrato" class="form-input" readonly hidden>
+    </div>
+    <div class="form-group">
+        <!-- <label class="form-label" hidden>Fecha de Fin del Contrato:</label> -->
+        <input type="date" id="fecha_fin_contrato" class="form-input" readonly hidden>
+    </div> 
+    <div class="form-group">
+        <label class="form-label">Fecha de Inicio del Proyecto:</label>
+        <input type="date" id="fecha_inicio_proyecto" class="form-input">
+    </div>
+    <div class="form-group">
+        <label class="form-label">Fecha de Fin del Proyecto:</label>
+        <input type="date" id="fecha_fin_proyecto" class="form-input">
+    </div>
+    <button type="submit" class="submit-button" onclick="handleNuevoProyecto(event)">Registrar Proyecto</button>
+</form>
+</main>
 
-      // Ahora puedes utilizar el contratoId para llenar el campo de contrato número
-      document.getElementById('contrato').value = contratoId;
-      
-      async function loadProductos() {
+<script>
+    async function loadProductos() {
         try {
-          const response = await fetch('/api/productos');
-          const productos = await response.json();
-          const select = document.getElementById('producto');
-          productos.forEach(producto => {
-            const option = document.createElement('option');
-            option.value = producto.id_producto;
-            option.text = producto.nombre_producto;
-            select.appendChild(option);
-          });
+            const response = await fetch('/api/productos');
+            const productos = await response.json();
+            const select = document.getElementById('producto');
+            productos.forEach(producto => {
+                const option = document.createElement('option');
+                option.value = producto.id_producto;
+                option.textContent = producto.nombre_producto;
+                select.appendChild(option);
+            });
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      }
+    }
 
-      loadProductos();
+    loadProductos();
 
-        async function handleNuevoProyecto() {
-          event.preventDefault(); 
+    const urlParams = new URLSearchParams(window.location.search);
+    const contratoId = urlParams.get('contratoId');
+    const contratoPresupuesto = urlParams.get('presupuesto');
+    const fechaInicioContrato = urlParams.get('fechaInicio');
+    const fechaFinContrato = urlParams.get('fechaFin');
 
-          const contratoId = document.getElementById('contrato').value;
-          const producto = document.getElementById('producto').value;
-          const cantidad = document.getElementById('cantidad').value;
-          const fechaInicio = document.getElementById('fecha_inicio').value;
-          const fechaFin = document.getElementById('fecha_fin').value;
-      
-          const [añoi, mesi, diai] = fechaInicio.split('-');
-          const [añof, mesf, diaf] = fechaFin.split('-');
-        
-          const data = {
+    document.getElementById('contrato').value = contratoId;
+    document.getElementById('presupuesto').value = contratoPresupuesto;
+    document.getElementById('fecha_inicio_contrato').value = fechaInicioContrato;
+    document.getElementById('fecha_fin_contrato').value = fechaFinContrato;
+
+    // Calcula la fecha de fin del proyecto como un día antes de la fecha de fin del contrato
+    const fechaFinProyecto = new Date(fechaFinContrato);
+    fechaFinProyecto.setDate(fechaFinProyecto.getDate() - 1);
+
+    document.getElementById('fecha_inicio_proyecto').value = fechaInicioContrato;
+    document.getElementById('fecha_fin_proyecto').value = fechaFinProyecto.toISOString().slice(0, 10);
+
+    async function handleNuevoProyecto(event) {
+        event.preventDefault();
+
+        const producto = document.getElementById('producto').value;
+        const cantidad = document.getElementById('cantidad').value;
+        const fechaInicioProyecto = document.getElementById('fecha_inicio_proyecto').value;
+        const fechaFinProyecto = document.getElementById('fecha_fin_proyecto').value;
+        const presupuesto = document.getElementById('presupuesto').value;
+
+        const data = {
             id_contrato: contratoId,
             id_producto: producto,
             cantidad_producto: cantidad,
-            fecha_inicio: fechaInicio,
-            fecha_fin: fechaFin,
-          };
-            
-          if (!contratoId || !producto || !cantidad || !diai || !mesi || !añoi || !diaf || !mesf || !añof) {
+            fecha_inicio: fechaInicioProyecto,
+            fecha_fin: fechaFinProyecto,
+        };
+
+        if (!producto || !cantidad || !fechaInicioProyecto || !fechaFinProyecto) {
             alert('Por favor, complete todos los campos requeridos');
             return;
-          } else {
-            try {
-              const response = await fetch('/api/initP/iniciar', {
+        }
+
+        try {
+            const response = await fetch('/api/initP/iniciar', {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
-              });
-      
-              const resultado = await response.json();
-      
-              if (response.ok) {
+            });
+
+            const resultado = await response.json();
+
+            if (response.ok) {
                 alert(`Proyecto creado con éxito. ID del proyecto: ${resultado.id_proyecto}`);
-                window.location.href = `./estadoa.html?id_contrato=${contratoId}&id_proyecto=${resultado.id_proyecto}`;
-                console.log("Éxito");
-              } else {
+                window.location.href = `./estadoa.html?id_contrato=${contratoId}&id_proyecto=${resultado.id_proyecto}&presupuesto=${presupuesto}`;
+            } else {
                 alert(`Error al crear: ${resultado.error}`);
-                console.error("error1");
-              }
-            } catch (error) {
-              alert(`Error al crear el proyecto: ${error.message}`);
-              console.error("error2");
+                console.error("Error al crear el proyecto:", resultado.error);
             }
-          }
+        } catch (error) {
+            alert(`Error al crear el proyecto: ${error.message}`);
+            console.error("Error al crear el proyecto:", error);
         }
-      </script>
+    }
+</script>
 </body>
 </html>

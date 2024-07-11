@@ -9,6 +9,61 @@
   <link rel="stylesheet" href="../static/style/tablas.css">
   <link rel="stylesheet" href="../static/style/forms.css">
   <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.4);
+      padding-top: 60px;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .modal-header, .modal-body, .modal-footer {
+      padding: 10px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-footer {
+      text-align: center;
+    }
+    .info-section {
+      margin-bottom: 20px;
+    }
+    .info-section h2 {
+      margin-bottom: 10px;
+    }
+    .info-section p {
+      margin: 5px 0;
+    }
+  </style>
 </head>
 <body>
   <header class="header">
@@ -18,164 +73,231 @@
     <h1 class="title">SOLUCIONES METÁLICAS - ESTADO DE ÁREA</h1>
   </header>
 
-  <main class="main-content">
-    <!-- Aquí puedes mostrar o usar los datos de contrato y proyecto -->
-    <div id="estadoAreaContainer">
-      <!-- Contenido dinámico -->
-    </div>
-    <button id="aceptarTodasButton" class="submit-button">Aceptar todas las áreas</button>
-    
-    <!-- Tabla para mostrar el nombre del área y su estado -->
-    <div id="tablaEstadoAreaContainer" style="display: none;">
-      <table class="styled-table">
-        <thead>
-          <tr>
-            <th>Área</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody id="tablaEstadoAreaBody">
-        </tbody>
-      </table>
+  <main class="main-contentenedor">
+    <!-- Contenedor para mostrar las áreas -->
+    <div id="areasContainer" class="area-container">
+      <!-- Aquí se cargarán dinámicamente las áreas y los inputs -->
     </div>
 
-    <!-- Formulario para ingresar porcentaje de ganancia -->
-    <div id="porcentajeGananciaContainer" style="display: none;">
-      <label for="porcentajeGananciaInput">Porcentaje de Ganancia (%)</label>
-      <input type="number" id="porcentajeGananciaInput" class="form-input" placeholder="Ingrese el porcentaje">
-      <button id="ingresarPorcentajeButton" class="submit-button">Ingresar</button>
+    <!-- Mostrar el presupuesto disponible -->
+    <div>
+      <br>
+      <label for="presupuestoDisplay">Presupuesto Disponible:</label>
+      <span id="presupuestoDisplay"></span>
     </div>
 
     <!-- Botón para asignar presupuesto por área -->
-    <button id="asignarPresupuestoButton" class="submit-button" style="display: none;">Asignar presupuesto por área</button>
+    <button id="asignarPresupuestoButton" class="submit-button">Asignar presupuesto por área</button>
   </main>
 
+  <!-- Ventana modal -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Información del Contrato y Proyecto</h2>
+        <span class="close" hidden>&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="info-section">
+          <h2>Información del Contrato</h2>
+          <p><strong>ID Contrato:</strong> <span id="contratoId"></span></p>
+          <p><strong>Cliente:</strong> <span id="contratoCliente"></span></p>
+          <p><strong>Fecha de Inicio:</strong> <span id="contratoFechaInicio"></span></p>
+          <p><strong>Fecha de Fin:</strong> <span id="contratoFechaFin"></span></p>
+          <p><strong>Presupuesto:</strong> $<span id="contratoPresupuesto"></span></p>
+        </div>
+        <div class="info-section">
+          <h2>Información del Proyecto</h2>
+          <p><strong>ID Proyecto:</strong> <span id="proyectoId"></span></p>
+          <p><strong>ID Contrato:</strong> <span id="proyectoContratoId"></span></p>
+          <p><strong>ID Producto:</strong> <span id="proyectoProductoId"></span></p>
+          <p><strong>Cantidad de Producto:</strong> <span id="proyectoCantidadProducto"></span></p>
+          <p><strong>Fecha de Inicio:</strong> <span id="proyectoFechaInicio"></span></p>
+          <p><strong>Fecha de Fin:</strong> <span id="proyectoFechaFin"></span></p>
+        </div>
+        <div class="info-section">
+          <h2>Información de Áreas y sus Presupuestos</h2>
+          <ul id="areasInfo"></ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalAcceptButton" class="submit-button">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Obtener los parámetros de la URL
     const urlParams = new URLSearchParams(window.location.search);
     const contratoId = urlParams.get('id_contrato');
     const proyectoId = urlParams.get('id_proyecto');
+    const presupuesto = urlParams.get('presupuesto');
 
-    // Ahora puedes usar contratoId y proyectoId en tus peticiones o para mostrar información
-    console.log('ID del Contrato:', contratoId);
-    console.log('ID del Proyecto:', proyectoId);
+    document.getElementById('presupuestoDisplay').textContent = `$ ${presupuesto}`;
 
-    async function loadAreasAndEstados() {
+    async function loadAreas() {
       try {
-        const [areasResponse, estadosResponse] = await Promise.all([
-          fetch('/api/areas'),
-          fetch('/api/estados')
-        ]);
-
+        const areasResponse = await fetch(`/api/areas?proyecto=${proyectoId}`);
+        if (!areasResponse.ok) {
+          throw new Error('Error al cargar las áreas');
+        }
         const areas = await areasResponse.json();
-        const estados = await estadosResponse.json();
-        
-        const container = document.getElementById('estadoAreaContainer');
 
+        const areasContainer = document.getElementById('areasContainer');
+        areasContainer.innerHTML = ''; 
         areas.forEach(area => {
           const div = document.createElement('div');
           div.className = 'area-item';
           div.innerHTML = `
             <span>${area.nombre_area}</span>
-            <select id="estado_${area.id_area}" class="form-input">
-              ${estados.map(estado => `
-                <option value="${estado.id_estado}" ${estado.id_estado === 1 ? 'selected' : ''}>${estado.estado}</option>
-              `).join('')}
-            </select>
+            <input type="number" id="presupuesto_${area.id_area}" class="form-input" placeholder="Ingrese el presupuesto para ${area.nombre_area}">
           `;
-          container.appendChild(div);
+          areasContainer.appendChild(div);
         });
+
       } catch (error) {
         console.error(error);
+        alert('Error al cargar las áreas: ' + error.message);
       }
     }
 
-    async function handleAceptarTodas() {
+    async function asignarPresupuestoPorArea() {
       try {
-        const areasResponse = await fetch('/api/areas');
+        const areasResponse = await fetch(`/api/areas?proyecto=${proyectoId}`);
+        if (!areasResponse.ok) {
+          throw new Error('Error al obtener las áreas');
+        }
         const areas = await areasResponse.json();
+        let sumaPresupuestos = 0;
 
-        // Ocultar los primeros elementos y el botón
-        document.getElementById('estadoAreaContainer').style.display = 'none';
-        document.getElementById('aceptarTodasButton').style.display = 'none';
+        const areasData = areas.map(area => {
+          const presupuestoInput = document.getElementById(`presupuesto_${area.id_area}`);
+          const monto = parseFloat(presupuestoInput.value);
 
-        const tablaContainer = document.getElementById('tablaEstadoAreaContainer');
-        const tablaBody = document.getElementById('tablaEstadoAreaBody');
-        tablaBody.innerHTML = ''; // Limpiar la tabla antes de llenarla
-
-        for (const area of areas) {
-          const data = {
-            id_contrato: contratoId,
-            id_proyecto: proyectoId,
-            id_area: area.id_area,
-            id_estado: 1 // Estado por defecto 'Iniciado'
-          };
-
-          // Log the data being sent
-          console.log('Enviando datos:', data);
-
-          const response = await fetch('/api/estadoa', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-          });
-
-          if (!response.ok) {
-            const resultado = await response.json();
-            alert(`Error al aceptar el área ${area.id_area}: ${resultado.error}`);
-            return;
+          if (isNaN(monto) || monto <= 0) {
+            alert(`Ingrese un presupuesto válido para ${area.nombre_area}`);
+            throw new Error(`Presupuesto inválido para ${area.nombre_area}`);
           }
 
-          // Añadir fila a la tabla
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${area.nombre_area}</td>
-            <td>Iniciado</td>
-          `;
-          tablaBody.appendChild(row);
+          sumaPresupuestos += monto;
+
+          return {
+            id_area: area.id_area,
+            nombre_area: area.nombre_area,
+            monto
+          };
+        });
+
+        const gananciaResponse = await fetch('/api/reglas/1');
+        if (!gananciaResponse.ok) {
+          throw new Error('Error al obtener la regla de ganancia');
+        }
+        const regla = await gananciaResponse.json();
+
+        const presupuestoTotal = parseFloat(presupuesto);
+        const presupuestoPermitido = presupuestoTotal * (1 - regla.valor / 100);
+
+        if (sumaPresupuestos > presupuestoPermitido) {
+          alert(`La suma de presupuestos no puede exceder $ ${presupuestoPermitido.toFixed(2)} (${(1 - regla.valor / 100) * 100}% del presupuesto)`);
+          return;
         }
 
-        // Mostrar la tabla
-        tablaContainer.style.display = 'block';
+        const data = {
+          id_proyecto: proyectoId,
+          id_contrato: contratoId,
+          areas: areasData
+        };
 
-        // Mostrar formulario para ingresar porcentaje de ganancia
-        document.getElementById('porcentajeGananciaContainer').style.display = 'block';
+        console.log('Datos a enviar al backend para asignar presupuestos:');
+        console.log(data);
 
-        alert('Áreas aceptadas con éxito');
+        const response = await fetch('/api/asignarP/iniciar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          const resultado = await response.json();
+          alert(`Error al asignar presupuestos: ${resultado.error}`);
+          return;
+        }
+
+        const contratoResponse = await fetch(`/api/contratos/${contratoId}`);
+        if (!contratoResponse.ok) {
+          throw new Error('Error al obtener la información del contrato');
+        }
+        const contrato = await contratoResponse.json();
+
+        const proyectoResponse = await fetch(`/api/proyectos/${proyectoId}`);
+        if (!proyectoResponse.ok) {
+          throw new Error('Error al obtener la información del proyecto');
+        }
+        const proyecto = await proyectoResponse.json();
+
+    // Obtener el nombre del producto del proyecto
+    const productoResponse = await fetch(`/api/productos/${proyecto.id_producto}`);
+    if (!productoResponse.ok) {
+      throw new Error('Error al obtener el producto del proyecto');
+    }
+    const producto = await productoResponse.json();
+    console.log(producto.nombre_producto);
+       
+
+    // Mostrar la información actualizada en la ventana modal
+          document.getElementById('contratoId').textContent = contrato.id_contrato;
+        document.getElementById('contratoCliente').textContent = contrato.cliente;
+        document.getElementById('contratoFechaInicio').textContent = contrato.fecha_inicio;
+        document.getElementById('contratoFechaFin').textContent = contrato.fecha_fin;
+        document.getElementById('contratoPresupuesto').textContent = contrato.presupuesto;
+
+        document.getElementById('proyectoId').textContent = proyecto.id_proyecto;
+        document.getElementById('proyectoContratoId').textContent = proyecto.id_contrato;
+        document.getElementById('proyectoProductoId').textContent = producto.nombre_producto;
+        document.getElementById('proyectoCantidadProducto').textContent = proyecto.cantidad_producto;
+        document.getElementById('proyectoFechaInicio').textContent = proyecto.fecha_inicio;
+        document.getElementById('proyectoFechaFin').textContent = proyecto.fecha_fin;
+
+        const areasInfo = document.getElementById('areasInfo');
+        areasInfo.innerHTML = '';
+        areasData.forEach(area => {
+          const li = document.createElement('li');
+          li.textContent = `${area.nombre_area}: $${area.monto}`;
+          areasInfo.appendChild(li);
+        });
+
+        const modal = document.getElementById('myModal');
+        modal.style.display = 'block';
+
       } catch (error) {
-        alert(`Error al aceptar las áreas: ${error.message}`);
+        console.error(error);
+        alert('Error al asignar presupuestos: ' + error.message);
       }
     }
 
-    async function handleIngresarPorcentaje() {
-      const porcentaje = document.getElementById('porcentajeGananciaInput').value;
+    document.getElementById('asignarPresupuestoButton').addEventListener('click', asignarPresupuestoPorArea);
 
-      // Validar que se ingrese un porcentaje válido
-      if (!porcentaje || isNaN(porcentaje)) {
-        alert('Ingrese un porcentaje válido.');
-        return;
+    window.addEventListener('load', loadAreas);
+
+    const modal = document.getElementById('myModal');
+    const span = document.getElementsByClassName('close')[0];
+    const acceptButton = document.getElementById('modalAcceptButton');
+
+    span.onclick = function () {
+      modal.style.display = 'none';
+    }
+
+    acceptButton.onclick = function () {
+      window.location.href = 'gerente.html';
+    }
+
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = 'none';
       }
-
-      // Ocultar el formulario y mostrar el botón para asignar presupuesto
-      document.getElementById('porcentajeGananciaContainer').style.display = 'none';
-      document.getElementById('asignarPresupuestoButton').style.display = 'block';
-
-      alert(`Porcentaje de ganancia ingresado: ${porcentaje}%`);
     }
-
-    async function handleAsignarPresupuesto() {
-      // Implementar la lógica para asignar presupuesto por área
-      // Aquí puedes realizar la llamada a la API para asignar presupuesto, similar al proceso de aceptar todas las áreas
-      alert('Presupuesto asignado por área correctamente');
-    }
-
-    document.getElementById('aceptarTodasButton').addEventListener('click', handleAceptarTodas);
-    document.getElementById('ingresarPorcentajeButton').addEventListener('click', handleIngresarPorcentaje);
-    document.getElementById('asignarPresupuestoButton').addEventListener('click', handleAsignarPresupuesto);
-
-    loadAreasAndEstados();
   </script>
 </body>
 </html>
+

@@ -44,6 +44,19 @@ body {
   max-height: fit-content;
 }
 
+.main-contentenedor{
+  display: flex;
+  flex-direction: column; /* Asegura que los hijos se coloquen en columna (uno debajo del otro) */
+  justify-content: center;
+  background-color: #5B5F80;
+  overflow: auto; /* Permite el desplazamiento si el contenido excede la altura del contenedor */
+  width: 100%;
+  min-height: calc(96vh - 65px); /* Ajusta la altura basada en la altura del encabezado */
+  max-height: fit-content;
+  padding-left: 30%;
+  padding-right: 30%;
+  padding-top: 0%;
+}
 
 .form-container {
   background-color: #ffffff;
