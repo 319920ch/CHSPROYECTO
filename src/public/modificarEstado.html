@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Estado del Área</title>
+    <link rel="stylesheet" href="../static/style/App.css">
+    <link rel="stylesheet" href="../static/style/modal.css">
+    <link rel="stylesheet" href="../static/style/tabla2.css">
+    <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="encabezado">
+        <header class="headerprincipal">
+            <div class="imglogo">
+                <a href="./encargado.html"></a>
+                <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+            </div>
+            <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span></center> !</h1>
+            <h2 class="rolUsuario" hidden><center>Tu rol de usuario es: <span id="rolUsuario"></span></center></h2>
+        </header>
+        <main class="areaprincipal">
+            <div>
+                <h2 style="color: #ffff;"><center>Modificar Estado del Área</center></h2>
+                <table border="1">
+                    <tr>
+                        <td colspan="2" style="background-color: #FF6B35; color: #fff; text-align: center;">
+                            Datos del proyecto, contrato y estado
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Proyecto:</td>
+                        <td><span id="proyecto-numero"></span></td>
+                    </tr>
+                    <tr>
+                        <td hidden>Área:</td>
+                        <td hidden><span id="area-nombre"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Contrato:</td>
+                        <td><span id="contrato-numero"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Estado actual:</td>
+                        <td><span id="estadoactual"></span></td>
+                    </tr>
+                </table>
+                <br><br>
+                <form id="formModificarEstado" style="font-weight: bold;">
+                    <center>
+                        <label for="nuevoEstado" style="color: #fff;">Nuevo Estado:</label>
+                        <select id="nuevoEstado" name="nuevoEstado">
+                            <option value="2">En Proceso</option>
+                            <option value="3">Atrasado</option>
+                            <option value="4">Finalizado</option>
+                        </select>
+                        <input type="hidden" id="areaId" name="areaId">
+                        <input type="hidden" id="contratoId" name="contratoId">
+                        <input type="hidden" id="proyectoId" name="proyectoId">
+                        <br><br>
+                        <button type="submit" class="botonpagina">Guardar</button>
+                    </center>
+                </form>
+        </div>
+        </main>
+    </div>
+
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', async (event) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const areaId = urlParams.get('areaId');
+            const contratoId = urlParams.get('contratoId');
+            const proyectoId = urlParams.get('proyectoId');
+            const estadoactual = urlParams.get('estadoActual'); // Cambié 'estado' a 'estadoActual'
+
+            // Mostrar los datos del proyecto, área y contrato
+            document.getElementById('proyecto-numero').textContent = proyectoId;
+            document.getElementById('area-nombre').textContent = `Área ${areaId}`;
+            document.getElementById('contrato-numero').textContent = contratoId;
+            document.getElementById('estadoactual').textContent = estadoactual; // Mostrar estado actual
+
+            // Asignar valores a los campos ocultos del formulario
+            document.getElementById('areaId').value = areaId;
+            document.getElementById('contratoId').value = contratoId;
+            document.getElementById('proyectoId').value = proyectoId;
+        });
+
+        document.getElementById('formModificarEstado').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            // Obtener los valores seleccionados y ocultos del formulario
+            const nuevoEstado = document.getElementById('nuevoEstado').value;
+            const areaId = document.getElementById('areaId').value;
+            const contratoId = document.getElementById('contratoId').value;
+            const proyectoId = document.getElementById('proyectoId').value;
+
+            // Mostrar en consola los datos que se enviarán
+            console.log('Datos a enviar:', { id_area: areaId, nuevo_estado: nuevoEstado, id_contrato: contratoId, id_proyecto: proyectoId });
+
+            try {
+                // Enviar la solicitud PUT al endpoint /api/estadoa
+                const response = await fetch('/api/estadoa', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id_area: areaId, nuevo_estado: nuevoEstado, id_contrato: contratoId, id_proyecto: proyectoId })
+                });
+
+                if (response.ok) {
+                    // Mostrar alerta de éxito y redirigir a area.html
+                    alert('Estado modificado con éxito');
+                    window.location.href = './area.html';
+                } else {
+                    // Manejar errores y mostrar mensaje de error
+                    const errorResponse = await response.json();
+                    console.error('Error en la respuesta del servidor:', errorResponse);
+                    alert(`Error al modificar el estado: ${errorResponse.error}`);
+                }
+            } catch (error) {
+                // Capturar errores de solicitud y mostrar mensaje de error
+                console.error('Error al enviar la solicitud:', error);
+                alert('Error al modificar el estado');
+            }
+        });
+        document.addEventListener('DOMContentLoaded', async (event) => {
+            const nombreUsuario = localStorage.getItem('nombreUsuario');
+            if (nombreUsuario) {
+              document.getElementById('nombreUsuario').innerText = nombreUsuario;
+            }    
+        });
+        const rolUsuario = localStorage.getItem('idRol');
+        if (rolUsuario) {
+          document.getElementById('rolUsuario').innerText = rolUsuario;
+        }
+
+    </script>
+</body>
+</html>

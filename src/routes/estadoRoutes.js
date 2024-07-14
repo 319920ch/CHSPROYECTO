@@ -6,7 +6,7 @@ const estadoController = require('../controllers/estadoController');
 router.post('/', estadoController.createEstado);
 router.get('/', estadoController.getEstado);
 router.get('/:id', estadoController.getEstadoById);
-router.put('/:id', estadoController.updateEstado);
+router.post('/', estadoController.updateEstado);
 router.delete('/:id', estadoController.deleteEstado);
 
 module.exports = router;

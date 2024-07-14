@@ -14,7 +14,8 @@ router.get('/', estadoareaController.getEstadoarea);
 router.get('/:id_estado/id_contrato/:id_contrato/id_area/:id_area/id_proyecto/:id_proyecto', estadoareaController.getEstadoareaoById);
 
 // Actualizar un estado de área por ID de estado, ID de contrato, ID de área y ID de proyecto
-router.put('/:id_estado/id_contrato/:id_contrato/id_area/:id_area/id_proyecto/:id_proyecto', estadoareaController.updateEstadoarea);
+router.put('/', estadoareaController.actualizarEstadoArea);
+
 
 // Eliminar un estado de área por ID de estado, ID de contrato, ID de área y ID de proyecto
 router.delete('/:id_estado/id_contrato/:id_contrato/id_area/:id_area/id_proyecto/:id_proyecto', estadoareaController.deleteEstadoarea);

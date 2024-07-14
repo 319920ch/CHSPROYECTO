@@ -1,0 +1,21 @@
+
+    /* Estilos adicionales para la integración de la tabla y las notificaciones */
+    .estado-areas {
+      margin-top: 20px; /* Ajusta el margen superior según sea necesario */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px; /* Ajusta el margen superior según sea necesario */
+    }
+    th, td {
+      border: 1px solid #f2f2f2;
+      padding: 8px;
+      text-align: center;
+      color: #f2f2f2;
+    }
+    th {
+      background-color: #f2f2f2;
+      color: #5B5F80;
+    }

@@ -30,6 +30,7 @@ const rym = require('./recomendacionymodelo');
 const buscainfo = require('./buscainfoRoutes');
 const rempleado = require('./registroempleados');
 
+
 router.use('/rempleado', rempleado);
 router.use('/buscainfo', buscainfo);
 router.use('/rym', rym);
@@ -57,5 +58,6 @@ router.use('/estados', estadoRoutes);
 router.use('/auth', authRoutes);
 router.use('/initProyecto', initproyectosRoutes);
 router.use('/areasPresupuesto', areasPresupuesto);
+
 
 module.exports = router;

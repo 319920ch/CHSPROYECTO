@@ -6,7 +6,7 @@ exports.actualizarEstadoArea = async (req, res) => {
     const { id_area, nuevo_estado, id_contrato, id_proyecto } = req.body;
 
     // Verificar que se hayan proporcionado todos los campos requeridos
-    if (!id_area || !nuevo_estado || !id_contrato || !id_proyecto) {
+    if (!id_area ||!nuevo_estado ||!id_contrato ||!id_proyecto) {
       return res.status(400).json({ error: 'Todos los campos son requeridos' });
     }
 
