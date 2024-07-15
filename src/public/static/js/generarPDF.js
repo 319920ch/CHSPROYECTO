@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <ul>
           ${contratoInfo.proyectos.map(proyecto => `
             <li>
-              <p>Nombre del proyecto: ${proyecto.id_proyecto}</p>
+              <p>Número de proyecto (id): ${proyecto.id_proyecto}</p>
               <p>Áreas:</p>
               <ul>
                 ${proyecto.areas.map(area => `

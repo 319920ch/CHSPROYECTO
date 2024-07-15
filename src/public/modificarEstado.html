@@ -88,18 +88,18 @@
 
         document.getElementById('formModificarEstado').addEventListener('submit', async (event) => {
             event.preventDefault();
-
+        
             // Obtener los valores seleccionados y ocultos del formulario
             const nuevoEstado = document.getElementById('nuevoEstado').value;
             const areaId = document.getElementById('areaId').value;
             const contratoId = document.getElementById('contratoId').value;
             const proyectoId = document.getElementById('proyectoId').value;
-
+        
             // Mostrar en consola los datos que se enviarán
             console.log('Datos a enviar:', { id_area: areaId, nuevo_estado: nuevoEstado, id_contrato: contratoId, id_proyecto: proyectoId });
-
+        
             try {
-                // Enviar la solicitud PUT al endpoint /api/estadoa
+                // Enviar la solicitud PUT al endpoint /api/estadoa para actualizar el estado del área actual
                 const response = await fetch('/api/estadoa', {
                     method: 'PUT',
                     headers: {
@@ -107,11 +107,65 @@
                     },
                     body: JSON.stringify({ id_area: areaId, nuevo_estado: nuevoEstado, id_contrato: contratoId, id_proyecto: proyectoId })
                 });
-
+        
                 if (response.ok) {
-                    // Mostrar alerta de éxito y redirigir a area.html
+                    // Mostrar alerta de éxito
                     alert('Estado modificado con éxito');
-                    window.location.href = './area.html';
+        
+                    // Verificar si el nuevo estado es "Finalizado" (id_estado = 4)
+                    if (nuevoEstado === '4') {
+                        if (parseInt(areaId) === 5) {
+                            // Actualizar el estado del proyecto y contrato cuando el área 5 se finaliza
+                            try {
+                                const updateProyectoResponse = await fetch(`/api/proyectos/${proyectoId}`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ id_estado: '4' }) // O el campo y valor que necesites actualizar
+                                });
+        
+                                const updateContratoResponse = await fetch(`/api/contratos/${contratoId}`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ id_estado: '4' }) // O el campo y valor que necesites actualizar
+                                });
+        
+                                if (updateProyectoResponse.ok && updateContratoResponse.ok) {
+                                    alert('Proyecto y Contrato actualizados a "Finalizado"');
+                                } else {
+                                    console.error('Error al actualizar el proyecto o contrato');
+                                    alert('Error al actualizar el proyecto o contrato');
+                                }
+                            } catch (error) {
+                                console.error('Error al enviar la solicitud:', error);
+                                alert('Error al actualizar el proyecto o contrato');
+                            }
+                        } else {
+                            // Actualizar el siguiente área a "En Proceso" (id_estado = 2) si el área no es 5
+                            const siguienteAreaId = parseInt(areaId) + 1; // Obtener el siguiente área
+        
+                            const siguienteResponse = await fetch('/api/estadoa', {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ id_area: siguienteAreaId, nuevo_estado: '2', id_contrato: contratoId, id_proyecto: proyectoId })
+                            });
+        
+                            if (siguienteResponse.ok) {
+                                alert('Siguiente área actualizada a "En Proceso"');
+                            } else {
+                                const errorResponse = await siguienteResponse.json();
+                                console.error('Error en la respuesta del servidor:', errorResponse);
+                                alert(`Error al actualizar el siguiente área: ${errorResponse.error}`);
+                            }
+                        }
+                    }
+        
+                    window.location.href = './area.html'; // Redirigir después de procesar las actualizaciones
                 } else {
                     // Manejar errores y mostrar mensaje de error
                     const errorResponse = await response.json();
@@ -124,6 +178,9 @@
                 alert('Error al modificar el estado');
             }
         });
+        
+        
+        
         document.addEventListener('DOMContentLoaded', async (event) => {
             const nombreUsuario = localStorage.getItem('nombreUsuario');
             if (nombreUsuario) {

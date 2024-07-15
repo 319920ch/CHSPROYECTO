@@ -3,68 +3,78 @@ const Area = require('../models/aream');
 const Contrato = require('../models/contratom');
 const Estado = require('../models/estadom');
 const EstadoArea = require('../models/estadoarea');
+const Presupuesto = require('../models/presupuestom');
 
 exports.getContratoInfo = async (req, res) => {
-    try {
-      const { id_contrato } = req.body;
-      const contrato = await Contrato.findByPk(id_contrato);
-  
-      if (!contrato) {
-        return res.status(404).json({ error: 'Contrato no encontrado' });
-      }
-  
-      const proyectos = await Proyecto.findAll({
-        where: { id_contrato },
-        attributes: ['id_proyecto']
+  try {
+    const { id_contrato } = req.body;
+    const contrato = await Contrato.findByPk(id_contrato);
+
+    if (!contrato) {
+      return res.status(404).json({ error: 'Contrato no encontrado' });
+    }
+
+    const proyectos = await Proyecto.findAll({
+      where: { id_contrato },
+      attributes: ['id_proyecto']
+    });
+
+    const proyectosInfo = await Promise.all(proyectos.map(async (proyecto) => {
+      const estadoAreas = await EstadoArea.findAll({
+        where: {
+          id_contrato,
+          id_proyecto: proyecto.id_proyecto
+        },
+        attributes: ['id_area', 'id_estado']
       });
-  
-      const proyectosInfo = await Promise.all(proyectos.map(async (proyecto) => {
-        const estadoAreas = await EstadoArea.findAll({
+
+      const areasInfo = await Promise.all(estadoAreas.map(async (estadoArea) => {
+        const area = await Area.findByPk(estadoArea.id_area, {
+          attributes: ['id_area', 'nombre_area']
+        });
+
+        const estado = await Estado.findByPk(estadoArea.id_estado, {
+          attributes: ['estado']
+        });
+
+        const presupuesto = await Presupuesto.findOne({
           where: {
             id_contrato,
-            id_proyecto: proyecto.id_proyecto
-          },
-          attributes: ['id_area', 'id_estado']
-        });
-  
-        const areasInfo = await Promise.all(estadoAreas.map(async (estadoArea) => {
-          const area = await Area.findByPk(estadoArea.id_area, {
-            attributes: ['id_area', 'nombre_area']
-          });
-  
-          const estado = await Estado.findByPk(estadoArea.id_estado, {
-            attributes: ['estado']
-          });
-  
-          return {
+            id_proyecto: proyecto.id_proyecto,
             id_area: area.id_area,
-            nombre_area: area.nombre_area,
-            estado: estado.estado
-          };
-        }));
-  
+          },
+          attributes: ['monto']
+        });
+
         return {
-          id_proyecto: proyecto.id_proyecto,
-          nombre_proyecto: proyecto.nombre_proyecto,
-          areas: areasInfo
+          id_area: area.id_area,
+          nombre_area: area.nombre_area,
+          estado: estado.estado,
+          presupuesto: presupuesto ? presupuesto.monto : null
         };
       }));
-  
-      const contratoInfo = {
-        id_contrato: contrato.id_contrato,
-        cliente: contrato.cliente,
-        fecha_inicio: contrato.fecha_inicio,
-        fecha_fin: contrato.fecha_fin,
-        presupuesto: contrato.presupuesto,
-        proyectos: proyectosInfo
+
+      return {
+        id_proyecto: proyecto.id_proyecto,
+        areas: areasInfo
       };
-  
-      res.status(200).json(contratoInfo);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  
+    }));
+
+    const contratoInfo = {
+      id_contrato: contrato.id_contrato,
+      cliente: contrato.cliente,
+      fecha_inicio: contrato.fecha_inicio,
+      fecha_fin: contrato.fecha_fin,
+      presupuesto: contrato.presupuesto,
+      proyectos: proyectosInfo
+    };
+
+    res.status(200).json(contratoInfo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
   exports.getAreasInfo = async (req, res) => {
     try {
