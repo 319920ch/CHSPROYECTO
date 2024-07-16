@@ -28,7 +28,6 @@
         <th>Apellidos</th>
         <th>Cédula</th>
         <th>Tiempo de Experiencia</th>
-        <th>Acción</th>
       </tr>
     </thead>
     <tbody id="empleados-list"></tbody>
@@ -40,13 +39,33 @@
     const contratoId = urlParams.get('id_contrato');
     const areaId = urlParams.get('id_area');
     const proyectoId = urlParams.get('id_proyecto');
+    const cantidad_asignada = urlParams.get('cantidad_asignada');
+    
 
     const empleados = JSON.parse(localStorage.getItem('empleados'));
-
-    empleados.forEach(empleado => {
-      const fila = document.createElement('tr');
-      fila.dataset.id = empleado.id_empleado;
-      
+    async function obtenerAsignaciones() {
+      try {
+        const response = await fetch(`/api/asignacion/${areaId}/${contratoId}`);
+        if (!response.ok) {
+          throw new Error('Error al obtener las asignaciones.');
+        }
+        const asignaciones = await response.json();
+        return asignaciones.map(asignacion => asignacion.id_empleado);
+      } catch (error) {
+        console.error('Error al obtener las asignaciones:', error);
+        return []; // En caso de error, retornar un array vacío
+      }
+    }
+    async function cargarEmpleados() {
+      const empleados = JSON.parse(localStorage.getItem('empleados'));
+    
+      // Obtener las asignaciones actuales
+      const asignaciones = await obtenerAsignaciones();
+    
+      empleados.forEach(empleado => {
+        const fila = document.createElement('tr');
+        fila.dataset.id = empleado.id_empleado;
+          
       const idEmpleado = document.createElement('td');
       idEmpleado.textContent = empleado.id_empleado;
       fila.appendChild(idEmpleado);
@@ -84,15 +103,35 @@
       
       const accion = document.createElement('td');
       const botonAsignar = document.createElement('button');
+      botonAsignar.classList.add('hidden'); // Agrega una clase 'hidden' al elemento
       botonAsignar.textContent = 'Asignar';
       botonAsignar.addEventListener('click', () => asignarEmpleado(empleado.id_empleado));
       accion.appendChild(botonAsignar);
       fila.appendChild(accion);
 
-      document.getElementById('empleados-list').appendChild(fila);
-    });
+    // Verificar si el empleado está asignado
+    if (asignaciones.includes(empleado.id_empleado)) {
+      const accion = document.createElement('td');
+      accion.textContent = 'Asignado';
+      fila.appendChild(accion);
+    } else {
+      const accion = document.createElement('td');
+      const botonAsignar = document.createElement('button');
+      botonAsignar.textContent = 'Asignar';
+      botonAsignar.addEventListener('click', () => asignarEmpleado(empleado.id_empleado));
+      accion.appendChild(botonAsignar);
+      fila.appendChild(accion);
+    }
 
-    let cantidadAsignada = 0; // Variable global que se inicializa en cero
+    document.getElementById('empleados-list').appendChild(fila);
+  });
+}
+
+let cantidadAsignada = cantidad_asignada; // Variable global que se inicializa en cero
+
+// Llamar a la función para cargar los empleados al cargar la página
+cargarEmpleados();
+
 
     async function asignarEmpleado(idEmpleado) {
       const datos = {
@@ -165,7 +204,10 @@
       })
       .then(data => {
         console.log('Respuesta del servidor:', data); // Log de la respuesta del servidor
-        // Aquí puedes manejar la respuesta del servidor si es necesario
+        // Redirigir a la página anterior recargada
+        
+  // Agregar un parámetro a la URL de la página anterior para indicar recarga
+  window.location.href = document.referrer + '.';
       })
       .catch(error => {
         console.error('Error al enviar la asignación:', error); // Log de error al enviar la asignación

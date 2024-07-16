@@ -154,6 +154,7 @@
       const areaId = urlParams.get('areaId');
       const contratoId = urlParams.get('contratoId');
       const proyectoId = urlParams.get('proyectoId');
+      const cantidadAsignada = document.getElementById('cantidadAsignada').innerText; // Asegúrate de obtenerlo desde el DOM
       
       if (!Number.isInteger(parseInt(areaId))) {
         console.error('Error: El valor de área debe ser un número entero válido.');
@@ -180,7 +181,7 @@
         console.log('Respuesta del servidor (listaE):', empleados);
     
         // Construir la URL de redirección
-        const redirectUrl = `asignaciones.html?id_proyecto=${proyectoId}&id_contrato=${contratoId}&id_area=${areaId}`;
+        const redirectUrl = `asignaciones.html?id_proyecto=${proyectoId}&id_contrato=${contratoId}&id_area=${areaId}&cantidad_asignada=${cantidadAsignada}`;
     
         // Redirigir a la página de asignaciones con los parámetros
         window.location.href = redirectUrl;
@@ -189,47 +190,8 @@
       }
     }
     
-    function mostrarEmpleados(empleados) {
-      const listaEmpleados = document.getElementById('listaEmpleados');
-      listaEmpleados.innerHTML = ''; // Limpiar cualquier contenido previo
+    
 
-      empleados.forEach(empleado => {
-        const fila = document.createElement('tr');
-
-        const idEmpleado = document.createElement('td');
-        idEmpleado.textContent = empleado.id_empleado;
-        fila.setAttribute('data-id', empleado.id_empleado); // Asegura que cada fila tenga el atributo data-id
-        fila.appendChild(idEmpleado);
-
-        const nombres = document.createElement('td');
-        nombres.textContent = empleado.nombres;
-        fila.appendChild(nombres);
-
-        const apellidos = document.createElement('td');
-        apellidos.textContent = empleado.apellidos;
-        fila.appendChild(apellidos);
-
-        const cedula = document.createElement('td');
-        cedula.textContent = empleado.cedula;
-        fila.appendChild(cedula);
-
-        const tiempoExp = document.createElement('td');
-        tiempoExp.textContent = empleado.tiempo_exp_general;
-        fila.appendChild(tiempoExp);
-
-        const accion = document.createElement('td');
-        const botonAsignar = document.createElement('button');
-        botonAsignar.textContent = 'Asignar';
-        botonAsignar.addEventListener('click', () => asignarEmpleado(empleado.id_empleado));
-        accion.appendChild(botonAsignar);
-        fila.appendChild(accion);
-        
-
-        listaEmpleados.appendChild(fila);
-      });
-
-      document.getElementById('tablaEmpleados').style.display = 'block';
-    }
 async function asignarEmpleado(idEmpleado) {
   const datos = {
     id_empleado: idEmpleado,
@@ -300,6 +262,18 @@ async function asignarEmpleado(idEmpleado) {
         document.getElementById('rolUsuario').innerText = rolUsuario;
       }
     });
+    window.addEventListener('load', () => {
+      const recargarPaginaAnterior = localStorage.getItem('recargarPaginaAnterior');
+      if (recargarPaginaAnterior) {
+        // Eliminar el indicador de recarga de LocalStorage
+        localStorage.removeItem('recargarPaginaAnterior');
+        
+        // Recargar la página
+        window.location.reload();
+      }
+    });
+    
+    
   </script>
 </body>
 </html>
