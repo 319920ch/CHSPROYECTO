@@ -64,7 +64,13 @@
           return;
         }
 
-        const sortedAreas = areasInfo.flat().sort((a, b) => new Date(a.fecha_fin) - new Date(b.fecha_fin));
+        const sortedAreas = areasInfo.flat().sort((a, b) => {
+          // Ordenar por estado: atrasado, en proceso, iniciado, finalizado
+          const estados = ['atrasado', 'en proceso', 'iniciado', 'finalizado'];
+          return estados.indexOf(a.estado) - estados.indexOf(b.estado);
+        });
+
+        //const sortedAreas = areasInfo.flat().sort((a, b) => new Date(a.fecha_fin) - new Date(b.fecha_fin));
 
         const table = document.createElement('table');
         table.innerHTML = `
@@ -100,6 +106,15 @@
           if (area && area.id_area === areaId) {
             console.log('area:', area);
             const row = document.createElement('tr');
+        
+            // Añadir clases CSS según el estado
+            let estadoClass = '';
+            if (area.estado === 'atrasado') {
+              estadoClass = 'atrasado';
+            } else if (area.estado === 'en proceso') {
+              estadoClass = 'en-proceso';
+            }
+            
             row.innerHTML = `
               <td>${area.id_contrato}</td>
               <td>${area.cliente}</td>
@@ -107,42 +122,45 @@
               <td>${area.fecha_fin}</td>
               <td>${area.id_proyecto}</td>
               <td>${area.nombre_area}</td>
-              <td>${area.estado}</td>
+              <td class="${estadoClass}">${area.estado}</td>
               <td>
                 ${area.estado !== 'finalizado' ? `<button class="submitb" data-area-id="${area.id_area}" data-contrato-id="${area.id_contrato}" data-proyecto-id="${area.id_proyecto}" data-estado="${area.estado}">Modificar estado</button>` : 'Finalizado'}
               </td>
             `;
+            
+            // Añadir la fila a la tabla
             contratosBody.appendChild(row);
-        
-            // Crear notificaciones de atraso
-            if (area.estado === 'atrasado') {
-              const notificacion = document.createElement('div');
-              notificacion.className = 'notificacion-precaucion';
-              notificacion.textContent = `¡Precaución! El área ${area.nombre_area} del contrato ${area.id_contrato} y el proyecto ${area.id_proyecto} está atrasada. Por favor, asigna más empleados`;
-              estadoAreasElement.appendChild(notificacion);
-        
-              const botonAsignar = document.createElement('button');
-              botonAsignar.className = 'botonnotificacion';
-              botonAsignar.textContent = 'Asignar más empleados';
-              botonAsignar.onclick = () => {
-                window.location.href = './asignarE.html';
-              };
-              notificacion.appendChild(botonAsignar);
-            }
-          }
-        });
-        
-        // Crear notificaciones de proceso
-        sortedAreas.forEach((area) => {
-          if (area && area.id_area === areaId) {
-            if (area.estado === 'en proceso') {
-              const notificacion = document.createElement('div');
-              notificacion.className = 'notificacion-atencion';
-              notificacion.textContent = `El área ${area.nombre_area} del contrato ${area.id_contrato} con el proyecto ${area.id_proyecto} está en proceso.`;
-              estadoAreasElement.appendChild(notificacion);
-            }
-          }
-        });
+
+
+    // Crear notificaciones de atraso
+    if (area.estado === 'atrasado') {
+      const notificacion = document.createElement('div');
+      notificacion.className = 'notificacion-precaucion';
+      notificacion.textContent = `¡Precaución! El área ${area.nombre_area} del contrato ${area.id_contrato} y el proyecto ${area.id_proyecto} está atrasada. Por favor, asigna más empleados`;
+      estadoAreasElement.appendChild(notificacion);
+
+      const botonAsignar = document.createElement('button');
+      botonAsignar.className = 'botonnotificacion';
+      botonAsignar.textContent = 'Asignar más empleados';
+      botonAsignar.onclick = () => {
+        window.location.href = './asignarE.html';
+      };
+      notificacion.appendChild(botonAsignar);
+    }
+  }
+});
+
+// Crear notificaciones de proceso
+sortedAreas.forEach((area) => {
+  if (area && area.id_area === areaId) {
+    if (area.estado === 'en proceso') {
+      const notificacion = document.createElement('div');
+      notificacion.className = 'notificacion-atencion';
+      notificacion.textContent = `El área ${area.nombre_area} del contrato ${area.id_contrato} con el proyecto ${area.id_proyecto} está en proceso.`;
+      estadoAreasElement.appendChild(notificacion);
+    }
+  }
+});
 
         estadoAreasElement.appendChild(table);
       } catch (error) {

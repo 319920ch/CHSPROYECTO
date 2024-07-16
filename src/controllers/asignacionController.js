@@ -19,6 +19,25 @@ exports.getAsignaciones = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// Obtener asignaciones por ID de contrato y área (sin empleado)
+exports.getAsignacionesByContratoYArea = async (req, res) => {
+  try {
+    const asignaciones = await Asignacion.findAll({
+      where: {
+        id_area: req.params.id_area,
+        id_contrato: req.params.id_contrato
+      }
+    });
+    if (asignaciones.length > 0) {
+      res.status(200).json(asignaciones);
+    } else {
+      res.status(404).json({ message: 'No se encontraron asignaciones para este contrato y área' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 // Obtener una asignación por ID
 exports.getAsignacionById = async (req, res) => {

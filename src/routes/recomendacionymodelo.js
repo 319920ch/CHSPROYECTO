@@ -6,7 +6,7 @@ const recomendacionymodelo = require('../controllers/recomendacionymodelo');
 
 router.post('/sugerir', recomendacionymodelo.sugerirEmpleados);
 router.put('/actualizar', recomendacionymodelo.actualizarCantidadAsignada);
-router.get('/listaE', recomendacionymodelo.obtenerEmpleadosPorDesempeno);
+router.post('/listaE', recomendacionymodelo.obtenerEmpleadosPorDesempeno);
 router.get('/adicional', recomendacionymodelo.recomendarAsignacionAdicional);
 
 module.exports = router;

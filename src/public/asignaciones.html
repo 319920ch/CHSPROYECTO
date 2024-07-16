@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empleados</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+</head>
+<body>
+  <h1>Lista de Empleados</h1>
+  <table id="empleados-table">
+    <thead>
+      <tr>
+        <th>ID Empleado</th>
+        <th>Nombres</th>
+        <th>Apellidos</th>
+        <th>Cédula</th>
+        <th>Tiempo de Experiencia</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody id="empleados-list"></tbody>
+  </table>
+  <button id="guardar-btn" onclick="guardarAsignacion()">Guardar</button>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const contratoId = urlParams.get('id_contrato');
+    const areaId = urlParams.get('id_area');
+    const proyectoId = urlParams.get('id_proyecto');
+    let cantidadAsignada = parseInt(localStorage.getItem('cantidadAsignada')) || 0;
+    // Get the list of employees from the previous page
+    const empleados = JSON.parse(localStorage.getItem('empleados'));
+ 
+
+    empleados.forEach(empleado => {
+        const fila = document.createElement('tr');
+        fila.dataset.id = empleado.id_empleado; // Add data-id attribute to the row
+      
+        const idEmpleado = document.createElement('td');
+        idEmpleado.textContent = empleado.id_empleado;
+        fila.appendChild(idEmpleado);
+      
+        const nombres = document.createElement('td');
+        nombres.textContent = empleado.nombres;
+        fila.appendChild(nombres);
+      
+        const apellidos = document.createElement('td');
+        apellidos.textContent = empleado.apellidos;
+        fila.appendChild(apellidos);
+      
+        const cedula = document.createElement('td');
+        cedula.textContent = empleado.cedula;
+        fila.appendChild(cedula);
+      
+        const tiempoExp = document.createElement('td');
+        tiempoExp.textContent = empleado.tiempo_exp_general;
+        fila.appendChild(tiempoExp);
+      
+        const area = document.createElement('td');
+        area.textContent = `Área: ${areaId}`; // Display areaId
+        fila.appendChild(area);
+      
+        const contrato = document.createElement('td');
+        contrato.textContent = `Contrato: ${contratoId}`; // Display contratoId
+        fila.appendChild(contrato);
+      
+        const proyecto = document.createElement('td');
+        proyecto.textContent = `Proyecto: ${proyectoId}`; // Display proyectoId
+        fila.appendChild(proyecto);
+      
+        const accion = document.createElement('td');
+        const botonAsignar = document.createElement('button');
+        botonAsignar.textContent = 'Asignar';
+        botonAsignar.addEventListener('click', () => asignarEmpleado(empleado.id_empleado));
+        accion.appendChild(botonAsignar);
+        fila.appendChild(accion);
+      
+        document.getElementById('empleados-list').appendChild(fila);
+      });
+
+      async function asignarEmpleado(idEmpleado) {
+        const datos = {
+          id_empleado: idEmpleado,
+          id_contrato: contratoId,
+          id_area: areaId
+        };
+    
+        try {
+          const response = await fetch('/api/asignacion', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+          });
+    
+          if (!response.ok) {
+            throw new Error('Error al asignar empleado.');
+          }
+    
+          const asignacion = await response.json();
+          console.log('Empleado asignado:', asignacion);
+    
+          // Cambiar el botón por texto "Asignado"
+          const filaEmpleado = document.querySelector(`#empleados-list tr[data-id="${idEmpleado}"]`);
+          if (filaEmpleado) {
+            const accion = filaEmpleado.querySelector('td:last-child');
+            if (accion) {
+              accion.innerHTML = '<span>Asignado</span>';
+            }
+          }
+    
+          // Incrementar el contador de empleados asignados y actualizar en localStorage
+          cantidadAsignada++;
+          localStorage.setItem('cantidadAsignada', cantidadAsignada);
+    
+          // Actualizar el texto del botón "guardar-btn"
+          actualizarContadorAsignados();
+    
+        } catch (error) {
+          console.error('Error al asignar empleado:', error);
+        }
+      }
+    
+      function guardarAsignacion() {
+        let cantidadAsignada = 0; // Reiniciar la cantidad asignada al inicio de la función
+      
+        const datosAsignacion = {
+          id_contrato: contratoId,
+          id_area: areaId,
+          id_proyecto: proyectoId
+          // Puedes añadir más datos si los necesitas
+        };
+      
+        // Aquí puedes enviar los datos o realizar alguna acción de guardado
+        console.log('Datos de la asignación a guardar:', datosAsignacion, 'Cantidad asignada:', cantidadAsignada);
+      }
+      
+      function actualizarContadorAsignados() {
+        const cantidad = localStorage.getItem('cantidadAsignada') || 0;
+        document.getElementById('guardar-btn').textContent = `Guardar (${cantidad} asignados)`;
+      }
+    
+      // Actualizar el texto inicial del botón al cargar la página
+      actualizarContadorAsignados();
+    
+    </script>
+</body>
+</html>

@@ -89,8 +89,8 @@ exports.sugerirEmpleados = async (req, res) => {
 // Exportar función para actualizar cantidad asignada
 exports.actualizarCantidadAsignada = async (req, res) => {
     try {
-      const { id_recomendacion, cantidad_asignada } = req.body;
-      const recomendacion = await Recomendacion.findByPk(id_recomendacion);
+      const { id_contrato, id_proyecto, id_area , cantidad_asignada } = req.body;
+      const recomendacion = await Recomendacion.findByPk(id_contrato, id_proyecto, id_area );
       if (!recomendacion) {
         return res.status(404).json({ error: 'Recomendación no encontrada' });
       }

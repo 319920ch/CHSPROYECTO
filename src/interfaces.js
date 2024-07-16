@@ -25,7 +25,9 @@ const asignarP = require('./routes/areasPresupuestoRoutes');
 const proyectos = require('./routes/proyectoRoutes');
 const presupuestos = require('./routes/presupuestoRoutes');
 const actualizarea = require('./routes/estadoARoutes');
-
+const rym = require('./routes/recomendacionymodelo');
+const recomendacion = require('./routes/recomendacionRoutes');
+const asignacion = require('./routes/asignacionRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -64,7 +66,10 @@ app.use('/api/reglas', reglas);
 app.use('/api/asignarP', asignarP);
 app.use('/api/proyectos', proyectos);
 app.use('/api/presupuestos', presupuestos);
-app.use('/actualizarEA', actualizarea);
+app.use('/api/actualizarEA', actualizarea);
+app.use('/api/rym', rym);
+app.use('/api/recomendacion', recomendacion);
+app.use('/api/asignacion', asignacion);
 
 // Ruta para renderizar la página de inicio
 app.get('/', (req, res) => {

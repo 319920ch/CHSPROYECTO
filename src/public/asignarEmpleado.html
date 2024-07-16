@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soluciones Metálicas</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="stylesheet" href="../static/style/tabla2.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div class="encabezado">
+    <header class="headerprincipal">
+      <div class="imglogo">
+        <a href="./encargado.html">
+          <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+        </a>
+      </div>
+      <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span>!</center></h1>
+      <h2 class="rolUsuario" hidden><center>Tu rol de usuario es: <span id="rolUsuario"></span></h2>
+    </header>
+    <main class="areaprincipal">
+      <div>
+        <h2 style="color: #ffff;"><center>Asignación de empleados</center></h2> 
+        <div id="estado-areas" class="estado-areas">
+          <p><strong>Área ID:</strong> <span id="areaId"></span></p>
+          <p><strong>Contrato ID:</strong> <span id="contratoId"></span></p>
+          <p><strong>Proyecto ID:</strong> <span id="proyectoId"></span></p>
+          <p><strong>Estado Actual:</strong> <span id="estadoActual"></span></p>
+          <p><strong>Número de empleados recomendados:</strong> <span id="recomendacion"></span></p>
+          <p><strong>Número de empleados asignados:</strong> <span id="cantidadAsignada"></span></p>
+        </div>
+        <button id="sugerirBtn" style="display:none;" class="submitb" onclick="enviarSugerencia()">Enviar Sugerencia</button>
+        <button id="obtenerEmpleadosBtn" style="display:none;" class="submitb" onclick="obtenerEmpleados()">Obtener Empleados</button>
+  <!-- Tabla para mostrar empleados -->
+  <div id="tablaEmpleados" style="display:none;">
+    <h3>Lista de Empleados</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>ID Empleado</th>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Cédula</th>
+          <th>Tiempo de Experiencia</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody id="listaEmpleados"></tbody>
+    </table>
+  </div>
+</div>
+</main>
+</div>
+  <script>
+    async function obtenerRecomendacion() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const areaId = urlParams.get('areaId');
+      const contratoId = urlParams.get('contratoId');
+      const proyectoId = urlParams.get('proyectoId');
+    
+      if (!Number.isInteger(parseInt(areaId)) || !Number.isInteger(parseInt(contratoId)) || !Number.isInteger(parseInt(proyectoId))) {
+        console.error('Error: Los valores de área, contrato y proyecto deben ser números enteros válidos.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/recomendacion/${contratoId}/${proyectoId}/${areaId}`);
+
+        if (response.status === 404) {
+          console.log('Recomendación no encontrada, mostrando botón para sugerir.');
+          document.getElementById('recomendacion').innerText = "Recomendación no encontrada.";
+          document.getElementById('sugerirBtn').style.display = 'block';
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error('Error al obtener la recomendación de empleados.');
+        }
+
+        const data = await response.json();
+        console.log('Respuesta del servidor (recomendacion):', data);
+
+        // Actualiza el elemento HTML con la información recibida
+        document.getElementById('areaId').innerText = data.id_area;
+        document.getElementById('contratoId').innerText = data.id_contrato;
+        document.getElementById('proyectoId').innerText = data.id_proyecto;
+        document.getElementById('recomendacion').innerText = data.recomendacion_num_e;
+        document.getElementById('cantidadAsignada').innerText = data.cantidad_asignada;
+        
+        // Muestra el botón para obtener empleados
+        document.getElementById('obtenerEmpleadosBtn').style.display = 'block';
+      } catch (error) {
+        console.error('Error en la operación (recomendacion):', error);
+      }
+    }
+
+    async function enviarSugerencia() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const areaId = urlParams.get('areaId');
+      const contratoId = urlParams.get('contratoId');
+      const proyectoId = urlParams.get('proyectoId');
+    
+      if (!Number.isInteger(parseInt(areaId)) || !Number.isInteger(parseInt(contratoId)) || !Number.isInteger(parseInt(proyectoId))) {
+        console.error('Error: Los valores de área, contrato y proyecto deben ser números enteros válidos.');
+        return;
+      }
+
+      const datos = {
+        id_contrato: contratoId,
+        id_proyecto: proyectoId,
+        id_area: areaId
+      };
+      
+      console.log('Datos a enviar a /api/rym/sugerir:', datos);
+
+      try {
+        const response = await fetch('/api/rym/sugerir', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(datos)
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al obtener la sugerencia de empleados.');
+        }
+
+        const data = await response.json();
+        console.log('Respuesta del servidor (sugerir):', data);
+
+        // Actualiza el elemento HTML con la información recibida
+        document.getElementById('areaId').innerText = data.recomendacion.id_area;
+        document.getElementById('contratoId').innerText = data.recomendacion.id_contrato;
+        document.getElementById('proyectoId').innerText = data.recomendacion.id_proyecto;
+        document.getElementById('recomendacion').innerText = data.recomendacion.recomendacion_num_e;
+        document.getElementById('cantidadAsignada').innerText = data.recomendacion.cantidad_asignada;
+
+        // Oculta el botón después de enviar la sugerencia
+        document.getElementById('sugerirBtn').style.display = 'none';
+        document.getElementById('obtenerEmpleadosBtn').style.display = 'block';
+      } catch (error) {
+        console.error('Error en la operación (sugerir):', error);
+      }
+    }
+
+
+
+    async function obtenerEmpleados() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const areaId = urlParams.get('areaId');
+      const contratoId = urlParams.get('contratoId');
+      const proyectoId = urlParams.get('proyectoId');
+      
+      if (!Number.isInteger(parseInt(areaId))) {
+        console.error('Error: El valor de área debe ser un número entero válido.');
+        return;
+      }
+    
+      const datos = { id_area: areaId };
+      console.log('Datos a enviar a /api/rym/listaE:', datos);
+    
+      try {
+        const response = await fetch('/api/rym/listaE', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(datos)
+        });
+    
+        if (!response.ok) {
+          throw new Error('Error al obtener la lista de empleados.');
+        }
+    
+        const empleados = await response.json();
+        console.log('Respuesta del servidor (listaE):', empleados);
+    
+        // Construir la URL de redirección
+        const redirectUrl = `asignaciones.html?id_proyecto=${proyectoId}&id_contrato=${contratoId}&id_area=${areaId}`;
+    
+        // Redirigir a la página de asignaciones con los parámetros
+        window.location.href = redirectUrl;
+      } catch (error) {
+        console.error('Error en la operación (listaE):', error);
+      }
+    }
+    
+    function mostrarEmpleados(empleados) {
+      const listaEmpleados = document.getElementById('listaEmpleados');
+      listaEmpleados.innerHTML = ''; // Limpiar cualquier contenido previo
+
+      empleados.forEach(empleado => {
+        const fila = document.createElement('tr');
+
+        const idEmpleado = document.createElement('td');
+        idEmpleado.textContent = empleado.id_empleado;
+        fila.setAttribute('data-id', empleado.id_empleado); // Asegura que cada fila tenga el atributo data-id
+        fila.appendChild(idEmpleado);
+
+        const nombres = document.createElement('td');
+        nombres.textContent = empleado.nombres;
+        fila.appendChild(nombres);
+
+        const apellidos = document.createElement('td');
+        apellidos.textContent = empleado.apellidos;
+        fila.appendChild(apellidos);
+
+        const cedula = document.createElement('td');
+        cedula.textContent = empleado.cedula;
+        fila.appendChild(cedula);
+
+        const tiempoExp = document.createElement('td');
+        tiempoExp.textContent = empleado.tiempo_exp_general;
+        fila.appendChild(tiempoExp);
+
+        const accion = document.createElement('td');
+        const botonAsignar = document.createElement('button');
+        botonAsignar.textContent = 'Asignar';
+        botonAsignar.addEventListener('click', () => asignarEmpleado(empleado.id_empleado));
+        accion.appendChild(botonAsignar);
+        fila.appendChild(accion);
+        
+
+        listaEmpleados.appendChild(fila);
+      });
+
+      document.getElementById('tablaEmpleados').style.display = 'block';
+    }
+async function asignarEmpleado(idEmpleado) {
+  const datos = {
+    id_empleado: idEmpleado,
+    id_contrato: document.getElementById('contratoId').innerText,
+    id_proyecto: document.getElementById('proyectoId').innerText,
+    id_area: document.getElementById('areaId').innerText
+  };
+
+  try {
+    const response = await fetch('/api/asignacion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datos)
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al asignar empleado.');
+    }
+
+    const asignacion = await response.json();
+    console.log('Empleado asignado:', asignacion);
+
+    // Cambiar el botón por texto "Asignado"
+    const filaEmpleado = document.querySelector(`#listaEmpleados tr[data-id="${idEmpleado}"]`);
+    if (filaEmpleado) {
+      const accion = filaEmpleado.querySelector('td:last-child');
+      if (accion) {
+        accion.innerHTML = '<span >Asignado</span>';
+      }
+    }
+
+    // Actualizar el contador de empleados asignados
+    const cantidadAsignadaElemento = document.getElementById('cantidadAsignada');
+    if (cantidadAsignadaElemento) {
+      let cantidadActual = parseInt(cantidadAsignadaElemento.innerText);
+      cantidadActual++;
+      cantidadAsignadaElemento.innerText = cantidadActual;
+    }
+
+  } catch (error) {
+    console.error('Error al asignar empleado:', error);
+  }
+}
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await obtenerRecomendacion();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const areaId = urlParams.get('areaId');
+      const contratoId = urlParams.get('contratoId');
+      const proyectoId = urlParams.get('proyectoId');
+      const estadoActual = urlParams.get('estadoActual');
+  
+      document.getElementById('areaId').innerText = areaId;
+      document.getElementById('contratoId').innerText = contratoId;
+      document.getElementById('proyectoId').innerText = proyectoId;
+      document.getElementById('estadoActual').innerText = estadoActual;
+  
+      const nombreUsuario = localStorage.getItem('nombreUsuario');
+      if (nombreUsuario) {
+        document.getElementById('nombreUsuario').innerText = nombreUsuario;
+      }
+  
+      const rolUsuario = localStorage.getItem('idRol');
+      if (rolUsuario) {
+        document.getElementById('rolUsuario').innerText = rolUsuario;
+      }
+    });
+  </script>
+</body>
+</html>

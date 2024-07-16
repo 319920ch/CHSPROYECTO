@@ -686,3 +686,15 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 0.15rem; /* Bordes redondeados */
   width: 55%;
 }
+
+/* Estilos para estado 'atrasado' */
+.atrasado {
+  color: rgb(0, 0, 0);           /* Color de texto */
+  background-color: #ff4d07;  /* Color de fondo */
+}
+
+/* Estilos para estado 'en proceso' */
+.en-proceso {
+  color: rgb(0, 0, 0);           /* Color de texto */
+  background-color: #ecf231;  /* Color de fondo */
+}
