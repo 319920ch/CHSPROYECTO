@@ -6,6 +6,7 @@
   <title>Soluciones Metálicas</title>
   <link rel="stylesheet" href="../static/style/App.css">
   <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="stylesheet" href="../static/style/tabla2.css">
   <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -19,22 +20,37 @@
       <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span></center> !</h1>
       <h2 class="rolUsuario" hidden><center>Tu rol de usuario es: <span id="rolUsuario"></span></center></h2>
     </header>
-  <h1>Lista de Empleados</h1>
-  <table id="empleados-table">
-    <thead>
-      <tr>
-        <th>ID Empleado</th>
-        <th>Nombres</th>
-        <th>Apellidos</th>
-        <th>Cédula</th>
-        <th>Tiempo de Experiencia</th>
-      </tr>
-    </thead>
-    <tbody id="empleados-list"></tbody>
-  </table>
-  <button id="guardar-btn" onclick="guardarAsignacion()">Guardar</button>
-
+    <div class="areaprincipal">
+      <main class="pprincipal">
+        <h1 style="color: #ffff;"><center>Lista de Empleados</center></h1>
+        <table id="empleados-table" class="tablev1">
+          <thead>
+            <tr>
+              <th>ID Empleado</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Cédula</th>
+              <th>Tiempo de Experiencia</th>
+            </tr>
+          </thead>
+          <tbody id="empleados-list"></tbody>
+        </table>
+        <br><br>
+        <center><button id="guardar-btn" class="submitb" onclick="guardarAsignacion()">Guardar</button></center>
+      </main>
+    </div>
+       
   <script>
+    document.addEventListener('DOMContentLoaded', async (event) => {
+      const nombreUsuario = localStorage.getItem('nombreUsuario');
+      if (nombreUsuario) {
+        document.getElementById('nombreUsuario').innerText = nombreUsuario;
+      }})
+
+      const rolUsuario = localStorage.getItem('idRol');
+      if (rolUsuario) {
+        document.getElementById('rolUsuario').innerText = rolUsuario;
+      }
     const urlParams = new URLSearchParams(window.location.search);
     const contratoId = urlParams.get('id_contrato');
     const areaId = urlParams.get('id_area');
@@ -105,6 +121,7 @@
       const botonAsignar = document.createElement('button');
       botonAsignar.classList.add('hidden'); // Agrega una clase 'hidden' al elemento
       botonAsignar.textContent = 'Asignar';
+      botonAsignar.classList.add('btn-asignar'); // Agrega una clase al botón
       botonAsignar.addEventListener('click', () => asignarEmpleado(empleado.id_empleado));
       accion.appendChild(botonAsignar);
       fila.appendChild(accion);
@@ -118,6 +135,7 @@
       const accion = document.createElement('td');
       const botonAsignar = document.createElement('button');
       botonAsignar.textContent = 'Asignar';
+      botonAsignar.classList.add('submitb');
       botonAsignar.addEventListener('click', () => asignarEmpleado(empleado.id_empleado));
       accion.appendChild(botonAsignar);
       fila.appendChild(accion);
@@ -216,7 +234,7 @@ cargarEmpleados();
     
     
     function actualizarContadorAsignados(cantidad) {
-      document.getElementById('guardar-btn').textContent = `Guardar (${cantidad} asignados)`;
+      document.getElementById('guardar-btn').textContent = `Guardar asignaciones`;
       localStorage.setItem('cantidadAsignada', cantidad);
     }
     // Actualizar el texto inicial del botón al cargar la página

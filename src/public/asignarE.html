@@ -29,6 +29,34 @@
   </div>
 
   <script>
+    async function getProjectInfo(id_proyecto) {
+      try {
+        const response = await fetch(`/api/proyectos/${id_proyecto}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const projectInfo = await response.json();
+        return projectInfo;
+      } catch (error) {
+        console.error('Error al obtener la información del proyecto:', error);
+        return null;
+      }
+    }
+    
+    async function getProductInfo(id_producto) {
+      try {
+        const response = await fetch(`/api/productos/${id_producto}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const productInfo = await response.json();
+        return productInfo;
+      } catch (error) {
+        console.error('Error al obtener la información del producto:', error);
+        return null;
+      }
+    }
+    
     document.addEventListener('DOMContentLoaded', async (event) => {
       const nombreUsuario = localStorage.getItem('nombreUsuario');
       if (nombreUsuario) {
@@ -42,6 +70,9 @@
 
       try {
         const responseContratos = await fetch('/api/buscainfo/v');
+        if (!responseContratos.ok) {
+          throw new Error('Network response was not ok');
+        }
         const contratosVigentes = await responseContratos.json();
       
         console.log('contratosVigentes:', contratosVigentes);
@@ -59,151 +90,163 @@
           estadoAreasElement.innerText = 'No hay información de áreas para los contratos vigentes.';
           return;
         }
-
+    
         const sortedAreas = areasInfo.flat().sort((a, b) => {
           const estados = ['atrasado', 'en proceso', 'iniciado', 'finalizado'];
-          return estados.indexOf(a.estado)
- - estados.indexOf(b.estado);
-  });
+          return estados.indexOf(a.estado) - estados.indexOf(b.estado);
+        });
 
-  const table = document.createElement('table');
-  table.innerHTML = `
-    <thead>
-      <tr>
-        <th>Contrato</th>
-        <th>Cliente</th>
-        <th>Fecha de Inicio</th>
-        <th>Fecha de Fin</th>
-        <th>Proyecto</th>
-        <th>Área</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody id="contratos-body"></tbody>
-  `;
+        const table = document.createElement('table');
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>Contrato</th>
+              <th>Cliente</th>
+              <th>Fecha de Inicio</th>
+              <th>Fecha de Fin</th>
+              <th>Proyecto</th>
+              <th>Producto</th>
+              <th>Área</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="contratos-body"></tbody>
+        `;
+        const contratosBody = table.querySelector('#contratos-body');
 
-  const contratosBody = table.querySelector('#contratos-body');
-
-  const areaRolesMatrix = [
-    [1, 3], 
-    [2, 4], 
-    [3, 5], 
-    [4, 6], 
-    [5, 7]  
-  ];
-
-  const roleId = parseInt(localStorage.getItem('idRol'));
-  const areaId = areaRolesMatrix.find(([areaId, roleIdMatch]) => roleIdMatch === roleId)[0];
-
-  sortedAreas.forEach((area) => {
-    if (area && area.id_area === areaId) {
-      console.log('area:', area);
-      const row = document.createElement('tr');
-  
-      let estadoClass = '';
-      if (area.estado === 'atrasado') {
-        estadoClass = 'atrasado';
-      } else if (area.estado === 'en proceso') {
-        estadoClass = 'en-proceso';
+        const areaRolesMatrix = [
+          [1, 3], 
+          [2, 4], 
+          [3, 5], 
+          [4, 6], 
+          [5, 7]  
+        ];
+    
+        const roleId = parseInt(localStorage.getItem('idRol'));
+        const areaId = areaRolesMatrix.find(([areaId, roleIdMatch]) => roleIdMatch === roleId)[0];
+    
+        for (const area of sortedAreas) {
+          if (area && area.id_area === areaId) {
+            const projectInfo = await getProjectInfo(area.id_proyecto);
+            const productInfo = projectInfo ? await getProductInfo(projectInfo.id_producto) : null;
+    
+            console.log('area:', area);
+            const row = document.createElement('tr');
+        
+            let estadoClass = '';
+            if (area.estado === 'atrasado') {
+              estadoClass = 'atrasado';
+            } else if (area.estado === 'en proceso') {
+              estadoClass = 'en-proceso';
+            }
+            
+            row.innerHTML = `
+              <td>${area.id_contrato}</td>
+              <td>${area.cliente}</td>
+              <td>${area.fecha_inicio}</td>
+              <td>${area.fecha_fin}</td>
+              <td>${area.id_proyecto}</td>
+              <td>${projectInfo && productInfo ? productInfo.nombre_producto : 'N/A'}</td>
+              <td>${area.nombre_area}</td>
+              <td class="${estadoClass}">${area.estado}</td>
+              <td>
+                ${area.estado !== 'finalizado' ? `<button class="submitb" data-area-id="${area.id_area}" data-contrato-id="${area.id_contrato}" data-proyecto-id="${area.id_proyecto}" data-estado="${area.estado}">Asignar empleados</button>` : 'Finalizado'}
+              </td>
+            `;
+            
+            contratosBody.appendChild(row);
+    
+            if (area.estado === 'atrasado') {
+              const notificacion = document.createElement('div');
+              notificacion.className = 'notificacion-precaucion';
+              notificacion.textContent = `¡Precaución! El área ${area.nombre_area} del contrato ${area.id_contrato} y el proyecto ${area.id_proyecto} está atrasada. Por favor, asigna más empleados`;
+              estadoAreasElement.appendChild(notificacion);
+    
+              const botonAsignar = document.createElement('button');
+              botonAsignar.className = 'botonnotificacion';
+              botonAsignar.textContent = 'Asignar más empleados';
+              botonAsignar.setAttribute('data-area-id', area.id_area);
+              botonAsignar.setAttribute('data-contrato-id', area.id_contrato);
+              botonAsignar.setAttribute('data-proyecto-id', area.id_proyecto);
+              botonAsignar.setAttribute('data-estado', area.estado);
+              botonAsignar.onclick = () => {
+                  // Obtener los datos de los atributos data
+                  const areaId = botonAsignar.getAttribute('data-area-id');
+                  const contratoId = botonAsignar.getAttribute('data-contrato-id');
+                  const proyectoId = botonAsignar.getAttribute('data-proyecto-id');
+                  const estado = botonAsignar.getAttribute('data-estado');
+          
+                  // Redirigir a la página asignarEmpleado.html con los parámetros en la URL
+                  window.location.href = `./asignarEmpleado.html?areaId=${areaId}&contratoId=${contratoId}&proyectoId=${proyectoId}&estadoActual=${estado}`;
+              };
+              notificacion.appendChild(botonAsignar);
+            }
+          }
+        }
+    
+        sortedAreas.forEach((area) => {
+          if (area && area.id_area === areaId) {
+            if (area.estado === 'en proceso') {
+              const notificacion = document.createElement('div');
+              notificacion.className = 'notificacion-atencion';
+              notificacion.textContent = `El área ${area.nombre_area} del contrato ${area.id_contrato} con el proyecto ${area.id_proyecto} está en proceso.`;
+              estadoAreasElement.appendChild(notificacion);
+            }
+          }
+        });
+    
+        estadoAreasElement.appendChild(table);
+      } catch (error) {
+        console.error('Error al obtener los contratos vigentes:', error);
       }
-      
-      row.innerHTML = `
-        <td>${area.id_contrato}</td>
-        <td>${area.cliente}</td>
-        <td>${area.fecha_inicio}</td>
-        <td>${area.fecha_fin}</td>
-        <td>${area.id_proyecto}</td>
-        <td>${area.nombre_area}</td>
-        <td class="${estadoClass}">${area.estado}</td>
-        <td>
-          ${area.estado !== 'finalizado' ? `<button class="submitb" data-area-id="${area.id_area}" data-contrato-id="${area.id_contrato}" data-proyecto-id="${area.id_proyecto}" data-estado="${area.estado}">Asignar empleados</button>` : 'Finalizado'}
-        </td>
-      `;
-      
-      contratosBody.appendChild(row);
-
-      if (area.estado === 'atrasado') {
-        const notificacion = document.createElement('div');
-        notificacion.className = 'notificacion-precaucion';
-        notificacion.textContent = `¡Precaución! El área ${area.nombre_area} del contrato ${area.id_contrato} y el proyecto ${area.id_proyecto} está atrasada. Por favor, asigna más empleados`;
-        estadoAreasElement.appendChild(notificacion);
-
-        const botonAsignar = document.createElement('button');
-        botonAsignar.className = 'botonnotificacion';
-        botonAsignar.textContent = 'Asignar más empleados';
-        botonAsignar.onclick = () => {
-          window.location.href = './asignarE.html';
-        };
-        notificacion.appendChild(botonAsignar);
+    });
+    
+    async function getAreasInfo(idContrato) {
+      try {
+        const response = await fetch('/api/buscainfo/a', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id_contrato: idContrato })
+        });
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const areasInfo = await response.json();
+    
+        console.log(areasInfo);  
+    
+        return areasInfo;
+      } catch (error) {
+        console.error('Error al obtener la información de las áreas:', error);
+        return [];
       }
     }
-  });
-
-  sortedAreas.forEach((area) => {
-    if (area && area.id_area === areaId) {
-      if (area.estado === 'en proceso') {
-        const notificacion = document.createElement('div');
-        notificacion.className = 'notificacion-atencion';
-        notificacion.textContent = `El área ${area.nombre_area} del contrato ${area.id_contrato} con el proyecto ${area.id_proyecto} está en proceso.`;
-        estadoAreasElement.appendChild(notificacion);
+    
+    document.addEventListener('click', function(event) {
+      if (event.target.classList.contains('submitb')) {
+        const areaId = event.target.getAttribute('data-area-id');
+        const contratoId = event.target.getAttribute('data-contrato-id');
+        const proyectoId = event.target.getAttribute('data-proyecto-id');
+        const estadoActual = event.target.getAttribute('data-estado');
+        window.location.href = `./asignarEmpleado.html?areaId=${areaId}&contratoId=${contratoId}&proyectoId=${proyectoId}&estadoActual=${estadoActual}`;
       }
-    }
-  });
-
-  estadoAreasElement.appendChild(table);
-} catch (error) {
-  console.error('Error al obtener los contratos vigentes:', error);
-}
-});
-
-async function getAreasInfo(idContrato) {
-try {
-  const response = await fetch('/api/buscainfo/a', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ id_contrato: idContrato })
-  });
-
-  const areasInfo = await response.json();
-
-  console.log(areasInfo);  
-
-  return areasInfo;
-} catch (error) {
-  console.error('Error al obtener la información de las áreas:', error);
-}
-}
-
-document.addEventListener('click', function(event) {
-if (event.target.classList.contains('submitb')) {
-  const areaId = event.target.getAttribute('data-area-id');
-  const contratoId = event.target.getAttribute('data-contrato-id');
-  const proyectoId = event.target.getAttribute('data-proyecto-id');
-  const estadoActual = event.target.getAttribute('data-estado');
-  window.location.href = `./asignarEmpleado.html?areaId=${areaId}&contratoId=${contratoId}&proyectoId=${proyectoId}&estadoActual=${estadoActual}`;
-}
-});
-
-document.addEventListener('DOMContentLoaded', async (event) => {
-const urlParams = new URLSearchParams(window.location.search);
-const areaId = urlParams.get('areaId');
-const contratoId = urlParams.get('contratoId');
-const proyectoId = urlParams.get('proyectoId');
-const estadoActual = urlParams.get('estadoActual');
-
-document.getElementById('proyecto-numero').textContent = proyectoId;
-document.getElementById('area-nombre').textContent = `Área ${areaId}`;
-document.getElementById('contrato-numero').textContent = contratoId;
-document.getElementById('estadoactual').textContent = estadoActual;
-
-document.getElementById('areaId').value = areaId;
-document.getElementById('contratoId').value = contratoId;
-document.getElementById('proyectoId').value = proyectoId;
-document.getElementById('estadoactual').value = estadoActual;
-});
-</script>
+    });
+    
+    document.addEventListener('DOMContentLoaded', async (event) => {
+      const nombreUsuario = localStorage.getItem('nombreUsuario');
+      if (nombreUsuario) {
+        document.getElementById('nombreUsuario').innerText = nombreUsuario;
+      }
+    
+      const rolUsuario = localStorage.getItem('idRol');
+      if (rolUsuario) {
+        document.getElementById('rolUsuario').innerText = rolUsuario;
+      }
+    });
+  </script>
 </body>
 </html>

@@ -19,3 +19,20 @@
       background-color: #f2f2f2;
       color: #5B5F80;
     }
+
+
+    .tablev1 {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px; /* Ajusta el margen superior según sea necesario */
+    }
+    .tablev1 th, td {
+      border: none;
+      padding: 8px;
+      text-align: center;
+      color: #f2f2f2;
+    }
+    .tablev1 th {
+      background-color: #f2f2f2;
+      color: #5B5F80;
+    }

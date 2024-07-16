@@ -20,7 +20,7 @@
       <h2 class="rolUsuario" hidden><center>Tu rol de usuario es: <span id="rolUsuario"></span></center></h2>
     </header>
     <div class="notificación" >
-      <h2><center>Estado de las áreas:</center></h2> 
+      <h2><center>Información de área</center></h2> 
       <div id="estado-areas" class="estado-areas"></div>
     </div>
     <main class="areaprincipal">
@@ -93,11 +93,23 @@
             if (area.estado === 'atrasado') {
               notificacion.className = 'notificacion-precaucion';
               notificacion.textContent = `¡Precaución! El área ${area.nombre_area} del contrato ${area.id_contrato} y el proyecto ${area.id_proyecto} está atrasada. Por favor, asigna más empleados.`;
+          
               const botonAsignar = document.createElement('button');
               botonAsignar.className = 'botonnotificacion';
               botonAsignar.textContent = 'Asignar más empleados';
+              botonAsignar.setAttribute('data-area-id', area.id_area);
+              botonAsignar.setAttribute('data-contrato-id', area.id_contrato);
+              botonAsignar.setAttribute('data-proyecto-id', area.id_proyecto);
+              botonAsignar.setAttribute('data-estado', area.estado);
               botonAsignar.onclick = () => {
-                window.location.href = './asignarE.html';
+                  // Obtener los datos de los atributos data
+                  const areaId = botonAsignar.getAttribute('data-area-id');
+                  const contratoId = botonAsignar.getAttribute('data-contrato-id');
+                  const proyectoId = botonAsignar.getAttribute('data-proyecto-id');
+                  const estado = botonAsignar.getAttribute('data-estado');
+          
+                  // Redirigir a la página asignarEmpleado.html con los parámetros en la URL
+                  window.location.href = `./asignarEmpleado.html?areaId=${areaId}&contratoId=${contratoId}&proyectoId=${proyectoId}&estadoActual=${estado}`;
               };
               notificacion.appendChild(botonAsignar);
             } else if (area.estado === 'en proceso') {
