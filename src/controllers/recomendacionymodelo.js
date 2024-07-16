@@ -88,35 +88,49 @@ exports.sugerirEmpleados = async (req, res) => {
 
 // Exportar función para actualizar cantidad asignada
 exports.actualizarCantidadAsignada = async (req, res) => {
-    try {
-      const { id_contrato, id_proyecto, id_area , cantidad_asignada } = req.body;
-      const recomendacion = await Recomendacion.findByPk(id_contrato, id_proyecto, id_area );
-      if (!recomendacion) {
-        return res.status(404).json({ error: 'Recomendación no encontrada' });
+  try {
+    const { id_contrato, id_proyecto, id_area, cantidad_asignada } = req.body;
+    
+    // Buscar la recomendación por sus claves primarias
+    const recomendacion = await Recomendacion.findOne({
+      where: {
+        id_contrato: id_contrato,
+        id_proyecto: id_proyecto,
+        id_area: id_area
       }
-  
-      const cantidadSugerida = recomendacion.recomendacion_num_e;
-      if (cantidad_asignada < cantidadSugerida) {
-        return res.status(400).json({ error: `La cantidad asignada no puede ser menor a la cantidad sugerida (${cantidadSugerida})` });
-      }
-      // Obtener el número total de empleados registrados
+    });
+
+    if (!recomendacion) {
+      return res.status(404).json({ error: 'Recomendación no encontrada' });
+    }
+
+    const cantidadSugerida = recomendacion.recomendacion_num_e;
+    if (cantidad_asignada < cantidadSugerida) {
+      return ({ 
+        error: `La cantidad asignada no puede ser menor a la cantidad sugerida (${cantidadSugerida})`
+      });
+    }
+
+    // Obtener el número total de empleados registrados
     const totalEmpleados = await Empleado.count();
 
     if (cantidad_asignada > totalEmpleados) {
-      return res.status(400).json({ error: `No hay suficientes empleados registrados (${totalEmpleados}) para asignar ${cantidad_asignada} empleados.` });
-    }
-    
-      recomendacion.cantidad_asignada = cantidad_asignada;
-      await recomendacion.save();
-  
-      res.status(200).json({
-        message: `Cantidad asignada actualizada a ${cantidad_asignada} para la recomendación ${id_recomendacion}.`,
-        recomendacion
+      return res.status(400).json({ 
+        error: `No hay suficientes empleados registrados (${totalEmpleados}) para asignar ${cantidad_asignada} empleados.`
       });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
     }
-  };
+
+    recomendacion.cantidad_asignada = cantidad_asignada;
+    await recomendacion.save();
+
+    res.status(200).json({
+      message: `Cantidad asignada actualizada a ${cantidad_asignada} para el contrato ${id_contrato}, proyecto ${id_proyecto} y área ${id_area}.`,
+      recomendacion  // Aquí se envía la recomendación actualizada en la respuesta
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
   exports.obtenerEmpleadosPorDesempeno = async (req, res) => {
     try {
