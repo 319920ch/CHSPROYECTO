@@ -126,15 +126,37 @@
       const datosAsignacion = {
         id_contrato: contratoId,
         id_area: areaId,
-        id_proyecto: proyectoId
+        id_proyecto: proyectoId,
+        cantidad_asignada: cantidadAsignada
       };
     
       // Aquí puedes enviar los datos o realizar alguna acción de guardado
-      console.log('Datos de la asignación a guardar:', datosAsignacion, 'Cantidad asignada:', cantidadAsignada);
+      console.log('Datos de la asignación a guardar:', datosAsignacion);
     
       // Actualizar el texto del botón "guardar-btn"
       actualizarContadorAsignados(cantidadAsignada);
+    
+      // Enviar solicitud a la API para actualizar la recomendación
+      fetch('/api/rym/actualizar', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datosAsignacion) // Enviar directamente el objeto datosAsignacion
+      })
+      .then(response => {
+        console.log('Estado de la respuesta:', response.status); // Log del estado de la respuesta
+        return response.json();
+      })
+      .then(data => {
+        console.log('Respuesta del servidor:', data); // Log de la respuesta del servidor
+        // Aquí puedes manejar la respuesta del servidor si es necesario
+      })
+      .catch(error => {
+        console.error('Error al enviar la asignación:', error); // Log de error al enviar la asignación
+      });
     }
+    
     
     function actualizarContadorAsignados(cantidad) {
       document.getElementById('guardar-btn').textContent = `Guardar (${cantidad} asignados)`;

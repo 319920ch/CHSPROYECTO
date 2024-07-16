@@ -100,10 +100,6 @@ exports.actualizarCantidadAsignada = async (req, res) => {
       }
     });
 
-    if (!recomendacion) {
-      return res.status(404).json({ error: 'Recomendación no encontrada' });
-    }
-
     const cantidadSugerida = recomendacion.recomendacion_num_e;
     if (cantidad_asignada < cantidadSugerida) {
       return ({ 
