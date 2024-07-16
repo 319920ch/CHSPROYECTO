@@ -3,10 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Empleados</title>
+  <title>Soluciones Metálicas</title>
   <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
 </head>
 <body>
+  <div class="encabezado">
+    <header class="headerprincipal">
+      <div class="imglogo">
+        <a href="./encargado.html">
+          <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+        </a>
+      </div>
+      <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span></center> !</h1>
+      <h2 class="rolUsuario" hidden><center>Tu rol de usuario es: <span id="rolUsuario"></span></center></h2>
+    </header>
   <h1>Lista de Empleados</h1>
   <table id="empleados-table">
     <thead>
@@ -57,16 +69,19 @@
 
       const area = document.createElement('td');
       area.textContent = `Área: ${areaId}`;
+      area.classList.add('hidden'); // Agrega una clase 'hidden' al elemento
       fila.appendChild(area);
-
+      
       const contrato = document.createElement('td');
       contrato.textContent = `Contrato: ${contratoId}`;
+      contrato.classList.add('hidden'); // Agrega una clase 'hidden' al elemento
       fila.appendChild(contrato);
-
+      
       const proyecto = document.createElement('td');
       proyecto.textContent = `Proyecto: ${proyectoId}`;
+      proyecto.classList.add('hidden'); // Agrega una clase 'hidden' al elemento
       fila.appendChild(proyecto);
-
+      
       const accion = document.createElement('td');
       const botonAsignar = document.createElement('button');
       botonAsignar.textContent = 'Asignar';

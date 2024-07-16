@@ -698,3 +698,7 @@ h1, h2, h3, h4, h5, h6 {
   color: rgb(0, 0, 0);           /* Color de texto */
   background-color: #ecf231;  /* Color de fondo */
 }
+
+.hidden {
+  display: none;
+}
