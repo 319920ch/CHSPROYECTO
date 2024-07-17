@@ -88,6 +88,7 @@ exports.sugerirEmpleados = async (req, res) => {
   };
 
 // Exportar función para actualizar cantidad asignada
+// Exportar función para actualizar cantidad asignada
 exports.actualizarCantidadAsignada = async (req, res) => {
   try {
     const { id_contrato, id_proyecto, id_area, cantidad_asignada } = req.body;
@@ -101,20 +102,19 @@ exports.actualizarCantidadAsignada = async (req, res) => {
       }
     });
 
-    const cantidadSugerida = recomendacion.recomendacion_num_e;
-    if (cantidad_asignada < cantidadSugerida) {
-      return ({ 
-        error: `La cantidad asignada no puede ser menor a la cantidad sugerida (${cantidadSugerida})`
-      });
+    if (!recomendacion) {
+      return res.status(404).json({ error: 'Recomendación no encontrada.' });
     }
 
-    // Obtener el número total de empleados registrados
+    const cantidadSugerida = recomendacion.recomendacion_num_e;
     const totalEmpleados = await Empleado.count();
 
-    if (cantidad_asignada > totalEmpleados) {
-      return res.status(400).json({ 
-        error: `No hay suficientes empleados registrados (${totalEmpleados}) para asignar ${cantidad_asignada} empleados.`
-      });
+    let alerta = null;
+
+    if (cantidad_asignada < cantidadSugerida) {
+      alerta = `La cantidad asignada (${cantidad_asignada}) es menor a la cantidad sugerida (${cantidadSugerida}).`;
+    } else if (cantidad_asignada > totalEmpleados) {
+      alerta = `La cantidad asignada (${cantidad_asignada}) es mayor al número total de empleados disponibles (${totalEmpleados}).`;
     }
 
     recomendacion.cantidad_asignada = cantidad_asignada;
@@ -122,12 +122,14 @@ exports.actualizarCantidadAsignada = async (req, res) => {
 
     res.status(200).json({
       message: `Cantidad asignada actualizada a ${cantidad_asignada} para el contrato ${id_contrato}, proyecto ${id_proyecto} y área ${id_area}.`,
-      recomendacion  // Aquí se envía la recomendación actualizada en la respuesta
+      recomendacion,  // Aquí se envía la recomendación actualizada en la respuesta
+      alerta  // Enviar la alerta si hay una
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
   exports.obtenerEmpleadosPorDesempeno = async (req, res) => {
     try {

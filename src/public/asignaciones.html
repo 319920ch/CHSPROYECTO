@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soluciones Metálicas</title>
+  <title>Soluciones Metálicas - Listado de Empleados</title>
   <link rel="stylesheet" href="../static/style/App.css">
   <link rel="stylesheet" href="../static/style/modal.css">
   <link rel="stylesheet" href="../static/style/tabla2.css">
@@ -22,7 +22,7 @@
     </header>
     <div class="areaprincipal">
       <main class="pprincipal">
-        <h1 style="color: #ffff;"><center>Lista de Empleados</center></h1>
+        <h1 style="color: #ffff;"><center>Listado de Empleados</center></h1>
         <table id="empleados-table" class="tablev1">
           <thead>
             <tr>
@@ -222,15 +222,20 @@ cargarEmpleados();
       })
       .then(data => {
         console.log('Respuesta del servidor:', data); // Log de la respuesta del servidor
+        if (data.alerta) {
+          alert(data.alerta); // Mostrar alerta si hay una
+        }
+        if (data.message) {
+          alert(data.message); // Mostrar mensaje si hay uno
+        }
         // Redirigir a la página anterior recargada
-        
-  // Agregar un parámetro a la URL de la página anterior para indicar recarga
-  window.location.href = document.referrer + '.';
+        window.location.href = document.referrer + '.';
       })
       .catch(error => {
         console.error('Error al enviar la asignación:', error); // Log de error al enviar la asignación
       });
     }
+    
     
     
     function actualizarContadorAsignados(cantidad) {

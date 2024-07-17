@@ -375,7 +375,8 @@ h1, h2, h3, h4, h5, h6 {
 .bienvenida {
   font-size: 1.5rem; /* Tamaño de fuente equivalente a text-2xl */
   font-weight: bold; /* Fuente en negrita */
-  display: flex;
+  display:flex;
+  color:#5B5F80;
   align-items: center;
   justify-content: center;
 }
@@ -720,3 +721,51 @@ color: #ffffff;
     color: #ffffff;
 }
   
+    /* Agrega estos estilos en tu archivo CSS */
+
+    .menu-hamburguesa {
+      display:inline;
+      cursor: pointer;
+      margin-right: 20px;
+    }
+    
+    .menu-hamburguesa .linea {
+      width: 30px;
+      height: 3px;
+      background-color: #5B5F80;
+      margin: 5px 0;
+    }
+    
+    #menu {
+      display: none;
+      background-color: #5B5F80;
+      position: absolute;
+      top: 70px;
+      right: 18px;
+      width: 200px;
+      z-index: 1;
+    }
+    
+    #menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    #menu ul li {
+      border-bottom: 1px solid #444;
+      border-top: 1px solid #444;
+    }
+    
+    #menu ul li a {
+      color: #ffffff;
+      text-decoration: none;
+      display: block;
+      padding: 10px;
+      text-align: center;
+    }
+    
+    #menu ul li a:hover {
+      background-color: #ffffff;
+      color: #5B5F80;
+    }
