@@ -7,18 +7,42 @@
   <link rel="stylesheet" href="../static/style/App.css">
   <link rel="stylesheet" href="../static/style/modal.css">
   <link rel="stylesheet" href="../static/style/tablas.css">
+  <link rel="stylesheet" href="../static/style/tabla2.css">
   <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
 </head>
 <body style="background-color: #5B5F80;">
   <div class="encabezado">
-    <header class="headerprincipal">
-      <div class="imglogo">
-        <a href="./gerente.html">
-          <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
-        </a>
-      </div>
-      <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span>!</center></h1>
-    </header>
+    <header class="headerprincipal" style="height: 100px;">
+      <table>
+        <td style="width: fit-content;">
+          <div class="imglogo">
+            <a href="./gerente.html">
+              <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+            </a>
+          </div>
+          <td style="width: 120%">
+          <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span></center> !</h1>
+          <h2 class="rolUsuario" hidden><center>Tu rol de usuario es: <span id="rolUsuario"></span></center></h2>
+        </td>
+        <td style="width: fit-content;">
+          <div class="menu-hamburguesa" onclick="toggleMenu()">
+            <div class="linea"></div>
+            <div class="linea"></div>
+            <div class="linea"></div>
+          </div>
+          <nav id="menu">
+            <ul>
+              <li><a href="./gerente.html">Página de Bienvenida</a></li>
+              <li><a href="./nuevocontrato.html">Nuevo Contrato</a></li>
+              <li><a href="./listadocontrato.html">Modificar Presupuestos</a></li>
+              <li><a href="./estadocontratos.html">Estado de Contratos</a></li>
+              <li><a href="./infocontrato.html">Informes</a></li>
+              <li><a href="./index.html">Cerrar Sesión</a></li>
+            </ul>
+          </nav>
+        </td>
+      </table>
+      </header>
     <main class="main-content">
       <div class="card">
         <div class="header">
@@ -120,6 +144,14 @@ function buscarCliente() {
 
     function actualizarEstado(id_contrato) {
       window.location.href = `actualizarEC.html?contratoId=${id_contrato}`;
+    }
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+      } else {
+        menu.style.display = 'block';
+      }
     }
   </script>
 </body>

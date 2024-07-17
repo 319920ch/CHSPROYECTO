@@ -61,11 +61,12 @@ body {
 .form-container {
   background-color: #ffffff;
   padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 40px;
   width: 100%;
   max-width: 500px;
+  border: 20px solid #5B5F80; /* Borde sólido de 2px de grosor y color gris claro */
 }
+
 
 .form-title {
   font-size: 1.25rem;
