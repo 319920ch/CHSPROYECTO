@@ -76,20 +76,20 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>Crear Nuevo Usuario</h2>
-      <form id="createForm" onsubmit="handleNuevoUsuario(event)">
-        <label for="nombreU">Nombre del Usuario:</label>
-        <input type="text" id="nombreU" name="nombreU"><br><br>
-        <label for="correo">Correo:</label>
-        <input type="email" id="correo" name="correo"><br><br>
-        <label for="contrasena">Contraseña:</label>
-        <input type="text" id="contrasena" name="contrasena"><br><br>
+      <form id="createForm" class="form" onsubmit="handleNuevoUsuario(event)">
+        <label for="nombreU">Nombre del Usuario:</label> <br>
+        <input type="text" id="nombreU" name="nombreU" style="width: 16.5rem;"><br><br>
+        <label for="correo">Correo:</label> <br>
+        <input type="email" id="correo" name="correo" style="width: 16.5rem;"><br><br>
+        <label for="contrasena">Contraseña:</label> <br>
+        <input type="text" id="contrasena" name="contrasena" style="width: 16.5rem;"><br><br>
         <div class="form-group">
           <label for="rol" class="form-label">Rol:</label>
           <select id="rol" name="rol" class="form-input">
-            <option value="">Seleccione un rol</option>
-          </select>
+            <option value="" style="width: 50rem;">Seleccione un rol</option>
+          </select> <br><br>
         </div>
-        <button type="submit" class="submit-button">Crear Usuario</button>
+        <center><button type="submit" class="submitb">Crear Usuario</button></center>
       </form>
       
     </div>
@@ -101,8 +101,8 @@
       <span class="close" onclick="cerrarModal('modalEliminarUsuario')">&times;</span>
       <h2>Eliminar Usuario</h2>
       <p>¿Está seguro de eliminar al usuario <span id="nombreUsuarioEliminar"></span>?</p>
-      <button id="eliminarBtn" style="background-color:red;" onclick="handleEliminarUsuario()">Eliminar</button>
-      <button type="button" class="submit-button" onclick="cerrarModal('modalEliminarUsuario')">Cancelar</button>
+      <button id="eliminarBtn" class="submitb" style="background-color:red;" onclick="handleEliminarUsuario()">Eliminar</button>
+      <button type="button" class="submitb" style="background-color: #32CD32" onclick="cerrarModal('modalEliminarUsuario')">Cancelar</button>
     </div>
   </div>
 
@@ -112,18 +112,18 @@
       <span class="close" onclick="cerrarModal('modalEditarUsuario')">&times;</span>
       <h2>Editar Usuario</h2>
       <form id="editForm" onsubmit="handleEditarUsuario(event)">
-        <label for="nombreUModal">Nombre del Usuario:</label>
-        <input type="text" id="nombreUModal" name="nombreUModal" readonly><br><br>
-        <label for="correoActualizar">Correo:</label>
-        <input type="email" id="correoActualizar" name="correoActualizar"><br><br>
+        <label for="nombreUModal">Nombre del Usuario:</label> <br>
+        <input type="text" id="nombreUModal" name="nombreUModal" readonly style="width: 16.5rem;"><br><br>
+        <label for="correoActualizar">Correo:</label> <br>
+        <input type="email" id="correoActualizar" name="correoActualizar" style="width: 16.5rem;"><br><br>
         <div class="form-group">
-          <label for="rolModal" class="form-label">Rol:</label>
+          <label for="rolModal" class="form-label">Rol:</label> <br>
           <select id="rolModal" name="rolModal" class="form-input">
             <option value="">Seleccione un rol</option>
             <!-- Opciones de roles -->
           </select>
-        </div>
-        <button type="submit" class="submit-button">Guardar Cambios</button>
+        </div> <br><br>
+        <center><button type="submit" class="submitb">Guardar Cambios</button></center>
         <p id="errorMessage" style="color:red;"></p>
       </form>
     </div>
@@ -188,17 +188,28 @@
         usuarios.forEach(usuario => {
           const row = document.createElement('tr');
           row.id = `usuario-${usuario.nombre}`; // ID único para cada fila
+
+              // Verificar si el rol es "Administrador"
+              const esAdministrador = (usuario.id_rol) === 1;
+          // Crear el contenido de la fila
           row.innerHTML = `
-            <td class="trol">${usuario.nombre}</td>
-            <td class="trol">${usuario.correo_electronico}</td>
-            <td class="trol">${getNombreRol(usuario.id_rol)}</td>
-            <td class="trol">
-              <button class="botonpagina" onclick="abrirModalEliminar('${usuario.nombre}')">Eliminar</button>
-              <button class="botonpagina" onclick="abrirModalEditar('${usuario.nombre}', '${usuario.correo_electronico}', ${usuario.id_rol})">Editar</button>
-            </td>
+              <td class="trol">${usuario.nombre}</td>
+              <td class="trol">${usuario.correo_electronico}</td>
+              
+              <td class="trol">${getNombreRol(usuario.id_rol)}</td>
+              
+              <td class="trol">
+                  <button class="botonpagina" 
+                          onclick="abrirModalEliminar('${usuario.nombre}')"
+                          ${esAdministrador ? 'disabled' : ''}>Eliminar</button>
+                  <button class="botonpagina" 
+                          onclick="abrirModalEditar('${usuario.nombre}', '${usuario.correo_electronico}', ${usuario.id_rol})">Editar</button>
+              </td>
           `;
+  
+          // Agregar la fila a la tabla
           usuariosList.appendChild(row);
-        });
+      });
       }
   
       async function loadRol() {
@@ -332,19 +343,34 @@
         return;
       }
       
-      // Verificar si ya existe un usuario con el mismo rol id
-      if (rol >= 1 && rol <= 7) {
-        try {
-          const response = await fetch(`/api/usuarios?rol=${rol}`);
-          const usuariosConMismoRol = await response.json();
-          if (usuariosConMismoRol.length > 0) {
-            alert(`Ya existe un usuario con el rol elegido`);
-            return;
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      }
+// Verificar si ya existe un usuario con el mismo rol id
+// Verificar si ya existe un usuario con el mismo rol id
+if (rol >= 1 && rol <= 7) {
+  try {
+    const response = await fetch(`/api/usuarios?rol=${rol}`);
+    
+    // Verificar si la respuesta fue exitosa
+    if (!response.ok) {
+      throw new Error(`Error en la solicitud: ${response.statusText}`);
+    }
+
+    const usuariosConMismoRol = await response.json();
+
+    // Mostrar los datos recibidos en la consola para depuración
+    console.log('Datos recibidos:', usuariosConMismoRol);
+
+    // Verificar si la respuesta es un array y tiene elementos
+    if (Array.isArray(usuariosConMismoRol) && usuariosConMismoRol.some(usuario => usuario.id_rol === parseInt(rol))) {
+      alert(`Ya existe un usuario con el rol elegido`);
+      return;
+    }
+  } catch (error) {
+    console.error('Error al verificar usuarios con el mismo rol:', error);
+    alert('Error al verificar usuarios con el mismo rol');
+  }
+}
+
+
       
       try {
         const response = await fetch('/api/usuarios', {
