@@ -217,6 +217,14 @@
               },
               body: JSON.stringify(estadoareaData),
             });
+
+            const progresoResponse = await fetch('/api/progreso', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({id_estado: 1, id_contrato: contratoId,id_area: area.id_area, id_proyecto: proyectoId, progreso: 0}),
+            });
     
             if (!estadoareaResponse.ok) {
               const resultado = await estadoareaResponse.json();

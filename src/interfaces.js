@@ -28,6 +28,7 @@ const actualizarea = require('./routes/estadoARoutes');
 const rym = require('./routes/recomendacionymodelo');
 const recomendacion = require('./routes/recomendacionRoutes');
 const asignacion = require('./routes/asignacionRoutes');
+const progreso = require ('./routes/progresoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -70,6 +71,7 @@ app.use('/api/actualizarEA', actualizarea);
 app.use('/api/rym', rym);
 app.use('/api/recomendacion', recomendacion);
 app.use('/api/asignacion', asignacion);
+app.use('/api/progreso', progreso);
 
 // Ruta para renderizar la página de inicio
 app.get('/', (req, res) => {

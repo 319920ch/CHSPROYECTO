@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soluciones Metálicas - Modificar Estado del Área</title>
-    <link rel="stylesheet" href="../static/style/App.css">
-    <link rel="stylesheet" href="../static/style/modal.css">
-    <link rel="stylesheet" href="../static/style/tabla2.css">
-    <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Soluciones Metálicas - Modificar Estado del Área</title>
+        <link rel="stylesheet" href="../static/style/App.css">
+        <link rel="stylesheet" href="../static/style/modal.css">
+        <link rel="stylesheet" href="../static/style/tabla2.css">
+        <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.1.0/progressbar.min.js"></script>
+    </head>
 <body>
     <div class="encabezado">
         <header class="headerprincipal">
@@ -45,7 +46,7 @@
                 <h2 style="color: #ffff;"><center>Modificar Estado del Área</center></h2>
                 <table border="1">
                     <tr>
-                        <td colspan="2" style="background-color: #FF6B35; color: #fff; text-align: center;">
+                        <td colspan="2" style="background-color: #FF6B35; color: #fff; text-align: center; font-weight:bold">
                             Datos del proyecto, contrato y estado
                         </td>
                     </tr>
@@ -69,6 +70,8 @@
                 <br><br>
                 <form id="formModificarEstado" style="font-weight: bold;">
                     <center>
+                        <div id="progressContainer" style="width: 100px; height: 100px;" class="progressContainer"></div>
+                        <br>
                         <label for="nuevoEstado" style="color: #fff;">Nuevo Estado:</label>
                         <select id="nuevoEstado" name="nuevoEstado">
                             <option value="2">En Proceso</option>
@@ -81,6 +84,7 @@
                         <br><br>
                         <button type="submit" class="botonpagina">Guardar</button>
                     </center>
+                    
                 </form>
         </div>
         </main>
@@ -95,129 +99,225 @@
               menu.style.display = 'block';
             }
           }
-        document.addEventListener('DOMContentLoaded', async (event) => {
+          document.addEventListener('DOMContentLoaded', async (event) => {
             const urlParams = new URLSearchParams(window.location.search);
             const areaId = urlParams.get('areaId');
             const contratoId = urlParams.get('contratoId');
             const proyectoId = urlParams.get('proyectoId');
-            const estadoactual = urlParams.get('estadoActual'); // Cambié 'estado' a 'estadoActual'
-
+            const estadoactual = urlParams.get('estadoActual');
+        
             // Mostrar los datos del proyecto, área y contrato
             document.getElementById('proyecto-numero').textContent = proyectoId;
             document.getElementById('area-nombre').textContent = `Área ${areaId}`;
             document.getElementById('contrato-numero').textContent = contratoId;
-            document.getElementById('estadoactual').textContent = estadoactual; // Mostrar estado actual
-
+            document.getElementById('estadoactual').textContent = estadoactual;
+        
             // Asignar valores a los campos ocultos del formulario
             document.getElementById('areaId').value = areaId;
             document.getElementById('contratoId').value = contratoId;
             document.getElementById('proyectoId').value = proyectoId;
-        });
+        
 
-        document.getElementById('formModificarEstado').addEventListener('submit', async (event) => {
-            event.preventDefault();
+// Inicializar la barra de progreso
+// Inicializar la barra de progreso
+const progressBar = new ProgressBar.Circle('#progressContainer', {
+    color: '#FF6B35',          // Color de la barra de progreso
+    trailColor: '#eee',        // Color del rastro (trayectoria)
+    strokeWidth: 10,           // Grosor de la barra de progreso
+    from: { color: '#FF6B35', width: 10 }, // Color y grosor inicial
+    to: { color: '#65d265', width: 10 },   // Color y grosor final
+    step: function(state, circle) {
+        // Establecer el color y el grosor del trazo
+        circle.path.setAttribute('stroke', state.color);
+        circle.path.setAttribute('stroke-width', state.width);
+
+        // Calcular el valor de progreso en porcentaje
+        var value = Math.round(circle.value() * 100);
         
-            // Obtener los valores seleccionados y ocultos del formulario
-            const nuevoEstado = document.getElementById('nuevoEstado').value;
-            const areaId = document.getElementById('areaId').value;
-            const contratoId = document.getElementById('contratoId').value;
-            const proyectoId = document.getElementById('proyectoId').value;
+        // Establecer el texto dentro de la barra de progreso con color blanco
+        if (value === 0) {
+            circle.setText('');
+        } else {
+            // Aplicar estilos CSS al texto del porcentaje, color blanco
+            circle.setText('<span style="color: white; font-size: 20px;">' + value + '%</span>');
+        }
+    }
+});
+
+
+
+// Obtener el progreso guardado desde el servidor
+try {
+    const response = await fetch(`/api/progreso?id_area=${areaId}&id_contrato=${contratoId}&id_proyecto=${proyectoId}`);
+    if (response.ok) {
+        const data = await response.json();
+        if (data.length > 0) {
+            // Asumiendo que el progreso está en el primer elemento de la respuesta
+            const progreso = data[0].progreso;  // Asumiendo que el valor de progreso está en el campo 'progreso'
+            progressBar.set(progreso / 100);  // Configura el valor de progreso en la barra
+        }
+    } else {
+        console.error('Error al obtener el progreso:', response.statusText);
+    }
+} catch (error) {
+    console.error('Error al obtener el progreso:', error);
+}
+
+// Función para convertir posición del mouse a progreso
+function positionToProgress(x, y) {
+    const rect = progressBar.svg.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const angle = Math.atan2(y - centerY, x - centerX) + Math.PI / 2;
+    let progress = angle / (2 * Math.PI);
+    if (progress < 0) progress += 1;
+    return progress;
+}
+
+// Controladores de eventos para interacción con la barra
+progressBar.svg.addEventListener('mousedown', function(e) {
+    const moveHandler = function(e) {
+        const progress = positionToProgress(e.clientX, e.clientY);
+        progressBar.set(progress);
+    };
+
+    const upHandler = async function(e) {
+        window.removeEventListener('mousemove', moveHandler);
+        window.removeEventListener('mouseup', upHandler);
+
+        const progress = Math.round(progressBar.value() * 100);
+        const data = {
+            id_area: areaId,
+            id_contrato: contratoId,
+            id_proyecto: proyectoId,
+            progreso: progress
+          };
+        console.log('data1', data);
+        try {
+const response = await fetch(`/api/progreso/${areaId}/${contratoId}/${proyectoId}`, {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ progreso: progress })
+});
+
+            if (!response.ok) {
+                throw new Error('Error al guardar el progreso');
+            }
+
+            const result = await response.json();
+            console.log('Progreso guardado:', result);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    window.addEventListener('mousemove', moveHandler);
+    window.addEventListener('mouseup', upHandler);
+});
+
+
+            document.getElementById('formModificarEstado').addEventListener('submit', async (event) => {
+                event.preventDefault();
         
-            // Mostrar en consola los datos que se enviarán
-            console.log('Datos a enviar:', { id_area: areaId, nuevo_estado: nuevoEstado, id_contrato: contratoId, id_proyecto: proyectoId });
+                // Obtener los valores seleccionados y ocultos del formulario
+                const nuevoEstado = document.getElementById('nuevoEstado').value;
+                const areaId = document.getElementById('areaId').value;
+                const contratoId = document.getElementById('contratoId').value;
+                const proyectoId = document.getElementById('proyectoId').value;
         
-            try {
-                // Enviar la solicitud PUT al endpoint /api/estadoa para actualizar el estado del área actual
-                const response = await fetch('/api/estadoa', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ id_area: areaId, nuevo_estado: nuevoEstado, id_contrato: contratoId, id_proyecto: proyectoId })
-                });
+                console.log('Datos a enviar:', { id_area: areaId, nuevo_estado: nuevoEstado, id_contrato: contratoId, id_proyecto: proyectoId });
         
-                if (response.ok) {
-                    // Mostrar alerta de éxito
-                    alert('Estado modificado con éxito');
+                try {
+                    // Enviar la solicitud PUT al endpoint /api/estadoa para actualizar el estado del área actual
+                    const response = await fetch('/api/estadoa', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ id_area: areaId, nuevo_estado: nuevoEstado, id_contrato: contratoId, id_proyecto: proyectoId })
+                    });
         
-                    // Verificar si el nuevo estado es "Finalizado" (id_estado = 4)
-                    if (nuevoEstado === '4') {
-                        if (parseInt(areaId) === 5) {
-                            // Actualizar el estado del proyecto y contrato cuando el área 5 se finaliza
-                            try {
-                                const updateProyectoResponse = await fetch(`/api/proyectos/${proyectoId}`, {
-                                    method: 'PUT',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify({ id_estado: '4' }) // O el campo y valor que necesites actualizar
-                                });
+                    if (response.ok) {
+                        alert('Estado modificado con éxito');
         
-                                const updateContratoResponse = await fetch(`/api/contratos/${contratoId}`, {
-                                    method: 'PUT',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify({ id_estado: '4' }) // O el campo y valor que necesites actualizar
-                                });
+                        if (nuevoEstado === '4') {
+                            
+                            if (parseInt(areaId) === 5) {
+                                try {
+                                    const updateProyectoResponse = await fetch(`/api/proyectos/${proyectoId}`, {
+                                        method: 'PUT',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({ id_estado: '4' })
+                                    });
         
-                                if (updateProyectoResponse.ok && updateContratoResponse.ok) {
-                                    alert('Proyecto y Contrato actualizados a "Finalizado"');
-                                } else {
-                                    console.error('Error al actualizar el proyecto o contrato');
+                                    const updateContratoResponse = await fetch(`/api/contratos/${contratoId}`, {
+                                        method: 'PUT',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({ id_estado: '4' })
+                                    });
+        
+                                    if (updateProyectoResponse.ok && updateContratoResponse.ok) {
+                                        alert('Proyecto y Contrato actualizados a "Finalizado"');
+                                    } else {
+                                        console.error('Error al actualizar el proyecto o contrato');
+                                        alert('Error al actualizar el proyecto o contrato');
+                                    }
+                                } catch (error) {
+                                    console.error('Error al enviar la solicitud:', error);
                                     alert('Error al actualizar el proyecto o contrato');
                                 }
-                            } catch (error) {
-                                console.error('Error al enviar la solicitud:', error);
-                                alert('Error al actualizar el proyecto o contrato');
-                            }
-                        } else {
-                            // Actualizar el siguiente área a "En Proceso" (id_estado = 2) si el área no es 5
-                            const siguienteAreaId = parseInt(areaId) + 1; // Obtener el siguiente área
-        
-                            const siguienteResponse = await fetch('/api/estadoa', {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ id_area: siguienteAreaId, nuevo_estado: '2', id_contrato: contratoId, id_proyecto: proyectoId })
-                            });
-        
-                            if (siguienteResponse.ok) {
-                                alert('Siguiente área actualizada a "En Proceso"');
                             } else {
-                                const errorResponse = await siguienteResponse.json();
-                                console.error('Error en la respuesta del servidor:', errorResponse);
-                                alert(`Error al actualizar el siguiente área: ${errorResponse.error}`);
+                                const siguienteAreaId = parseInt(areaId) + 1;
+                                const siguienteResponse = await fetch('/api/estadoa', {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ id_area: siguienteAreaId, nuevo_estado: '2', id_contrato: contratoId, id_proyecto: proyectoId })
+                                });
+        
+                                if (siguienteResponse.ok) {
+                                    alert('Siguiente área actualizada a "En Proceso"');
+                                } else {
+                                    const errorResponse = await siguienteResponse.json();
+                                    console.error('Error en la respuesta del servidor:', errorResponse);
+                                    alert(`Error al actualizar el siguiente área: ${errorResponse.error}`);
+                                }
                             }
+                            
                         }
+        
+
+        
+                        window.location.href = './area.html';
+                    } else {
+                        const errorResponse = await response.json();
+                        console.error('Error en la respuesta del servidor:', errorResponse);
+                        alert(`Error al modificar el estado: ${errorResponse.error}`);
                     }
-        
-                    window.location.href = './area.html'; // Redirigir después de procesar las actualizaciones
-                } else {
-                    // Manejar errores y mostrar mensaje de error
-                    const errorResponse = await response.json();
-                    console.error('Error en la respuesta del servidor:', errorResponse);
-                    alert(`Error al modificar el estado: ${errorResponse.error}`);
+                } catch (error) {
+                    console.error('Error al enviar la solicitud:', error);
+                    alert('Error al modificar el estado');
                 }
-            } catch (error) {
-                // Capturar errores de solicitud y mostrar mensaje de error
-                console.error('Error al enviar la solicitud:', error);
-                alert('Error al modificar el estado');
-            }
+            });
         });
-        
-        
         
         document.addEventListener('DOMContentLoaded', async (event) => {
             const nombreUsuario = localStorage.getItem('nombreUsuario');
             if (nombreUsuario) {
-              document.getElementById('nombreUsuario').innerText = nombreUsuario;
-            }    
+                document.getElementById('nombreUsuario').innerText = nombreUsuario;
+            }
         });
+        
         const rolUsuario = localStorage.getItem('idRol');
         if (rolUsuario) {
-          document.getElementById('rolUsuario').innerText = rolUsuario;
+            document.getElementById('rolUsuario').innerText = rolUsuario;
         }
 
     </script>
