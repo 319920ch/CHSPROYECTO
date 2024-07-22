@@ -6,6 +6,7 @@
   <title>Soluciones Metálicas - Productos</title>
   <link rel="stylesheet" href="../static/style/App.css">
   <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="stylesheet" href="../static/style/forms.css">
   <link rel="stylesheet" href="../static/style/tablas.css">
   <link rel="stylesheet" href="../static/style/tabla2.css">
   <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
@@ -46,7 +47,7 @@
           <div class="header">
               <input class="buscador" type="text" id="buscarProducto" placeholder="Buscar producto por nombre" onkeyup="buscarProducto()">
           </div>
-          <div class="header">
+          <div class="header" style="height: 70px;">
             <button class="botonpagina" onclick="abrirModalCrearProducto()">Crear Nuevo Producto</button>
         </div>
           <div>
@@ -80,7 +81,7 @@
           <input type="text" id="nombreActualizar" name="nombreActualizar"><br><br>
           <label for="descripcionActualizar">Nueva Descripción:</label>
           <textarea id="descripcionActualizar" name="descripcionActualizar" rows="4" cols="50"></textarea><br><br>
-          <button type="submit">Guardar cambios</button>
+          <center><button type="submit" class="submitb">Guardar cambios</button></center>
         </form>
       </div>
     </div>
@@ -89,11 +90,11 @@
     <div id="modalEliminar" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>Eliminar Producto</h2>
+        <h2>Eliminar Producto</h2> <br>
         <label for="idEliminar">ID Producto:</label>
         <input type="text" id="idEliminar" name="idEliminar"><br><br>
-        <p>¿Estás seguro de que deseas eliminar este producto?</p>
-        <button id="eliminarBtn" style="background-color:red;">Eliminar</button>
+        <p>¿Estás seguro de que deseas eliminar este producto?</p> <br>
+        <center><button id="eliminarBtn" style="background-color:red;" class="submitb">Eliminar</button></center>
       </div>
     </div>
     
@@ -107,7 +108,7 @@
           <input type="text" id="nombreNuevo" name="nombreNuevo"><br><br>
           <label for="descripcionNueva">Descripción:</label>
           <textarea id="descripcionNueva" name="descripcionNueva" rows="4" cols="50"></textarea><br><br>
-          <button type="submit">Crear Producto</button>
+          <center><button type="submit" class="submitb" style="height: fit-content;">Crear Producto</button></center>
         </form>
       </div>
     </div>

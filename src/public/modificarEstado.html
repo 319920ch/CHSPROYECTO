@@ -246,6 +246,14 @@ const response = await fetch(`/api/progreso/${areaId}/${contratoId}/${proyectoId
                             
                             if (parseInt(areaId) === 5) {
                                 try {
+                                    const response = await fetch(`/api/progreso/${areaId}/${contratoId}/${proyectoId}`, {
+                                        method: 'PUT',
+                                        headers: {
+                                          'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ progreso: 100 })
+                                      });
+                                    
                                     const updateProyectoResponse = await fetch(`/api/proyectos/${proyectoId}`, {
                                         method: 'PUT',
                                         headers: {

@@ -77,17 +77,17 @@
       <span class="close" onclick="cerrarModal('modalCrearEmpleado')">&times;</span>
       <h2>Registrar Nuevo Empleado</h2>
       <form id="createForm" onsubmit="handleNuevoEmpleado(event)">
-        <label for="nombres">Nombres:</label>
+        <label for="nombres">Nombres:</label> <br>
         <input type="text" id="nombres" name="nombres"><br><br>
-        <label for="apellidos">Apellidos:</label>
+        <label for="apellidos">Apellidos:</label> <br>
         <input type="text" id="apellidos" name="apellidos"><br><br>
-        <label for="cedula">Cédula:</label>
+        <label for="cedula">Cédula:</label> <br>
         <input type="text" id="cedula" name="cedula"><br><br>
-        <label for="tiempoexp">Tiempo de experiencia general en años:</label>
+        <label for="tiempoexp">Tiempo de experiencia general en años:</label> <br>
         <input type="text" id="tiempoexp" name="tiempoexp"><br><br>
-        <label for="contacto">Número de contacto:</label>
+        <label for="contacto">Número de contacto:</label> <br>
         <input type="text" id="contacto" name="contacto"><br><br>
-        <button type="submit" class="submit-button">Registrar Empleado</button>
+        <center><button type="submit" class="submitb">Registrar Empleado</button></center>
       </form>
     </div>
   </div>
@@ -109,17 +109,17 @@
     <span class="close" onclick="cerrarModal('modalEditarEmpleado')">&times;</span>
     <h2>Editar Empleado</h2>
     <form id="editForm" onsubmit="handleEditarUsuario(event)">
-      <label for="editid">ID del Empleado:</label>
+      <label for="editid">ID del Empleado:</label> <br>
       <input type="text" id="editid" name="editid" readonly><br><br>
-      <label for="editNombres">Nombre del Empleado:</label>
+      <label for="editNombres">Nombre del Empleado:</label> <br>
       <input type="text" id="editNombres" name="editNombres" readonly><br><br>
-      <label for="editApellidos">Apellidos:</label>
+      <label for="editApellidos">Apellidos:</label> <br>
       <input type="text" id="editApellidos" name="editApellidos" readonly><br><br>
-      <label for="editTiempoexp">Tiempo de experiencia general en años:</label>
-      <input type="number" id="editTiempoexp" name="editTiempoexp" min="0" max="30"><br><br>
-      <label for="editContacto">Número de contacto:</label>
+      <label for="editTiempoexp">Tiempo de experiencia general en años:</label> <br>
+      <input type="number" id="editTiempoexp" name="editTiempoexp" min="0" max="30" style="width: 27%;"><br><br>
+      <label for="editContacto">Número de contacto:</label> <br>
       <input type="number" id="editContacto" name="editContacto" pattern="[0-9]" maxlength="10"><br><br>
-      <button type="submit" class="submit-button">Guardar Cambios</button>
+      <center><button type="submit" class="submitb">Guardar Cambios</button></center>
       <p id="editErrorMessage" style="color:red;"></p>
     </form>
   </div>
