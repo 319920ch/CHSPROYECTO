@@ -64,7 +64,8 @@
               <input type="date" id="fecha_fin" class="form-input">
             </div>
             <button type="submit" class="submit-button" onclick="handleNuevoContrato(event)">Registrar Contrato</button>
-          </form>      
+          </form> 
+        </main>     
           <script>
             document.addEventListener('DOMContentLoaded', async () => {
                 const nombreUsuario = localStorage.getItem('nombreUsuario');
@@ -118,9 +119,11 @@
           }
           document.getElementById('fecha_inicio').min = new Date().toISOString().split('T')[0];
           const maxDate = new Date();
-    maxDate.setFullYear(maxDate.getFullYear() + 1); // Sumar un año
+          maxDate.setFullYear(maxDate.getFullYear() + 1); // Sumar un año
 
-    document.getElementById('fecha_fin').max = maxDate.toISOString().split('T')[0];
+          document.getElementById('fecha_fin').max = maxDate.toISOString().split('T')[0];
+          document.getElementById('fecha_fin').min = new Date().toISOString().split('T')[0];
+
     function toggleMenu() {
       const menu = document.getElementById('menu');
       if (menu.style.display === 'block') {
@@ -129,6 +132,7 @@
         menu.style.display = 'block';
       }
     }
+  
           </script>
 </body>
 </html>

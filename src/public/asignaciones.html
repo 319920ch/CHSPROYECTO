@@ -58,6 +58,7 @@
         <br><br>
         <center><button id="guardar-btn" class="submitb" onclick="guardarAsignacion()">Guardar</button></center>
       </main>
+      
     </div>
        
   <script>
@@ -257,7 +258,7 @@ cargarEmpleados();
           alert(data.message); // Mostrar mensaje si hay uno
         }
         // Redirigir a la página anterior recargada
-        window.location.href = document.referrer + '.';
+        window.location.href = document.referrer + '';
       })
       .catch(error => {
         console.error('Error al enviar la asignación:', error); // Log de error al enviar la asignación
@@ -272,7 +273,7 @@ cargarEmpleados();
     }
     // Actualizar el texto inicial del botón al cargar la página
     actualizarContadorAsignados();
-
   </script>
 </body>
 </html>
+
