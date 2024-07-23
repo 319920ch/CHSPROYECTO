@@ -82,7 +82,7 @@
                         <input type="hidden" id="contratoId" name="contratoId">
                         <input type="hidden" id="proyectoId" name="proyectoId">
                         <br><br>
-                        <button type="submit" class="botonpagina">Guardar</button>
+                            <button type="submit" class="botonpagina">Guardar</button>
                     </center>
                     
                 </form>
@@ -116,7 +116,6 @@
             document.getElementById('areaId').value = areaId;
             document.getElementById('contratoId').value = contratoId;
             document.getElementById('proyectoId').value = proyectoId;
-        
 
 // Inicializar la barra de progreso
 // Inicializar la barra de progreso
@@ -300,9 +299,7 @@ const response = await fetch(`/api/progreso/${areaId}/${contratoId}/${proyectoId
                             }
                             
                         }
-        
-
-        
+                
                         window.location.href = './area.html';
                     } else {
                         const errorResponse = await response.json();
