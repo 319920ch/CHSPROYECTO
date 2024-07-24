@@ -4,6 +4,7 @@ const Contrato = require('../models/contratom');
 const Estado = require('../models/estadom');
 const EstadoArea = require('../models/estadoarea');
 const Presupuesto = require('../models/presupuestom');
+const Producto = require('../models/productom');
 
 exports.getContratoInfo = async (req, res) => {
   try {
@@ -16,10 +17,14 @@ exports.getContratoInfo = async (req, res) => {
 
     const proyectos = await Proyecto.findAll({
       where: { id_contrato },
-      attributes: ['id_proyecto']
+      attributes: ['id_proyecto', 'id_producto', 'cantidad_producto']
     });
 
     const proyectosInfo = await Promise.all(proyectos.map(async (proyecto) => {
+      const producto = await Producto.findByPk(proyecto.id_producto, {
+        attributes: ['nombre_producto']
+      });
+
       const estadoAreas = await EstadoArea.findAll({
         where: {
           id_contrato,
@@ -54,8 +59,12 @@ exports.getContratoInfo = async (req, res) => {
         };
       }));
 
+      console.log(`Proyecto ID: ${proyecto.id_proyecto}, Producto: ${producto ? producto.nombre_producto : null}, Cantidad: ${proyecto.cantidad_producto}`);
+
       return {
         id_proyecto: proyecto.id_proyecto,
+        producto: producto ? producto.nombre_producto : null,
+        cantidad_producto: proyecto.cantidad_producto,
         areas: areasInfo
       };
     }));
@@ -71,9 +80,11 @@ exports.getContratoInfo = async (req, res) => {
 
     res.status(200).json(contratoInfo);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 
   exports.getAreasInfo = async (req, res) => {

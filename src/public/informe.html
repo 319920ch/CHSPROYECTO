@@ -45,15 +45,29 @@
         </td>
       </table>
       </header>
-    <main class="main-content">
-      <div class="card1">
-          <h2>Información de Contrato</h2>
-          <div id="contrato-info"></div>
-          <button id="generar-pdf" class="botonenvio">Generar PDF</button>
-      </div>
-  </main>
+    <div class="m">
+      <main class="main-content" style="background-color: #5B5F80;">
+        <div class="card1">
+            <h2>Información de Contrato</h2>
+            <div id="contrato-info"></div>
+            <button id="generar-pdf" class="submitb">Generar PDF</button>
+        </div>
+    </main>
+    </div>
   </div>
 </body>
+<style>
+  /* Agrega este estilo en tus hojas de estilo (App.css, por ejemplo) */
+.main-content {
+  margin-top: 110px; /* Ajusta este valor según el tamaño de tu header */
+}
+
+.m{
+  background-color: #5B5F80;
+  width: 100%;
+}
+
+</style>
 <script>
   function toggleMenu() {
     const menu = document.getElementById('menu');
