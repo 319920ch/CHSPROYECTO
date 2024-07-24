@@ -31,10 +31,10 @@ exports.getProgresos = async (req, res) => {
 
 // Obtener un progreso por ID
 exports.getProgresoById = async (req, res) => {
-  const { id_area, id_estado, id_contrato, id_proyecto } = req.params;
+  const { id_area, id_contrato, id_proyecto } = req.params;
   try {
     const progreso = await Progreso.findOne({
-      where: { id_area, id_estado, id_contrato, id_proyecto },
+      where: { id_area, id_contrato, id_proyecto },
     });
     if (progreso) {
       res.status(200).json(progreso);

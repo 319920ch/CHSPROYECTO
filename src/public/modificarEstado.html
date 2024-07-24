@@ -143,14 +143,14 @@ const progressBar = new ProgressBar.Circle('#progressContainer', {
         }
     }
 });
-
-
-
 // Obtener el progreso guardado desde el servidor
 try {
-    const response = await fetch(`/api/progreso?id_area=${areaId}&id_contrato=${contratoId}&id_proyecto=${proyectoId}`);
+    const response = await fetch(`/api/progreso/${areaId}/${contratoId}/${proyectoId}`);
     if (response.ok) {
         const data = await response.json();
+        console.log(data);
+        progressBar.set(data.progreso / 100);  // Configura el valor de progreso en la barra
+
         if (data.length > 0) {
             // Asumiendo que el progreso está en el primer elemento de la respuesta
             const progreso = data[0].progreso;  // Asumiendo que el valor de progreso está en el campo 'progreso'
