@@ -50,8 +50,8 @@
         <h2>Índice</h2>
         <ul>
           <li><a href="#bienvenida">Pantalla de Bienvenida</a></li>
-          <li><a href="#asignar">Nuevo Contrato</a></li>
-          <li><a href="#area">Modificar Presupuestos</a></li>
+          <li><a href="#asignar">Asignar Empleados</a></li>
+          <li><a href="#area">Estado de Área</a></li>
         </ul>
       </div>
       <div class="help-grid">
@@ -76,72 +76,87 @@
           <img src="../static/image/ayudaencargado/3.png" alt="Ayuda 3">
         </div>
         <div class="help-item">
-          <p>Se deben llenar todos los campos correspondientes para un registro exitoso de los datos del contrato. Al hacer clic en el botón <i>Registrar Contrato</i> se confirma la creación en un alert en la parte superior de la página.</p>
+          <p>Esta página se muestra al hacer clic sobre el botón <i>Asignar Empleado</i>. Si no se han asignado todavía, se muestra en el campo de Número de empleados recomendados la leyenda <i>Recomendación no encontrada</i>. Para obtener una recomendación se debe hacer clic en el botón <i>Enviar Sugerencia</i> </p>
         </div>
         <br>
         <div class="help-item">
           <img src="../static/image/ayudaencargado/4.png" alt="Ayuda 4">
         </div>
         <div class="help-item">
-          <p>Una vez que se registra el contrato, automáticamente se muestra una página con un formulario para el registro del proyecto correspondiente. Se deben llenar todos los campos correspondientes para un registro exitoso del proyecto. Al hacer clic en el botón <i>Registrar Proyecto</i> se confirma la creación en un alert en la parte superior de la página.</p>
+          <p>Una vez que se obtiene la recomendación, se podrá ver en los datos el número recomendado.</p>
         </div>
         <br>
         <div class="help-item">
           <img src="../static/image/ayudaencargado/5.png" alt="Ayuda 5">
         </div>
         <div class="help-item">
-          <p>Una vez que se registra el proyecto, automáticamente se muestra una página con un formulario para asignar el presupuesto por área de proceso de la organización. Para guardar los datos se debe hacer clic en el botón <i>Asignar presupuesto por área</i>.</p>
+          <p>Esta página se muestra cuando se hace clic en el botón <i>Obtener Empleados</i>. Es un listado de los empleados ordenado de forma descendente según su desempeño</p>
         </div>
         <br>
         <div class="help-item">
           <img src="../static/image/ayudaencargado/6.png" alt="Ayuda 6">
         </div>
         <div class="help-item">
-          <p> Esta ventana modal muestra todos los datos del registro de contrato, proyecto y presupuesto de áreas. </p>
+          <p> Cuando se hace clic sobre el botón <i>Asignar</i>, se asigna el empleado al área de trabajo para el contrato especificado . </p>
         </div>
         <br>
         <div id="presupuestos" class="help-item">
           <img src="../static/image/ayudaencargado/7.png" alt="Ayuda 7">
         </div>
         <div class="help-item">
-          <p>Esta página se muestra al hacer clic en el botón <i>Modificar presupuesto de áreas</i>, se trata de una tabla con la información de cada contrato y un botón correspondiente para la modificación de presupuestos.</p>
+            <p> Cuando se hace clic sobre el botón <i>Guardar asignaciones</i>, se muestra una alerta en caso de éxito. </p>
         </div>
         <br>
         <div class="help-item">
           <img src="../static/image/ayudaencargado/8.png" alt="Ayuda 8">
         </div>
         <div class="help-item">
-          <p>Cuando se hace clic sobre el botón <i>Modificar Presupuesto</i> se muestra la información de cada área del contrato y proyecto. Cuando se ingresa un nuevo valor y se hace clic en el botón <i>Modificar</i> se actualiza automáticamente en la tabla con el valor ingresado. </p>
+          <p>Al regresar a la página con los datos de recomendación se habrá actualizado el número de empleados actualizados.</p>
         </div>
         <br>
-        <div id="estadosc" class="help-item">
+        <div  id="area" class="help-item">
           <img src="../static/image/ayudaencargado/9.png" alt="Ayuda 9">
         </div>
         <div class="help-item">
-          <p>Esta página se muestra al hacer clic sobre el tercer botón <i>Estado de Contratos</i>. Muestra la información de todos los contratos registrados con su estado actual. Su propósito es solo informativo.</p>
+          <p>Esta página se muestra al hacer clic sobre el segundo botón <i>Estado de Área</i>. Muestra la información de todos los contratos registrados con su estado actual. Su propósito es modificar el estado del área correspondiente.</p>
         </div>
         <br>
-        <div id="informes" class="help-item">
+        <div class="help-item">
           <img src="../static/image/ayudaencargado/10.png" alt="Ayuda 10">
         </div>
         <div class="help-item">
-          <p>Esta página aparece al hacer clic sobre el cuarto botón <i>Informes</i>. Muestra la información de todos los contratos registrados con un botón para la generación de informes.</p>
+          <p>Esta página aparece al hacer clic sobre el botón <i>Modificar estado</i>. Muestra la información de número de contrato, número de proyecto y estado actual, además permite elegir un nuevo estado y agregar el progreso correspondiente.</p>
         </div>
         <br>
         <div class="help-item">
           <img src="../static/image/ayudaencargado/11.png" alt="Ayuda 11">
         </div>
         <div class="help-item">
-            <img src="../static/image/ayudaencargado/12.png" alt="Ayuda 11">
+            <p>Se puede solamente modificar el presupuesto y esto se verá reflejado cada vez que se cargue la página.</p>
+          </div> <br>
+        <div class="help-item">
+            <img src="../static/image/ayudaencargado/12.png" alt="Ayuda 12">
           </div>
         <div class="help-item">
-          <p>Se debe seleccionar el contrato correspondiente del cual se desea generar el informe. Una vez seleccionado el contrato, se debe hacer clic en el botón <i>Generar PDF</i>. Esto mostrará la información y podrá ser descargada en formato PDF.</p>
+            <p>Cuando se modifica el estado y se da clic en el botón <i>Guardar</i>, se obtiene un mensaje de confirmación. </p>
         </div> <br>
         <div class="help-item">
-            <img src="../static/image/ayudaencargado/13.png" alt="Ayuda 11">
+            <img src="../static/image/ayudaencargado/13.png" alt="Ayuda 13">
           </div>
         <div class="help-item">
-          <p>Así se visualiza el informe generado.</p>
+            <p>En la página de Estado de Área, se visuliza una notificación cuando hay un estado <i>en proceso</i>. </p>
+        </div> <br>
+        <div class="help-item">
+            <img src="../static/image/ayudaencargado/14.png" alt="Ayuda 14">
+          </div>
+        <div class="help-item">
+          <p>En la página de Estado de Área, se visuliza una notificación cuando hay un estado <i>atrasado</i>. Y se pone un botón para asignar más empleados de modo que se pueda avanzar</p>
+        </div> <br>
+        <div class="help-item">
+            <img src="../static/image/ayudaencargado/16.png" alt="Ayuda 16">
+          </div>
+        <div class="help-item">
+          <p>Cuando se actualiza un estado a <i>finalizado</i>, automáticamente se actualiza el estado a <i>en proceso</i> para la siguiente área consecutiva.</p>
         </div> <br>
       </div>
     </main>
