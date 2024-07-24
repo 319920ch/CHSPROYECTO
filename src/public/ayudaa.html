@@ -1,1 +1,231 @@
-<p>ayuda admin</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soluciones Metálicas - Administrador</title>
+  <link rel="stylesheet" href="../static/style/App.css">
+  <link rel="stylesheet" href="../static/style/modal.css">
+  <link rel="stylesheet" href="../static/style/tabla2.css">
+  <link rel="stylesheet" href="../static/style/ayuda.css">
+  <link rel="icon" href="../static/image/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div class="encabezado">
+    <header class="headerprincipal">
+      <table>
+        <tr>
+          <td style="width: fit-content;">
+            <div class="imglogo">
+              <a href="./admin.html">
+                <img src="../static/image/LOGO.jpeg" alt="Logo" class="logo-img" />
+              </a>
+            </div>
+          </td>
+          <td style="width: 120%">
+            <h1 class="bienvenida"><center>¡Bienvenido <span id="nombreUsuario"></span></center>!</h1>
+          </td>
+          <td style="width: fit-content;">
+            <div class="menu-hamburguesa" onclick="toggleMenu()">
+              <div class="linea"></div>
+              <div class="linea"></div>
+              <div class="linea"></div>
+            </div>
+            <nav id="menu">
+              <ul>
+                <li><a href="./admin.html">Página de Bienvenida</a></li>
+                <li><a href="./gestionusuario.html">Gestión de Usuarios</a></li>
+                <li><a href="./empleados.html">Gestión de Empleados</a></li>
+                <li><a href="./productos.html">Gestión de Productos</a></li>
+                <li><a href="./ayudaa.html">Ayuda</a></li>
+                <li><a href="./index.html">Cerrar Sesión</a></li>
+              </ul>
+            </nav>
+          </td>
+        </tr>
+      </table>
+    </header>
+    <main>
+        <div style="background-color: #5B5F80; padding: 1rem">
+            <center><h1 style="background-color: #5B5F80; color: #ffff;">PÁGINA DE AYUDA PARA USUARIO ADMINISTRADOR</h1></center>
+        </div>
+        <div class="indice">
+            <h2>Índice</h2>
+            <ul>
+              <li><a href="#bienvenida">Pantalla de Bienvenida</a></li>
+              <li><a href="#gestion-usuarios">Gestión de Usuarios</a></li>
+              <li><a href="#gestion-empleados">Gestión de Empleados</a></li>
+              <li><a href="#gestion-productos">Gestión de Productos</a></li>
+            </ul>
+        </div>
+        <div class="help-grid">
+            <div id="bienvenida" class="help-item">
+              <img src="../static/image/ayudaadmin/1.png" alt="Ayuda 1">
+            </div>
+              <div class="help-item">
+                <p>Esta es la pantalla de bienvenida para el usuario con el rol de <strong>Administrador</strong> <br> <br> Está compuesto por un mensaje de bienvenida con el nombre del usuario registrado, el logo de la aplicación y un menú de hamburguesa desplegable cada vez que se hace clic sobre las tres rayas horizontales ubicadas en la parte superior derecha.</p>
+              </div>
+              
+              <div class="help-item">
+                <p>Para las tareas que realiza el <strong>Administrador</strong> se muestran tres botones que dirigirán a las páginas correspondientes para la realización de sus actividades.</p> 
+              </div>
+              <br>
+              
+              <div id="gestion-usuarios" class="help-item">
+                <img src="../static/image/ayudaadmin/2.png" alt="Ayuda 2">
+              </div>
+              <div class="help-item">
+                <p> Esta es la página que se muestra cuando se hace clic en el primer botón de <strong>Gestión de usuarios</strong> <br> <br> Se trata de una página que muestra la información de los usuarios registrados, permitiendo acciones como crear nuevos usuarios. De la información disponible se presenta la posibilidad de que se elimine el usuario o se edite la información desplegada.</p>
+              </div> <br>
+
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/3.png" alt="Ayuda 3">
+              </div>
+              <div class="help-item">
+                <p> Esta ventana modal aparece al hacer clic sobre el botón <i>Crear Nuevo Usuario</i> <br><br> Muestra un formulario para completar con la información del nuevo usuario.</p>
+              </div>
+              <div class="help-item">
+                <p>Se deben llenar todos los campos correspondientes para un registro exitoso del nuevo usuario.</p>
+              </div>
+              <br>
+              
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/4.png" alt="Ayuda 4">
+              </div>
+              <div class="help-item">
+                <p> Esta ventana modal aparece al hacer clic sobre el botón <i>Eliminar</i> <br><br> Se obtiene el nombre del usuario que será eliminado.</p>
+              </div>
+              <br>
+              
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/5.png" alt="Ayuda 5">
+              </div>
+              
+              <div class="help-item">
+                <p>Esta ventana modal aparece al hacer clic sobre el botón <i>Editar</i> <br> <br>Se obtiene un formulario con la información del usuario que se puede editar.</p>
+              </div>
+              <br>
+              
+              <div id="gestion-empleados" class="help-item">
+                <img src="../static/image/ayudaadmin/6.png" alt="Ayuda 6">
+              </div>
+              <div class="help-item">
+                <p> Esta es la página que se muestra cuando se hace clic en el segundo botón de <strong>Gestión de empleados</strong> <br> <br> Se trata de una página que muestra la información de los empleados registrados, permitiendo acciones como crear nuevos empleados. De la información disponible se presenta la posibilidad de que se elimine el usuario o se edite la información desplegada.</p>
+              </div>
+              <br>
+              
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/7.png" alt="Ayuda 7">
+              </div>
+              <div class="help-item">
+                <p>Esta ventana modal aparece al hacer clic sobre el botón <i>Crear Nuevo Empleado</i> <br> <br>Muestra un formulario para completar con la información del nuevo empleado.</p>
+              </div>
+              <br>
+              
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/8.png" alt="Ayuda 8">
+              </div>
+              <div class="help-item">
+                <p>Esta ventana modal aparece al hacer clic sobre el botón <i>Eliminar</i> para confirmar la eliminación del empleado seleccionado</p>
+              </div>
+              <br>
+              
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/9.png" alt="Ayuda 9">
+              </div>
+              <div class="help-item">
+                <p>Esta ventana modal aparece al hacer clic sobre el botón <i>Editar</i> <br> <br>Se obtiene un formulario con la información del empleado que se puede editar.</p>
+              </div>
+              <br>
+              
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/10.png" alt="Ayuda 10">
+              </div>
+              <div class="help-item">
+                <p>Esta página aparece al hacer clic sobre el botón <i>Desempeño</i> <br> <br>Se obtiene información de las evaluaciones de desempeño del empleado en las diferentes áreas de producción de la organización</p>
+              </div>
+              <br>
+
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/11.png" alt="Ayuda 11">
+              </div>
+              <div class="help-item">
+                <p>Esta ventana modal aparece al hacer clic sobre el botón <i>Agregar Evaluación de Desempeño</i> <br> <br>Muestra un formulario para completar con la información de la nueva evaluación.</p>
+              </div>
+              <br>
+
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/12.png" alt="Ayuda 12">
+              </div>
+              <div class="help-item">
+                <p>Esta ventana modal aparece al hacer clic sobre el botón <i>Editar</i> <br> <br>Se obtiene un formulario con la información de evaluación de desempeño que se puede editar.</p>
+              </div>
+              <br>
+
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/13.png" alt="Ayuda 13">
+              </div>
+              <div class="help-item">
+                <p>Esta alert aparece al hacer clic sobre el botón <i>Eliminar</i> para confirmar la eliminaión de evaluación de desempeño elegida</p>
+              </div>
+              <br>
+            
+              <div id="gestion-productos" class="help-item">
+                <img src="../static/image/ayudaadmin/14.png" alt="Ayuda 14">
+              </div>
+              <div class="help-item">
+                <p>Esta es la página que se muestra cuando se hace clic en el tercer botón de <strong>Gestión de productos</strong> <br> <br> Se trata de una página que muestra la información de los productos registrados, permitiendo acciones como crear nuevos productos. De la información disponible se presenta la posibilidad de que se elimine el producto o se edite la información desplegada.</p>
+              </div>
+              <br>
+
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/15.png" alt="Ayuda 15">
+              </div>
+              <div class="help-item">
+                <p>Esta ventana modal aparece al hacer clic sobre el botón <i>Crear Nuevo Producto</i> <br> <br>Muestra un formulario para completar con la información del nuevo producto.</p>
+              </div>
+              <br>
+
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/16.png" alt="Ayuda 16">
+              </div>
+              <div class="help-item">
+                <p>Esta ventana modal aparece al hacer clic sobre el botón <i>Editar</i></p>
+              </div>
+              <div class="help-item">
+                <p>Se obtiene un formulario con la información del producto que se puede editar.</p>
+              </div>
+              <br>
+
+              <div class="help-item">
+                <img src="../static/image/ayudaadmin/17.png" alt="Ayuda 17">
+              </div>
+              <div class="help-item">
+                <p>Esta ventana modal aparece al hacer clic sobre el botón <i>Eliminar</i></p>
+              </div>
+              <div class="help-item">
+                <p>Se obtiene la información del producto que se puede eliminará.</p>
+              </div>
+              <br>
+    </main>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+      } else {
+        menu.style.display = 'block';
+      }
+    }
+    // Recuperar el nombre de usuario de LocalStorage
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const nombreUsuario = localStorage.getItem('nombreUsuario');
+      if (nombreUsuario) {
+        document.getElementById('nombreUsuario').innerText = nombreUsuario;
+      }
+    });
+  </script>
+</body>
+</html>
