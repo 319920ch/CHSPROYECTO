@@ -281,5 +281,30 @@ ALTER TABLE IF EXISTS public.usuario
     REFERENCES public.rol (id_rol) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION;
+CREATE TABLE IF NOT EXISTS public.progreso
+(
+    id_contrato integer NOT NULL,
+    id_area integer NOT NULL,
+    id_estado integer NOT NULL,
+    id_proyecto integer NOT NULL,
+    progreso integer,
+    CONSTRAINT progreso_pkey PRIMARY KEY (id_contrato, id_area, id_estado, id_proyecto),
+    CONSTRAINT progreso_id_area_fkey FOREIGN KEY (id_area)
+        REFERENCES public.area (id_area) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT progreso_id_contrato_fkey FOREIGN KEY (id_contrato)
+        REFERENCES public.contrato (id_contrato) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT progreso_id_estado_fkey FOREIGN KEY (id_estado)
+        REFERENCES public.estado (id_estado) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT progreso_id_proyecto_fkey FOREIGN KEY (id_proyecto)
+        REFERENCES public.proyecto (id_proyecto) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
 
 END;
