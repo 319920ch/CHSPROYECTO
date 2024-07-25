@@ -62,6 +62,8 @@
             <!-- Aquí se insertarán los datos dinámicamente -->
           </tbody>
         </table>
+       <br> <center> <button id="regresar" class="regresarb">Regresar</button>
+       </center>
       </div>
     </main>
   </div>
@@ -164,6 +166,11 @@ document.querySelectorAll('.modificar-form').forEach(form => {
       } catch (error) {
         console.error(error);
       }
+    });
+    const boton = document.getElementById('regresar');
+
+    boton.addEventListener('click', () => {
+      window.location.href = './listadocontrato.html'; // Reemplaza con la URL de la página que deseas dirigir
     });
   </script>
 </body>

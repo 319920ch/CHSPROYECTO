@@ -50,8 +50,10 @@
         <div class="card1">
             <h2>Información de Contrato</h2>
             <div id="contrato-info"></div>
-            <button id="generar-pdf" class="submitb">Generar PDF</button>
+            <button id="regresar" class="regresarb">Regresar</button>
+            <button id="generar-pdf" class="submitb">Generar PDF</button> 
         </div>
+        
     </main>
     </div>
   </div>
@@ -77,5 +79,12 @@
       menu.style.display = 'block';
     }
   }
+
+  const boton = document.getElementById('regresar');
+
+  boton.addEventListener('click', () => {
+    window.location.href = './infocontrato.html'; // Reemplaza con la URL de la página que deseas dirigir
+  });
+
 </script>
 </html>

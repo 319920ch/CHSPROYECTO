@@ -44,6 +44,7 @@
     <div class="areaprincipal">
       <main class="pprincipal">
         <h1 style="color: #ffff;"><center>Listado de Empleados</center></h1>
+        <center> <p style="color: #ffff;">Los empleados están ordenados por su desempeño de mayor a menor</p> </center>
         <table id="empleados-table" class="tablev1">
           <thead>
             <tr>
@@ -57,7 +58,9 @@
           <tbody id="empleados-list"></tbody>
         </table>
         <br><br>
-        <center><button id="guardar-btn" class="submitb" onclick="guardarAsignacion()">Guardar</button></center>
+        <center><button id="guardar-btn" class="submitb" onclick="guardarAsignacion()">Guardar</button> <br> <br>
+        <button id="regresar" class="regresarb">Regresar</button></center>
+
       </main>
       
     </div>
@@ -274,6 +277,11 @@ cargarEmpleados();
     }
     // Actualizar el texto inicial del botón al cargar la página
     actualizarContadorAsignados();
+    const boton = document.getElementById('regresar');
+
+    boton.addEventListener('click', () => {
+      window.location.href = './asignarE.html'; // Reemplaza con la URL de la página que deseas dirigir
+    });
   </script>
 </body>
 </html>

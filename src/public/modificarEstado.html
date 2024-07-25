@@ -83,11 +83,14 @@
                         <input type="hidden" id="contratoId" name="contratoId">
                         <input type="hidden" id="proyectoId" name="proyectoId">
                         <br><br>
-                            <button type="submit" class="botonpagina">Guardar</button>
+                            <button type="submit" class="botonpagina">Guardar</button> <br> <br>
+                            <button id="regresar" class="regresarb">Regresar</button>
+
                     </center>
                     
                 </form>
         </div>
+        
         </main>
     </div>
 
@@ -325,7 +328,11 @@ const response = await fetch(`/api/progreso/${areaId}/${contratoId}/${proyectoId
         if (rolUsuario) {
             document.getElementById('rolUsuario').innerText = rolUsuario;
         }
+        const boton = document.getElementById('regresar');
 
+        boton.addEventListener('click', () => {
+          window.location.href = './area.html'; // Reemplaza con la URL de la página que deseas dirigir
+        });
     </script>
 </body>
 </html>

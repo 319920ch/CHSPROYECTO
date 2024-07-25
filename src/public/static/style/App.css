@@ -674,6 +674,28 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #1E3A8A; /* Color del borde en foco */
 }
 
+.regresarb {
+  background-color: #ffff; /* Color de fondo */
+  color: #65d265; /* Color del texto */
+  border: none; /* Sin borde inicial */
+  padding: 0.5rem 1rem; /* Relleno (padding) para el botón */
+  border-radius: 0.25rem; /* Bordes redondeados */
+  cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; /* Transición suave para hover y focus */
+  font-weight: bold;
+}
+
+.regresarb:hover {
+  background-color: #ff4d07; /* Color de fondo al pasar el ratón por encima */
+  color: #ffff; 
+}
+
+.regresarb:focus {
+  outline: none; /* Eliminar el contorno por defecto */
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5); /* Sombra para indicar el foco */
+  border-color: #1E3A8A; /* Color del borde en foco */
+}
+
 .submitb {
   background-color: #65d265; /* Color de fondo */
   color: #FFFFFF; /* Color del texto */

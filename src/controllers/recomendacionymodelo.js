@@ -14,10 +14,10 @@ const Estado = require('../models/estadom');
 function empleadosNecesarios(area, producto, cantidad, plazo, desempeno) {
   // Obtener el tiempo estándar para el área y producto
   const tiempos = {
-    corte: { mesas: 1, sillas: 1, puertas: 1, estandarte: 2, muebles: 2 },
-    soldadura: { mesas: 2, sillas: 3, puertas: 2, estandarte: 2, muebles: 2  },
-    pintura: { mesas: 2, sillas: 2, puertas: 1, estandarte: 2, muebles: 2  },
-    ensamblaje: { mesas: 3, sillas: 4, puertas: 3, estandarte: 2, muebles: 2  },
+    Corte: { mesas: 1, sillas: 1, puertas: 1, estandarte: 2, muebles: 2 },
+    Soldadura: { mesas: 2, sillas: 3, puertas: 2, estandarte: 2, muebles: 2  },
+    Pintura: { mesas: 2, sillas: 2, puertas: 1, estandarte: 2, muebles: 2  },
+    Ensamblaje: { mesas: 3, sillas: 4, puertas: 3, estandarte: 2, muebles: 2  },
     'verificación de calidad': { mesas: 0.5, sillas: 0.5, puertas: 0.5, estandarte: 2, muebles: 2  }
   };
 

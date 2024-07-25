@@ -57,6 +57,8 @@
             <!-- Aquí se añadirán dinámicamente los usuarios -->
           </tbody>
         </table>
+        <center> <br> <button id="regresar" class="regresarb">Regresar</button> </center>
+
         <p id="noDataMessage" style="display:none; text-align:center; color:#ffffff">Aún no se han ingresado datos de evaluación para este empleado.</p>
       </div>
     </main>
@@ -331,6 +333,12 @@ evaluacionesEmpleado.forEach((evaluacion) => {
           menu.style.display = 'block';
         }
       }
+      const boton = document.getElementById('regresar');
+
+      boton.addEventListener('click', () => {
+        window.location.href = './empleados.html'; // Reemplaza con la URL de la página que deseas dirigir
+      });
+  
     </script>
   </body>
 </html>

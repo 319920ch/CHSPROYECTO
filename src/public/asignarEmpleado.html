@@ -36,7 +36,6 @@
               <li><a href="./encargado.html">Página de Bienvenida</a></li>
               <li><a href="./asignarE.html">Asignar Empleados</a></li>
               <li><a href="./area.html">Estado de Área</a></li>
-              <li><a href="./ayudae.html">Ayuda</a></li>
               <li><a href="./index.html">Cerrar Sesión</a></li>
             </ul>
           </nav>
@@ -77,8 +76,9 @@
         </div>
         <br>
         <center>
-          <button id="sugerirBtn" style="display:none;" class="submitb" onclick="enviarSugerencia()">Enviar Sugerencia</button>
-        <button id="obtenerEmpleadosBtn" style="display:none;" class="submitb" onclick="obtenerEmpleados()">Obtener Empleados</button>
+          <button id="sugerirBtn" style="display:none;" class="submitb" onclick="enviarSugerencia()">Enviar Sugerencia</button> <br>
+        <button id="obtenerEmpleadosBtn" style="display:none;" class="submitb" onclick="obtenerEmpleados()">Obtener Empleados</button> <br>
+        <button id="regresar" class="regresarb">Regresar</button>
         </center>
   <!-- Tabla para mostrar empleados -->
   <div id="tablaEmpleados" style="display:none;">
@@ -327,7 +327,11 @@ async function asignarEmpleado(idEmpleado) {
       }
     });
     
-    
+    const boton = document.getElementById('regresar');
+
+    boton.addEventListener('click', () => {
+      window.location.href = './asignarE.html'; // Reemplaza con la URL de la página que deseas dirigir
+    });
   </script>
 </body>
 </html>
