@@ -84,8 +84,8 @@
         <input type="text" id="apellidos" name="apellidos"><br><br>
         <label for="cedula">Cédula:</label> <br>
         <input type="text" id="cedula" name="cedula"><br><br>
-        <label for="tiempoexp">Tiempo de experiencia general en años:</label> <br>
-        <input type="text" id="tiempoexp" name="tiempoexp"><br><br>
+        <label for="tiempo_exp_general">Tiempo de experiencia general en años:</label> <br>
+        <input type="text" id="tiempo_exp_general" name="tiempo_exp_general"><br><br>
         <label for="contacto">Número de contacto:</label> <br>
         <input type="text" id="contacto" name="contacto"><br><br>
         <center><button type="submit" class="submitb">Registrar Empleado</button></center>
@@ -243,7 +243,13 @@
     async function handleNuevoEmpleado(event) {
       event.preventDefault();
       const formData = new FormData(event.target);
-      const data = Object.fromEntries(formData.entries());
+      const data = {
+        nombres: formData.get('nombres'),
+        apellidos: formData.get('apellidos'),
+        cedula: formData.get('cedula'),
+        tiempo_exp_general: formData.get('tiempo_exp_general'),
+        numero_contacto: formData.get('contacto')
+      };
 
       try {
         const response = await fetch('/api/empleados', {
@@ -253,8 +259,9 @@
           },
           body: JSON.stringify(data)
         });
+        console.log(data);
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
         const nuevoEmpleado = await response.json();
         empleados.push(nuevoEmpleado);
